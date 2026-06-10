@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Devon 60 Day Body Rebuild V20</title>
+<style>
+:root{
+ --bg:#fff1f8;--card:#fff;--ink:#331426;--muted:#7b5b6e;--line:#f5c2dc;
+ --pink:#ec4899;--pink2:#db2777;--deep:#831843;--soft:#fce7f3;--good:#16a34a;--warn:#f59e0b;--danger:#dc2626;
+ --shadow:0 12px 28px rgba(131,24,67,.12);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:linear-gradient(180deg,var(--bg),#fff);color:var(--ink);font-family:Arial,Helvetica,sans-serif}
+body{padding:10px 10px 96px}
+.app{max-width:760px;margin:0 auto}
+.hero{background:linear-gradient(135deg,#fbcfe8,#f9a8d4,#f472b6);border:1px solid #f8bad8;border-radius:26px;padding:15px;box-shadow:var(--shadow)}
+.tag{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;color:var(--deep)}
+h1{font-size:25px;line-height:1.05;margin:8px 0}
+h2{font-size:20px;margin:0 0 8px}
+h3{font-size:17px;margin:0 0 8px}
+p,li,label{line-height:1.42}
+.small{font-size:12px;color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:21px;padding:13px;margin:11px 0;box-shadow:var(--shadow)}
+.pinkcard{background:#fff7fb}.notice{border-left:5px solid var(--pink);background:#fff7fb}.warnbox{border-left:5px solid var(--warn);background:#fffbeb}
+.row{display:flex;gap:8px;flex-wrap:wrap}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+button,.btn{border:0;border-radius:15px;padding:12px 13px;background:var(--soft);color:var(--deep);font-weight:900;cursor:pointer;text-decoration:none;display:inline-flex;justify-content:center;align-items:center;gap:6px}
+button.primary{background:var(--pink);color:#fff} button.deep{background:var(--deep);color:#fff} button.good{background:var(--good);color:#fff} button.ghost{background:#fff;border:1px solid var(--line)} button.danger{background:var(--danger);color:#fff}
+button.full{width:100%} button.active{background:var(--deep);color:#fff} button:disabled{opacity:.45}
+input,select,textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:15px;background:#fff;color:var(--ink);font-size:16px}
+textarea{min-height:90px;resize:vertical}
+details{border:1px solid var(--line);border-radius:17px;background:#fff;padding:12px;margin:9px 0}
+summary{list-style:none;display:flex;justify-content:space-between;align-items:center;font-weight:900;cursor:pointer}
+summary::-webkit-details-marker{display:none}.inside{padding-top:10px}
+.stat{border:1px solid var(--line);background:#fff7fb;border-radius:15px;padding:10px}.big{font-size:22px;font-weight:900}
+.exercise,.recipe{border:1px solid #f7c9df;background:#fffafd;border-radius:15px;padding:10px;margin:8px 0}
+.exercise b,.recipe b{display:block}.video{margin-top:6px;font-weight:900;color:var(--pink2);font-size:13px;display:block}
+.bar{height:12px;border-radius:999px;background:var(--soft);overflow:hidden}.fill{height:100%;background:var(--pink);width:0%}
+.nav{position:sticky;top:0;z-index:10;background:rgba(255,241,248,.94);backdrop-filter:blur(10px);display:flex;gap:7px;overflow:auto;padding:8px 0}
+.nav button{white-space:nowrap;padding:10px 12px}
+.sticky{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(255,241,248,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:9px 10px calc(9px + env(safe-area-inset-bottom))}
+.sticky .inner{max-width:760px;margin:0 auto;display:flex;gap:8px}.sticky button{flex:1}
+.hidden{display:none!important} .lockedRoute{display:none}
+@media(max-width:560px){.grid{grid-template-columns:1fr}h1{font-size:23px}.card{padding:12px}.hero{border-radius:23px}}
+</style>
+</head>
+<body>
+<div class="app">
+<section class="hero">
+ <div class="tag">Devon 60 Day Postpartum Body Rebuild</div>
+ <h1>Weight loss, shape, confidence, and peace.</h1>
+ <p>Mobile first plan for breastfeeding, real mom stress, body composition, steps, workouts, meals, and daily mindset.</p>
+ <div id="affirmation" class="card pinkcard" style="margin-bottom:0"></div>
+</section>
+
+<div class="nav">
+ <button onclick="jump('historyTop')">History</button>
+ <button id="quitBtn" class="danger hidden" type="button">Quit Program</button>
+ <button onclick="jump('routeSec')">Route</button>
+ <button onclick="jump('todaySec')">Today</button>
+ <button onclick="jump('foodSec')">Food</button>
+ <button onclick="jump('journalSec')">Journal</button>
+</div>
+
+<section id="historyTop" class="card">
+ <details>
+  <summary>Saved growth history <span>+</span></summary>
+  <div class="inside" id="historyList"></div>
+ </details>
+ <div id="quitConfirmPanel" class="card warnbox hidden">
+  <b>Quit current 60 day program?</b>
+  <p class="small">This will reset the locked route, program day, food log, journal history, and completed days. You will be able to choose a new route after quitting.</p>
+  <div id="quitStepOne" class="grid">
+   <button type="button" class="danger" id="quitFirstConfirm">Yes, I want to quit</button>
+   <button type="button" class="ghost" id="quitCancelOne">Cancel</button>
+  </div>
+  <div id="quitStepTwo" class="grid hidden">
+   <button type="button" class="danger" id="quitFinalConfirm">Final confirm, reset it</button>
+   <button type="button" class="ghost" id="quitCancelTwo">Cancel</button>
+  </div>
+ </div>
+</section>
+
+<section id="routeSec" class="card">
+ <h2>1. Lock the Body Goal Route</h2>
+ <p class="small">Each route has a different 7 day split with active recovery and full rest. Once locked, the other route options disappear until the program is quit or completed.</p>
+ <div id="routeStatus" class="card notice"></div>
+ <div id="routePicker">
+  <div class="grid">
+   <button id="r_balanced" onclick="selectRoute('balanced')">Balanced weight loss</button>
+   <button id="r_curvy" onclick="selectRoute('curvy')">Curvier built with weights</button>
+   <button id="r_slim" onclick="selectRoute('slim')">Slimmer cardio focused</button>
+   <button id="r_slimthick" onclick="selectRoute('slimthick')">Slim thick glute focused</button>
+  </div>
+  <button id="lockRouteButton" type="button" class="primary full">Lock this 60 day route</button>
+  <div id="lockConfirmPanel" class="card notice hidden">
+    <b id="lockConfirmTitle">Confirm route</b>
+    <p class="small">This locks the selected body goal route for 60 days. Other route options will disappear unless the program is quit and reset.</p>
+    <div class="grid">
+      <button type="button" class="primary" id="confirmLockButton">Yes, lock it in</button>
+      <button type="button" class="ghost" id="cancelLockButton">Cancel</button>
+    </div>
+  </div>
+ </div>
+</section>
+
+<section class="card">
+ <h2>2. Devon’s Challenge Mode</h2>
+ <p class="small">This changes sets, reps, exercises, cardio minutes, intensity, and steps.</p>
+ <div class="grid">
+  <button id="m_taylor" onclick="setMode('taylor')">Taylor Swift: Easy</button>
+  <button id="m_cardi" onclick="setMode('cardi')">Cardi B: Moderate</button>
+  <button id="m_latto" onclick="setMode('latto')">Latto Big Mama: Hard</button>
+  <button onclick="autoMode()">Auto from journal</button>
+ </div>
+ <div id="modeExplain" class="small" style="margin-top:8px"></div>
+</section>
+
+<section class="card">
+ <h2>3. Training Location</h2>
+ <p class="small">This changes warmup, main workout, cardio/finisher, and cool down based on access.</p>
+ <div class="grid">
+  <button id="loc_gym" onclick="setLocation('gym')">Gym</button>
+  <button id="loc_home" onclick="setLocation('home')">Indoor home</button>
+  <button id="loc_outdoor" onclick="setLocation('outdoor')">Outdoor</button>
+  <button onclick="cycleLocation()">Switch location</button>
+ </div>
+</section>
+
+<section class="card">
+ <h2>4. Body, Baby, Steps, and Calories</h2>
+ <div class="grid">
+  <label>Weight lbs<input id="weight" type="number" inputmode="decimal" value="180" onchange="saveInputs();refreshAll()"></label>
+  <label>Height inches<input id="height" type="number" inputmode="decimal" value="64" onchange="saveInputs();refreshAll()"></label>
+  <label>Age<input id="age" type="number" inputmode="numeric" value="33" onchange="saveInputs();refreshAll()"></label>
+  <label>Baby age months<input id="babyMonths" type="number" inputmode="numeric" value="8" onchange="saveInputs();refreshAll()"></label>
+  <label>Breastfeeding<select id="breastfeeding" onchange="saveInputs();refreshAll()"><option value="yes">Yes</option><option value="partial">Partial</option><option value="no">No</option></select></label>
+  <label>Steps walked today<input id="steps" type="number" inputmode="numeric" value="0" onchange="saveInputs();refreshAll()"></label>
+ </div>
+ <div class="grid" style="margin-top:10px">
+  <div class="stat"><div class="small">Calorie target</div><div class="big" id="calTarget">0</div></div>
+  <div class="stat"><div class="small">Estimated maintenance</div><div class="big" id="maintenance">0</div></div>
+  <div class="stat"><div class="small">Step goal</div><div class="big" id="stepGoal">0</div></div>
+  <div class="stat"><div class="small">Step calories</div><div class="big" id="stepBurn">0</div></div>
+  <div class="stat"><div class="small">Calories left</div><div class="big" id="remaining">0</div></div>
+  <div class="stat"><div class="small">Route deficit</div><div class="big" id="deficit">0</div></div>
+ </div>
+ <p id="calExplain" class="small"></p>
+</section>
+
+<section id="todaySec" class="card">
+ <div class="row" style="justify-content:space-between;align-items:center">
+  <div><h2 id="dayHeader">Today</h2><p id="planSummary" class="small"></p></div>
+  <button class="primary" onclick="buildToday(true)">Build Today</button>
+ </div>
+ <div class="bar"><div class="fill" id="dayFill"></div></div>
+ <div id="todayPlan"></div>
+</section>
+
+<section id="foodSec" class="card">
+ <h2>Meal and Macro Tracker</h2>
+ <p class="small">Includes a lightweight recipe generator for breakfast, lunch, and dinner using your approved food list.</p>
+ <div class="grid">
+  <input id="foodName" placeholder="Food name">
+  <input id="foodAmount" type="number" inputmode="decimal" placeholder="Amount">
+  <select id="foodUnit"><option value="g">grams</option><option value="oz">ounces</option><option value="lb">pounds</option><option value="ml">ml</option><option value="floz">fl oz</option></select>
+  <button class="primary" onclick="addFood()">Add food</button>
+ </div>
+ <div class="grid" style="margin-top:10px">
+  <div class="stat"><div class="small">Calories</div><div class="big" id="mCal">0</div></div>
+  <div class="stat"><div class="small">Protein</div><div class="big" id="mPro">0g</div></div>
+  <div class="stat"><div class="small">Carbs</div><div class="big" id="mCarb">0g</div></div>
+  <div class="stat"><div class="small">Fat</div><div class="big" id="mFat">0g</div></div>
+  <div class="stat"><div class="small">Fiber</div><div class="big" id="mFiber">0g</div></div>
+  <div class="stat"><div class="small">Macro advice</div><div id="macroAdvice" class="small"></div></div>
+ </div>
+ <div id="foodList"></div>
+ <button class="ghost full" onclick="clearFood()">Clear today’s food</button>
+
+ <details>
+  <summary>Recipe idea generator <span>+</span></summary>
+  <div class="inside">
+   <p class="small">No typing needed. Tap a meal type and the app creates 6 healthy recipes with cook times and steps.</p>
+   <div class="grid">
+    <button class="primary" type="button" onclick="generateRecipes('breakfast')">Breakfast ideas</button>
+    <button class="primary" type="button" onclick="generateRecipes('lunch')">Lunch ideas</button>
+    <button class="primary" type="button" onclick="generateRecipes('dinner')">Dinner ideas</button>
+    <button class="ghost" type="button" onclick="generateRecipes('any')">Surprise me</button>
+   </div>
+   <div id="mealIdeas"></div>
+  </div>
+ </details>
+</section>
+
+<section id="journalSec" class="card">
+ <h2>Daily Journal and Adaptation</h2>
+ <div class="grid">
+  <label>Mood<select id="mood"><option>steady</option><option>happy</option><option>motivated</option><option>stressed</option><option>sad</option><option>overwhelmed</option></select></label>
+  <label>Energy<select id="energy"><option>medium</option><option>low</option><option>high</option></select></label>
+  <label>Sleep hours<input id="sleep" type="number" inputmode="decimal" value="6"></label>
+  <label>Soreness 1 to 10<input id="soreness" type="number" inputmode="numeric" value="3"></label>
+ </div>
+ <label>Thoughts, feelings, cravings, foods, wins, dislikes<textarea id="journalText" placeholder="Devon, write what today felt like. The app will adapt tomorrow only if it supports better results and consistency."></textarea></label>
+ <button class="primary full" onclick="saveJournal()">Save journal and adapt tomorrow</button>
+ <div id="adaptBox" class="card notice hidden"></div>
+</section>
+
+<section class="card warnbox">
+ <h3>Recipe and database note</h3>
+ <p class="small">This version uses a lightweight recipe generator instead of storing thousands of full recipes, which keeps the app fast on mobile. It uses your approved foods and healthy fats only: olive oil, sesame oil, and avocado.</p>
+</section>
+</div>
+
+<div class="sticky"><div class="inner"><button onclick="buildToday(true)">Refresh Plan</button><button class="primary" onclick="completeToday()">Complete Day</button></div></div>
+
+<script>
+const KEY="devon_v20_";
+
+const RECIPE_ENGINE={
+ proteins:["ground turkey","lean ground beef","lean steak","white fish","eggs","greek yogurt","dairy free yogurt"],
+ carbs:["oats","jasmine rice","potatoes","rice cakes","quinoa"],
+ veg:["spinach","kale","bell peppers","onions"],
+ fruits:["blueberries","raspberries","strawberries","bananas","mango","pineapple","apples","grapes"],
+ dairy:["dairy free yogurt","greek yogurt","almond milk","coconut milk","cashew milk"],
+ fats:["olive oil","sesame oil","avocado"],
+ breakfast:[
+  ["Protein Oat Bowl","Cook oats with milk, add yogurt or eggs on the side, top with fruit.","10 to 15 min"],
+  ["Smoothie Bowl","Blend milk, yogurt, fruit, and oats. Pour into a bowl and keep toppings measured.","5 to 8 min"],
+  ["Egg Potato Breakfast Bowl","Cook potatoes, add eggs and vegetables, finish with avocado if needed.","15 to 20 min"],
+  ["Yogurt Berry Crunch Bowl","Layer yogurt, berries, and crushed rice cakes or oats.","5 min"],
+  ["Warm Fruit Oats","Cook oats with almond milk, warm fruit on top, add Greek yogurt for protein.","10 to 12 min"],
+  ["Rice Cake Breakfast Stack","Top rice cakes with yogurt or eggs and fruit.","5 to 7 min"]
+ ],
+ lunch:[
+  ["Lean Power Bowl","Cook protein, add carb base, fold in vegetables, finish with measured healthy fat.","18 to 25 min"],
+  ["Meal Prep Bowl","Batch cook protein and carb, add vegetables, and portion it into a balanced bowl.","20 to 30 min"],
+  ["Rice Cake Lunch Plate","Top rice cakes with protein, greens, and avocado, then add fruit if needed.","8 to 10 min"],
+  ["Quinoa Protein Bowl","Serve protein over quinoa with vegetables and measured olive oil or avocado.","18 to 22 min"],
+  ["Potato Protein Bowl","Roast or mash potatoes, add protein and vegetables, then finish with healthy fat.","20 to 28 min"],
+  ["Sesame Lunch Bowl","Use sesame oil lightly with protein, rice or quinoa, and vegetables.","18 to 22 min"]
+ ],
+ dinner:[
+  ["Glute Day Dinner Plate","Prioritize protein and carb around training, add vegetables, and keep fats measured.","20 to 30 min"],
+  ["Lean Comfort Bowl","Make it warm with protein, potatoes or rice, vegetables, and avocado or oil.","22 to 30 min"],
+  ["White Fish Dinner Plate","Bake or air fry fish, add carb and vegetables, and finish with olive oil or avocado.","18 to 22 min"],
+  ["Steak Strength Plate","Cook lean steak, serve with potatoes or rice, add greens, and keep fat measured.","22 to 28 min"],
+  ["Turkey Dinner Bowl","Cook ground turkey with vegetables, serve over rice, quinoa, or potatoes.","18 to 24 min"],
+  ["Simple Family Plate","Use one protein, one carb, one vegetable, and one healthy fat in measured portions.","18 to 25 min"]
+ ]
+};
+
+const today=()=>new Date().toISOString().slice(0,10);
+const q=s=>"https://www.youtube.com/results?search_query="+encodeURIComponent(s);
+
+const affirmations=[
+"Devon, your body is not the enemy. It is the home you are rebuilding.",
+"Devon, one calm choice at a time still changes everything.",
+"Devon, motherhood did not erase you. It revealed another level of you.",
+"Devon, soft life and strong discipline can exist together.",
+"Devon, you are allowed to want your body back and still love the body that carried life.",
+"Devon, today we move for energy, peace, shape, and confidence.",
+"Devon, the win is not perfection. The win is coming back.",
+"Devon, your consistency can be gentle and still be powerful.",
+"Devon, eat enough to heal and train enough to transform.",
+"Devon, you do not need punishment. You need a plan.",
+"Devon, the woman you are becoming is already showing up.",
+"Devon, breathe, reset, move, nourish, repeat."
+];
+
+const foods=[
+["ground beef",250,26,0,15,0],["ground turkey",170,27,0,8,0],["lean steak",190,29,0,8,0],["white fish",105,23,0,1,0],["egg",143,13,1.1,10,0],["eggs",143,13,1.1,10,0],
+["oats",389,17,66,7,10.6],["jasmine rice",130,2.7,28,.3,.4],["potatoes",87,1.9,20,.1,1.8],["rice cakes",387,8,82,3,4],["quinoa",120,4.4,21.3,1.9,2.8],
+["spinach",23,2.9,3.6,.4,2.2],["kale",49,4.3,8.8,.9,3.6],["bell peppers",31,1,6,.3,2.1],["onions",40,1.1,9,.1,1.7],
+["blueberries",57,.7,14,.3,2.4],["raspberries",52,1.2,12,.7,6.5],["strawberries",32,.7,7.7,.3,2],["bananas",89,1.1,23,.3,2.6],["mango",60,.8,15,.4,1.6],["pineapple",50,.5,13,.1,1.4],["apples",52,.3,14,.2,2.4],["grapes",69,.7,18,.2,.9],
+["dairy free yogurt",90,2,16,2,1],["greek yogurt",59,10,3.6,.4,0],["almond milk",15,.6,.3,1.2,0],["coconut milk",31,.2,2.9,2.1,0],["cashew milk",25,.4,1,2,0],
+["olive oil",884,0,0,100,0],["sesame oil",884,0,0,100,0],["avocado",160,2,9,15,7]
+];
+const db=Object.fromEntries(foods.map(f=>[f[0],{cal:f[1],p:f[2],c:f[3],fat:f[4],fi:f[5]}]));
+
+const routes={
+balanced:{label:"Balanced weight loss",def:325,protein:.78,steps:8000,split:["Lower body + incline burn","Upper tone + core","Glutes + hamstrings","Cardio mobility","Full body strength","Recovery","Rest"]},
+curvy:{label:"Curvier built with weights",def:225,protein:.86,steps:7500,split:["Heavy glutes + legs","Upper posture + waist","Glute volume","Deep core recovery","Lower body shape","Recovery","Rest"]},
+slim:{label:"Slimmer cardio focused",def:425,protein:.72,steps:9800,split:["Cardio base + tone","Low impact intervals","Steady burn","Cardio circuit","Long walk tone","Recovery","Rest"]},
+slimthick:{label:"Slim thick glute focused",def:275,protein:.88,steps:8500,split:["Glute growth + burn","Small waist upper tone","Glute med + hamstrings","Core recovery + cardio","Glute pump conditioning","Recovery","Rest"]}
+};
+
+const workoutBank={
+gym:{
+ balanced:[
+  [["Treadmill walk","Pelvic floor breathing","Glute activation bridge"],["Goblet squat","Step up","Glute bridge"],["Incline treadmill walk","Dead bug postpartum"],["Hip flexor stretch","Child pose breathing"]],
+  [["Bike warmup","Band pull apart","Cat cow"],["Dumbbell row","Incline push up","Pallof press"],["Treadmill walk","Shoulder taps"],["Chest stretch","Deep core breathing"]],
+  [["Treadmill walk","Bodyweight hinge","Glute bridge"],["Dumbbell Romanian deadlift","Hip thrust","Reverse lunge"],["Bike cardio","Hamstring curl"],["Hamstring stretch","Breathing reset"]],
+  [["Bike warmup","Pelvic floor breathing","Bird dog"],["Low impact cardio","Cable row","Bodyweight squat"],["Brisk treadmill walk","Full body stretch"],["Hip mobility","Cat cow"]],
+  [["Treadmill walk","Dynamic mobility","Glute bridge"],["Kettlebell deadlift","Dumbbell shoulder press","Cable row"],["Farmer carry","Incline walk"],["Calf stretch","Deep breathing"]],
+  [["Easy walk","Breathing"],["Mobility flow","Stretch"],["Optional sauna breathing","Hydrate"],["Rest"]],
+  [["Rest"],["Rest"],["Rest"],["Rest"]]
+ ],
+ curvy:[
+  [["Treadmill walk","Glute activation bridge","Banded side steps"],["Hip thrust","Leg press","Cable kickback","Hip abduction machine"],["Incline walk","Glute bridge hold"],["Hip flexor stretch","Figure four stretch"]],
+  [["Bike warmup","Band pull apart"],["Lat pulldown","Seated row","Incline push up"],["Dead bug","Side plank modified"],["Chest stretch","Breathing"]],
+  [["Treadmill walk","Glute bridge"],["Dumbbell Romanian deadlift","Hack squat or goblet squat","Bulgarian split squat beginner","Hamstring curl"],["Incline walk","Hip abduction burnout"],["Hamstring stretch","Glute stretch"]],
+  [["Bike easy","Pelvic floor breathing"],["Heel slides postpartum","Bird dog","Cable Pallof press"],["Easy bike cardio"],["Hip mobility","Deep breathing"]],
+  [["Treadmill walk","Banded glutes"],["Leg press","Hip thrust","Hip abduction machine","Calf raise"],["Incline walk","Cable pull through"],["Quad stretch","Breathing"]],
+  [["Easy walk","Glute activation"],["Foam roll legs","Hip stretch"],["Hydrate"],["Rest"]],
+  [["Rest"],["Rest"],["Rest"],["Rest"]]
+ ],
+ slim:[
+  [["Treadmill walk","Mobility"],["Incline treadmill intervals","Bodyweight squat","Band row"],["Bike cardio","Dead bug"],["Stretch routine"]],
+  [["Treadmill warmup"],["Treadmill interval walk","Step up","Incline push up"],["Pallof press","Breathing"],["Calf and hip stretch"]],
+  [["Bike warmup"],["Stationary bike steady","Glute bridge","Bird dog"],["Walk intervals"],["Hip stretch"]],
+  [["Elliptical warmup"],["Low impact cardio circuit","Dumbbell row","Wall sit"],["Marching core"],["Stretch"]],
+  [["Treadmill walk"],["Long incline walk","Reverse lunge","Shoulder press light"],["Side plank modified"],["Mobility"]],
+  [["Easy walk"],["Stretch routine","Pelvic floor breathing"],["Meal prep"],["Rest"]],
+  [["Rest"],["Rest"],["Rest"],["Rest"]]
+ ],
+ slimthick:[
+  [["Treadmill walk","Glute activation bridge","Banded side steps"],["Hip thrust","Leg press","Hack squat","Cable pull through"],["Incline walk","Core breathing"],["Hip flexor stretch","Glute stretch"]],
+  [["Bike warmup","Posture reset"],["Lat pulldown","Cable row","Pallof press"],["Incline walk","Dead bug"],["Chest stretch","Breathing"]],
+  [["Treadmill walk","Glute bridge"],["Dumbbell Romanian deadlift","Step up","Hip abduction machine","Side lying clamshell"],["Stairmaster low impact","Hamstring curl"],["Hamstring stretch","Breathing"]],
+  [["Bike easy","Pelvic floor breathing"],["Heel taps postpartum","Bird dog","Cable anti rotation press"],["Easy incline walk"],["Hip mobility"]],
+  [["Treadmill walk","Banded glutes"],["Leg press","Hip thrust","Reverse lunge","Kettlebell deadlift"],["Incline walk","Glute bridge hold"],["Quad stretch","Glute stretch"]],
+  [["Easy walk"],["Foam roll","Hip stretch","Calf stretch"],["Breathing"]],
+  [["Rest"],["Rest"],["Rest"],["Rest"]]
+ ]
+},
+home:{
+ balanced:[
+  [["March in place","Pelvic floor breathing","Glute bridge"],["Bodyweight squat","Chair step up","Floor glute bridge"],["Hallway walk intervals","Dead bug postpartum"],["Hip flexor stretch","Child pose breathing"]],
+  [["March in place","Cat cow"],["Band row or towel row","Incline counter push up","Backpack Pallof press"],["Shoulder taps","Walk around house"],["Chest stretch","Breathing"]],
+  [["Bodyweight hinge","Glute bridge"],["Backpack Romanian deadlift","Single leg glute bridge","Reverse lunge"],["Stair steps","Hamstring walkout"],["Hamstring stretch","Breathing"]],
+  [["March warmup","Bird dog"],["Low impact cardio video","Bodyweight squat","Wall push up"],["Brisk house walk","Stretch"],["Hip mobility"]],
+  [["March warmup","Glute bridge"],["Backpack deadlift","Backpack shoulder press","Band row"],["Farmer carry with bags","Step ups"],["Calf stretch","Breathing"]],
+  [["Easy walk inside","Breathing"],["Mobility flow","Stretch"],["Hydrate"],["Rest"]],
+  [["Rest"],["Rest"],["Rest"],["Rest"]]
+ ],
+ curvy:[
+  [["March warmup","Banded glutes"],["Backpack hip thrust","Chair squat","Banded kickback","Banded abductions"],["Stair walk","Glute bridge hold"],["Glute stretch"]],
+  [["March warmup"],["Band pulldown","Band row","Counter push up"],["Dead bug","Side plank modified"],["Stretch"]],
+  [["Glute bridge"],["Backpack Romanian deadlift","Split squat to couch","Banded glute bridge","Hamstring walkout"],["Stair steps","Banded abduction burnout"],["Hamstring stretch"]],
+  [["Breathing"],["Heel slides postpartum","Bird dog","Standing anti rotation band"],["Easy walk"],["Hip mobility"]],
+  [["Banded glutes"],["Couch hip thrust","Backpack squat","Banded abduction","Calf raise"],["Step ups","Good morning"],["Stretch"]],
+  [["Easy walk","Glute activation"],["Hip stretch"],["Hydrate"],["Rest"]],
+  [["Rest"],["Rest"],["Rest"],["Rest"]]
+ ],
+ slim:[
+  [["March warmup"],["Low impact cardio intervals","Bodyweight squat","Band row"],["Step ups","Dead bug"],["Stretch"]],
+  [["March warmup"],["Stair intervals","Step up","Counter push up"],["Pallof band press","Breathing"],["Stretch"]],
+  [["March warmup"],["Low impact cardio steady","Glute bridge","Bird dog"],["Walk intervals"],["Hip stretch"]],
+  [["Warmup"],["Low impact cardio workout","Band row","Wall sit"],["Marching core"],["Stretch"]],
+  [["Walk warmup"],["Long brisk indoor walk","Reverse lunge","Light shoulder press"],["Side plank modified"],["Mobility"]],
+  [["Easy walk"],["Stretch","Breathing"],["Meal prep"],["Rest"]],
+  [["Rest"],["Rest"],["Rest"],["Rest"]]
+ ],
+ slimthick:[
+  [["Banded glute warmup"],["Couch hip thrust","Backpack squat","Split squat","Banded kickback"],["Stair walk","Core breathing"],["Glute stretch"]],
+  [["Posture warmup"],["Band row","Band pulldown","Pallof press"],["March intervals","Dead bug"],["Stretch"]],
+  [["Glute bridge"],["Backpack Romanian deadlift","Chair step up","Banded abduction","Side lying clamshell"],["Stair steps","Hamstring walkout"],["Stretch"]],
+  [["Breathing"],["Heel taps postpartum","Bird dog","Standing anti rotation"],["Easy walk"],["Hip mobility"]],
+  [["Banded glutes"],["Backpack squat","Couch hip thrust","Reverse lunge","Backpack deadlift"],["Step ups","Glute bridge hold"],["Stretch"]],
+  [["Easy walk"],["Foam roll substitute stretch","Calf stretch"],["Breathing"]],
+  [["Rest"],["Rest"],["Rest"],["Rest"]]
+ ]
+},
+outdoor:{
+ balanced:[
+  [["Easy walk","Breathing","Bodyweight mobility"],["Park bench squat","Step up","Glute bridge on mat"],["Brisk walk intervals","Dead bug on mat"],["Hip flexor stretch","Breathing"]],
+  [["Walk warmup","Arm circles"],["Bench incline push up","Band row if available","Pallof hold with band"],["Walk intervals","Shoulder taps"],["Stretch"]],
+  [["Walk warmup","Hip hinge"],["Bodyweight Romanian deadlift","Walking lunge","Single leg glute bridge"],["Hill walk","Hamstring curl towel at home later"],["Stretch"]],
+  [["Walk warmup"],["Low impact outdoor circuit","Bodyweight squat","Bird dog"],["Brisk walk","Full body stretch"],["Breathing"]],
+  [["Walk warmup"],["Backpack deadlift","Push up on bench","Band row"],["Farmer carry bags","Incline hill walk"],["Stretch"]],
+  [["Easy walk"],["Outdoor stretch","Breathing"],["Hydrate"],["Rest"]],
+  [["Rest"],["Rest"],["Rest"],["Rest"]]
+ ],
+ curvy:[
+  [["Walk warmup","Banded glutes"],["Bench hip thrust","Park squat","Banded kickback","Banded abductions"],["Hill walk","Glute hold"],["Stretch"]],
+  [["Walk warmup"],["Band row","Bench incline push up","Band pulldown"],["Dead bug","Side plank"],["Stretch"]],
+  [["Walk warmup"],["Backpack Romanian deadlift","Walking lunge","Bench step up","Glute bridge"],["Hill walk"],["Stretch"]],
+  [["Breathing"],["Bird dog","Heel slides later indoors","Band anti rotation"],["Easy walk"],["Hip mobility"]],
+  [["Banded glutes"],["Bench hip thrust","Park squat","Step up","Calf raise"],["Hill walk"],["Stretch"]],
+  [["Easy walk"],["Hip stretch"],["Hydrate"],["Rest"]],
+  [["Rest"],["Rest"],["Rest"],["Rest"]]
+ ],
+ slim:[
+  [["Walk warmup"],["Power walk intervals","Bodyweight squat","Bench push up"],["Brisk walk","Dead bug later"],["Stretch"]],
+  [["Walk warmup"],["Hill walk intervals","Step up","Bench push up"],["Core breathing"],["Stretch"]],
+  [["Walk warmup"],["Steady walk","Glute bridge on mat","Bird dog"],["Walk intervals"],["Hip stretch"]],
+  [["Warmup walk"],["Outdoor cardio circuit","Bodyweight row if available","Wall sit"],["Marching core"],["Stretch"]],
+  [["Walk warmup"],["Long brisk walk","Reverse lunge","Arm raise with bottles"],["Side plank later"],["Mobility"]],
+  [["Easy walk"],["Stretch","Breathing"],["Meal prep"],["Rest"]],
+  [["Rest"],["Rest"],["Rest"],["Rest"]]
+ ],
+ slimthick:[
+  [["Walk warmup","Banded glutes"],["Bench hip thrust","Park squat","Walking lunge","Banded kickback"],["Hill walk","Core breathing"],["Stretch"]],
+  [["Posture warmup"],["Band row","Band pulldown","Pallof press"],["Walk intervals","Dead bug later"],["Stretch"]],
+  [["Walk warmup"],["Backpack Romanian deadlift","Bench step up","Banded abduction","Side lying clamshell"],["Hill walk"],["Stretch"]],
+  [["Breathing"],["Bird dog","Heel taps later","Standing anti rotation"],["Easy walk"],["Hip mobility"]],
+  [["Banded glutes"],["Park squat","Bench hip thrust","Reverse lunge","Backpack deadlift"],["Hill walk","Glute hold"],["Stretch"]],
+  [["Easy walk"],["Hip stretch","Calf stretch"],["Breathing"],["Rest"]],
+  [["Rest"],["Rest"],["Rest"],["Rest"]]
+ ]
+}
+};
+
+let state={route:null,selectedRoute:"balanced",routeStart:null,programDay:1,mode:"cardi",location:"gym",inputs:{weight:180,height:64,age:33,babyMonths:8,breastfeeding:"yes",steps:0},food:[],journals:[],completed:{}};
+
+function load(){try{const x=JSON.parse(localStorage.getItem(KEY+"state"));if(x)state={...state,...x,inputs:{...state.inputs,...(x.inputs||{})}}}catch(e){console.log(e)}}
+function save(){localStorage.setItem(KEY+"state",JSON.stringify(state))}
+function jump(id){document.getElementById(id).scrollIntoView({behavior:"smooth",block:"start"})}
+function init(){load();renderAffirmation();hydrate();refreshAll()}
+function renderAffirmation(){document.getElementById("affirmation").innerHTML=`<h3>Daily Affirmation</h3><p>${affirmations[Math.floor(Math.random()*affirmations.length)]}</p><button onclick="renderAffirmation()">New affirmation</button>`}
+function hydrate(){["weight","height","age","babyMonths","steps"].forEach(id=>document.getElementById(id).value=state.inputs[id]);document.getElementById("breastfeeding").value=state.inputs.breastfeeding}
+function saveInputs(){["weight","height","age","babyMonths","steps"].forEach(id=>state.inputs[id]=Number(document.getElementById(id).value||0));state.inputs.breastfeeding=document.getElementById("breastfeeding").value;save()}
+function route(){return state.route||state.selectedRoute}
+function dayNum(){return state.route?Math.min(60,Math.max(1,Number(state.programDay||1))):1}
+function weekIdx(){return (dayNum()-1)%7}
+function weekNum(){return Math.floor((dayNum()-1)/7)+1}
+function modeInfo(){
+ if(state.mode==="taylor")return{name:"Taylor Swift easy",setAdd:0,extraExercises:0,repAdd:0,int:60,cardio:-4,step:-1000};
+ if(state.mode==="latto")return{name:"Latto Big Mama hard",setAdd:1,extraExercises:2,repAdd:4,int:85,cardio:8,step:1200};
+ return{name:"Cardi B moderate",setAdd:0,extraExercises:1,repAdd:2,int:72,cardio:0,step:0};
+}
+function selectRoute(r){if(state.route){alert("Route locked until Day 60 is complete. Use Quit Program if you truly want to reset.");return}state.selectedRoute=r;save();refreshAll()}
+function lockRoute(){
+ openLockConfirm();
+}
+function quitProgram(){
+ if(!state.route){alert("No program is locked right now.");return}
+ if(!confirm("Are you sure you want to quit Devon's current 60 day program? This will reset the route and allow a new one."))return;
+ if(!confirm("Second confirmation: quit and reset the program back to the beginning?"))return;
+ const keepInputs=state.inputs;
+ state={route:null,selectedRoute:"balanced",routeStart:null,programDay:1,mode:"cardi",location:"gym",inputs:keepInputs,food:[],journals:[],completed:{}};
+ save();hydrate();refreshAll();jump("routeSec");alert("Program reset. You can choose a new route.");
+}
+function openQuitConfirm(){
+ if(!state.route){alert("No program is locked right now.");return}
+ const panel=document.getElementById("quitConfirmPanel");
+ const stepOne=document.getElementById("quitStepOne");
+ const stepTwo=document.getElementById("quitStepTwo");
+ if(stepOne) stepOne.classList.remove("hidden");
+ if(stepTwo) stepTwo.classList.add("hidden");
+ if(panel){
+   panel.classList.remove("hidden");
+   panel.scrollIntoView({behavior:"smooth",block:"center"});
+ }
+}
+function quitSecondConfirm(){
+ const stepOne=document.getElementById("quitStepOne");
+ const stepTwo=document.getElementById("quitStepTwo");
+ if(stepOne) stepOne.classList.add("hidden");
+ if(stepTwo) stepTwo.classList.remove("hidden");
+}
+function cancelQuitConfirm(){
+ const panel=document.getElementById("quitConfirmPanel");
+ if(panel) panel.classList.add("hidden");
+}
+function finalQuitProgram(){
+ const keepInputs=state.inputs;
+ state={route:null,selectedRoute:"balanced",routeStart:null,programDay:1,mode:"cardi",location:"gym",inputs:keepInputs,food:[],journals:[],completed:{}};
+ save();
+ hydrate();
+ const panel=document.getElementById("quitConfirmPanel");
+ if(panel) panel.classList.add("hidden");
+ refreshAll();
+ jump("routeSec");
+ alert("Program reset. You can choose a new route.");
+}
+function quitProgram(){openQuitConfirm()}
+function setMode(m){state.mode=m;save();refreshAll()}
+function setLocation(l){state.location=l;save();refreshAll()}
+function cycleLocation(){state.location=state.location==="gym"?"home":state.location==="home"?"outdoor":"gym";save();refreshAll()}
+function autoMode(){
+ const j=state.journals[state.journals.length-1];
+ if(j&&(j.sleep<5||j.soreness>=7||["stressed","sad","overwhelmed"].includes(j.mood)))state.mode="taylor";
+ else if(j&&j.energy==="high"&&j.sleep>=6.5&&j.soreness<=4)state.mode="latto";
+ else state.mode="cardi";
+ save();refreshAll();
+}
+function bmr(){let w=state.inputs.weight*0.453592,h=state.inputs.height*2.54,a=state.inputs.age;return 10*w+6.25*h-5*a-161}
+function nursing(){if(state.inputs.breastfeeding==="no")return 0;if(state.inputs.breastfeeding==="partial")return state.inputs.babyMonths>=6?220:180;return state.inputs.babyMonths>=6?400:330}
+function stepCals(s=state.inputs.steps){return Math.round((s/2200)*state.inputs.weight*.53)}
+function workoutCals(){let idx=weekIdx();if(idx>=5)return 70;return state.mode==="taylor"?170:state.mode==="latto"?350:255}
+function deficit(){let d=routes[route()].def;if(state.mode==="taylor")d-=100;if(state.mode==="latto")d+=100;return Math.max(150,Math.min(550,d))}
+function maintenance(){return Math.round(bmr()*1.35+nursing()+stepCals()+workoutCals())}
+function target(){return Math.max(state.inputs.breastfeeding==="no"?1500:1800,maintenance()-deficit())}
+function stepGoal(){return Math.max(4500,routes[route()].steps+modeInfo().step)}
+function grams(amount,unit){let a=Number(amount||0);if(unit==="g")return a;if(unit==="oz")return a*28.3495;if(unit==="lb")return a*453.592;if(unit==="ml")return a;if(unit==="floz")return a*29.5735;return a}
+function findFood(n){n=n.toLowerCase().trim();if(db[n])return db[n];let k=Object.keys(db).find(x=>n.includes(x)||x.includes(n));return k?db[k]:{cal:130,p:6,c:16,fat:4,fi:1.5}}
+function totals(){return state.food.filter(x=>x.date===today()).reduce((a,x)=>({cal:a.cal+x.cal,p:a.p+x.p,c:a.c+x.c,fat:a.fat+x.fat,fi:a.fi+x.fi}),{cal:0,p:0,c:0,fat:0,fi:0})}
+function refreshAll(){saveInputs();renderRoute();renderMode();renderLocation();renderCalories();renderFood();buildToday(false);renderHistory()}
+function renderRoute(){
+ Object.keys(routes).forEach(r=>document.getElementById("r_"+r).classList.toggle("active",state.selectedRoute===r||state.route===r));
+ document.getElementById("routePicker").classList.toggle("hidden",!!state.route);
+ document.getElementById("quitBtn").classList.toggle("hidden",!state.route);
+ document.getElementById("routeStatus").innerHTML=state.route?`<b>Locked route:</b> ${routes[state.route].label}<br><span class="small">Day ${dayNum()} of 60 • Week ${weekNum()} • Other routes hidden until program is quit or completed.</span>`:`<b>No route locked yet.</b><br><span class="small">Selected: ${routes[state.selectedRoute].label}. Press lock to start the 60 day plan.</span>`;
+}
+function renderMode(){["taylor","cardi","latto"].forEach(m=>document.getElementById("m_"+m).classList.toggle("active",state.mode===m));let mi=modeInfo();document.getElementById("modeExplain").innerText=`${mi.name}: adds ${mi.extraExercises} extra workout option(s), ${mi.setAdd} set(s), ${mi.repAdd} reps, intensity around ${mi.int}%, cardio adjustment ${mi.cardio} min.`}
+function renderLocation(){["gym","home","outdoor"].forEach(l=>document.getElementById("loc_"+l).classList.toggle("active",state.location===l))}
+function renderCalories(){
+ let t=totals(), tg=target(), sg=stepGoal();
+ document.getElementById("calTarget").innerText=tg;document.getElementById("maintenance").innerText=maintenance();document.getElementById("stepGoal").innerText=sg.toLocaleString();document.getElementById("stepBurn").innerText=stepCals();document.getElementById("remaining").innerText=Math.max(0,tg-t.cal);document.getElementById("deficit").innerText=deficit();
+ document.getElementById("calExplain").innerText=`Route adjusted for ${routes[route()].label}. Breastfeeding adds ${nursing()} calories in this estimate. Walk ${Math.max(0,sg-state.inputs.steps).toLocaleString()} more steps to hit the movement target.`;
+}
+function ex(name,i,block){
+ let mi=modeInfo(), weekBoost=Math.floor(dayNum()/21);
+ let sets=(block==="main"?(3+mi.setAdd):(2+Math.max(0,mi.setAdd-1)));
+ let reps=(block==="main"?(10+mi.repAdd+weekBoost):(8+mi.repAdd));
+ let mins=block==="finisher"?Math.max(8,12+mi.cardio+weekBoost*2):null;
+ if(weekIdx()>=5){sets=1;reps=8;mins=20;}
+ const detail=mins?`${mins} minutes • effort ${Math.max(50,mi.int-5)}%`:`${sets} sets x ${reps} reps • effort ${mi.int}%`;
+ return `<div class="exercise"><b>${name}</b><span class="small">${detail}. Rest 45 to 75 sec. Stop for pelvic pressure, pain, leaking, dizziness, or core doming.</span><a class="video" target="_blank" href="${q(name+' proper form postpartum beginner '+state.location+' workout')}">Watch matching video</a></div>`;
+}
+function buildToday(scroll){
+ if(!state.route){
+  document.getElementById("dayHeader").innerText="Route not locked yet";
+  document.getElementById("planSummary").innerText="Choose and lock a 60 day body goal route first. Then Complete Day will unlock Day 2, Day 3, and so on.";
+  document.getElementById("dayFill").style.width="0%";
+  document.getElementById("todayPlan").innerHTML='<div class="card notice"><b>Plan waiting for lock in.</b><p class="small">This keeps Devon from jumping around randomly. Pick a route, lock it, then the split starts.</p></div>';
+  return;
+ }
+ let r=route(), loc=state.location, idx=weekIdx(), mi=modeInfo();
+ const dayPlan=workoutBank[loc][r][idx];
+ const warm=dayPlan[0], main=dayPlan[1].slice(0,3+mi.extraExercises), finish=dayPlan[2].slice(0,2+mi.extraExercises), cool=dayPlan[3];
+ document.getElementById("dayHeader").innerText=`Day ${dayNum()} of 60`;
+ document.getElementById("planSummary").innerText=`${routes[r].label} • ${routes[r].split[idx]} • ${mi.name} • ${loc}`;
+ document.getElementById("dayFill").style.width=Math.round(dayNum()/60*100)+"%";
+ let html="";
+ if(idx===6){html=`<details><summary>Sunday Full Rest <span>+</span></summary><div class="inside"><p>No formal workout. Hydrate, eat protein, journal, and sleep.</p>${warm.map((x,i)=>ex(x,i,"cool")).join("")}</div></details>`}
+ else if(idx===5){html=`<details><summary>Saturday Recovery <span>+</span></summary><div class="inside">${[...warm,...main,...finish,...cool].map((x,i)=>ex(x,i,"cool")).join("")}</div></details>`}
+ else{
+  html+=`<details><summary>Warm Up 8 to 10 min <span>+</span></summary><div class="inside">${warm.map((x,i)=>ex(x,i,"warm")).join("")}</div></details>`;
+  html+=`<details><summary>Main Workout 30 to 35 min <span>+</span></summary><div class="inside">${main.map((x,i)=>ex(x,i,"main")).join("")}</div></details>`;
+  html+=`<details><summary>Cardio or Finisher 10 to 20 min <span>+</span></summary><div class="inside">${finish.map((x,i)=>ex(x,i,"finisher")).join("")}</div></details>`;
+  html+=`<details><summary>Cool Down 7 to 10 min <span>+</span></summary><div class="inside">${cool.map((x,i)=>ex(x,i,"cool")).join("")}</div></details>`;
+ }
+ if(state.lastAdaptation){
+ html += `<details><summary>Latest adaptation feedback <span>+</span></summary><div class="inside"><p class="small">${state.lastAdaptation.date} ${state.lastAdaptation.time}</p><ul>${state.lastAdaptation.changes.map(c=>`<li>${c}</li>`).join("")}</ul></div></details>`;
+}
+document.getElementById("todayPlan").innerHTML=html;if(scroll)jump("todaySec")
+}
+function addFood(){
+ let name=document.getElementById("foodName").value.trim(), amount=Number(document.getElementById("foodAmount").value||0), unit=document.getElementById("foodUnit").value;
+ if(!name||!amount){alert("Enter food and amount.");return}
+ let g=grams(amount,unit), f=findFood(name), m=g/100;
+ state.food.push({date:today(),name,amount,unit,grams:Math.round(g),cal:Math.round(f.cal*m),p:Math.round(f.p*m),c:Math.round(f.c*m),fat:Math.round(f.fat*m),fi:Math.round(f.fi*m)});
+ document.getElementById("foodName").value="";document.getElementById("foodAmount").value="";save();refreshAll()
+}
+function renderFood(){
+ let t=totals(), tg=target(), pg=Math.round(state.inputs.weight*routes[route()].protein), fg=25;
+ document.getElementById("mCal").innerText=t.cal;document.getElementById("mPro").innerText=t.p+"g";document.getElementById("mCarb").innerText=t.c+"g";document.getElementById("mFat").innerText=t.fat+"g";document.getElementById("mFiber").innerText=t.fi+"g";
+ document.getElementById("macroAdvice").innerText=`Target ${tg} cal • protein ${pg}g • fiber ${fg}g. Left: ${Math.max(0,tg-t.cal)} cal, ${Math.max(0,pg-t.p)}g protein, ${Math.max(0,fg-t.fi)}g fiber.`;
+ document.getElementById("foodList").innerHTML=state.food.filter(x=>x.date===today()).map(x=>`<div class="exercise"><b>${x.name}: ${x.amount} ${x.unit}</b><span class="small">${x.cal} cal • P ${x.p}g • C ${x.c}g • F ${x.fat}g • Fiber ${x.fi}g</span></div>`).join("");
+}
+function clearFood(){if(confirm("Clear today's foods?")){state.food=state.food.filter(x=>x.date!==today());save();refreshAll()}}
+function pick(arr,offset){
+ return arr[(Date.now()+offset+Math.floor(Math.random()*arr.length))%arr.length];
+}
+function generateRecipes(category){
+ let cats = category==="any" ? ["breakfast","lunch","dinner"] : [category];
+ let results=[];
+ for(let i=0;i<6;i++){
+   let cat=cats[i%cats.length];
+   let tpl=pick(RECIPE_ENGINE[cat],i*13);
+   let protein=cat==="breakfast" ? pick(["eggs","greek yogurt","dairy free yogurt","ground turkey"],i) : pick(["ground turkey","lean ground beef","lean steak","white fish"],i);
+   let carb=cat==="breakfast" ? pick(["oats","potatoes","rice cakes","quinoa"],i*2) : pick(RECIPE_ENGINE.carbs,i*2);
+   let veg=cat==="breakfast" && i%2===0 ? "" : pick(RECIPE_ENGINE.veg,i*3)+", "+pick(RECIPE_ENGINE.veg,i*5);
+   let fruit=cat==="breakfast" || i%3===0 ? pick(RECIPE_ENGINE.fruits,i*7) : "";
+   let dairy=cat==="breakfast" ? pick(RECIPE_ENGINE.dairy,i*9) : "";
+   let fat=pick(RECIPE_ENGINE.fats,i*11);
+   results.push({cat,name:tpl[0],method:tpl[1],time:tpl[2],protein,carb,veg,fruit,dairy,fat});
+ }
+ let out=results.map((r,idx)=>`<div class="recipe"><b>${r.cat.toUpperCase()}: ${r.name}</b><span class="small"><b>Cook time:</b> ${r.time}<br><b>Use:</b> ${[r.protein,r.carb,r.veg,r.fruit,r.dairy,r.fat].filter(Boolean).join(", ")}.<br><b>Instructions:</b><ol><li>${r.method}</li><li>Cook or prep ${r.protein} and ${r.carb} first.</li><li>Add ${r.veg||r.fruit||"fruit or vegetables"} and season how Devon likes.</li><li>Finish with measured ${r.fat}. Keep fats controlled for the calorie goal.</li></ol><b>Portion:</b> protein palm sized, carbs fist sized, fats thumb sized, vegetables 1 to 2 fists.</span></div>`);
+ document.getElementById("mealIdeas").innerHTML=out.join("");
+}
+function buildMealIdeas(){generateRecipes("any")}
+function saveJournal(){
+ let changes=[];
+ let j={date:today(),time:new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}),mood:document.getElementById("mood").value,energy:document.getElementById("energy").value,sleep:Number(document.getElementById("sleep").value||0),soreness:Number(document.getElementById("soreness").value||0),text:document.getElementById("journalText").value};
+ state.journals.push(j);
+ const words=(j.text||"").toLowerCase();
+
+ if(j.sleep<5 || j.soreness>=7 || ["stressed","sad","overwhelmed"].includes(j.mood)){
+   if(state.mode!=="taylor") changes.push("Changed challenge mode to Taylor Swift easy for recovery.");
+   else changes.push("Kept Taylor Swift easy because recovery still needs protection.");
+   state.mode="taylor";
+ } else if(j.energy==="high" && j.sleep>=6.5 && j.soreness<=4){
+   if(state.mode!=="latto") changes.push("Changed challenge mode to Latto Big Mama hard because recovery looked strong.");
+   else changes.push("Kept Latto Big Mama hard because recovery looked strong.");
+   state.mode="latto";
+ } else {
+   if(state.mode!=="cardi") changes.push("Changed challenge mode to Cardi B moderate for steady results.");
+   else changes.push("Kept Cardi B moderate because the plan is balanced today.");
+   state.mode="cardi";
+ }
+
+ if(words.includes("outside") || words.includes("walk")){state.location="outdoor";changes.push("Changed workout location to outdoor because journal mentioned outside or walking.");}
+ else if(words.includes("home") || words.includes("baby") || words.includes("tired")){state.location="home";changes.push("Changed workout location to indoor home because journal suggested convenience was needed.");}
+ else if(words.includes("gym")){state.location="gym";changes.push("Changed workout location to gym because journal mentioned gym access.");}
+ else changes.push("Location did not change because the journal did not point to gym, home, or outdoor needs.");
+
+ changes.push("Meal and macro targets updated using current weight, baby age, breastfeeding status, route, mode, and steps.");
+ state.lastAdaptation={date:j.date,time:j.time,changes,newMode:state.mode,newLocation:state.location,newSteps:stepGoal()};
+ save();
+ document.getElementById("journalText").value="";
+ document.getElementById("adaptBox").classList.remove("hidden");
+ document.getElementById("adaptBox").innerHTML="<b>Saved and adapted.</b><ul>"+changes.map(c=>`<li>${c}</li>`).join("")+"</ul>";
+ refreshAll();
+}
+function renderHistory(){
+ let arr=state.journals.slice().reverse();
+ document.getElementById("historyList").innerHTML=arr.length?arr.map(j=>`<details><summary>${j.date} ${j.time||""} • ${j.mood} <span>+</span></summary><div class="inside small">Energy: ${j.energy} • Sleep: ${j.sleep} • Soreness: ${j.soreness}/10<p>${j.text||""}</p></div></details>`).join(""):"<p class='small'>No saved journals yet.</p>";
+}
+function completeToday(){
+ if(!state.route){alert("Lock a 60 day route first. Then the app will let Devon move forward.");jump("routeSec");return}
+ state.completed["day_"+dayNum()]=true;
+ if(state.programDay<60){state.programDay+=1;save();refreshAll();jump("todaySec");alert("Completed. Next day unlocked.");}
+ else{save();refreshAll();alert("60 day block complete. Devon finished the route.")}
+}
+
+function openLockConfirm(){
+ if(state.route){alert("Already locked.");return}
+ const panel=document.getElementById("lockConfirmPanel");
+ const title=document.getElementById("lockConfirmTitle");
+ if(title) title.innerText="Confirm: "+routes[state.selectedRoute].label;
+ if(panel){
+   panel.classList.remove("hidden");
+   panel.scrollIntoView({behavior:"smooth",block:"center"});
+ }
+}
+function cancelLockConfirm(){
+ const panel=document.getElementById("lockConfirmPanel");
+ if(panel) panel.classList.add("hidden");
+}
+function confirmLockRoute(){
+ if(state.route){alert("Already locked.");return}
+ state.route=state.selectedRoute;
+ state.routeStart=today();
+ state.programDay=1;
+ const panel=document.getElementById("lockConfirmPanel");
+ if(panel) panel.classList.add("hidden");
+ save();
+ refreshAll();
+ jump("todaySec");
+ alert("Program locked. Day 1 is ready.");
+}
+
+function wireButtons(){
+ const lockBtn=document.getElementById("lockRouteButton");
+ const yesBtn=document.getElementById("confirmLockButton");
+ const cancelBtn=document.getElementById("cancelLockButton");
+ if(lockBtn) lockBtn.addEventListener("click", openLockConfirm);
+ if(yesBtn) yesBtn.addEventListener("click", confirmLockRoute);
+ if(cancelBtn) cancelBtn.addEventListener("click", cancelLockConfirm);
+ const quitBtn=document.getElementById("quitBtn");
+ const quitFirst=document.getElementById("quitFirstConfirm");
+ const quitFinal=document.getElementById("quitFinalConfirm");
+ const quitCancelOne=document.getElementById("quitCancelOne");
+ const quitCancelTwo=document.getElementById("quitCancelTwo");
+ if(quitBtn) quitBtn.addEventListener("click", openQuitConfirm);
+ if(quitFirst) quitFirst.addEventListener("click", quitSecondConfirm);
+ if(quitFinal) quitFinal.addEventListener("click", finalQuitProgram);
+ if(quitCancelOne) quitCancelOne.addEventListener("click", cancelQuitConfirm);
+ if(quitCancelTwo) quitCancelTwo.addEventListener("click", cancelQuitConfirm);
+}
+wireButtons();
+init();
+</script>
+</body>
+</html>
