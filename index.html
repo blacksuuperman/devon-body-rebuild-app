@@ -3,666 +3,473 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Devon 60 Day Body Rebuild V20</title>
+<meta name="theme-color" content="#ec4899">
+<title>Devon Daily Rebuild V24</title>
 <style>
 :root{
- --bg:#fff1f8;--card:#fff;--ink:#331426;--muted:#7b5b6e;--line:#f5c2dc;
- --pink:#ec4899;--pink2:#db2777;--deep:#831843;--soft:#fce7f3;--good:#16a34a;--warn:#f59e0b;--danger:#dc2626;
- --shadow:0 12px 28px rgba(131,24,67,.12);
+ --bg:#fff1f8;--card:#fff;--ink:#301226;--muted:#755769;--line:#f4c0d9;
+ --pink:#ec4899;--pink2:#db2777;--deep:#831843;--soft:#fce7f3;--soft2:#fff7fb;
+ --good:#16a34a;--warn:#f59e0b;--danger:#dc2626;--blue:#2563eb;--purple:#7c3aed;--orange:#ea580c;
+ --shadow:0 14px 30px rgba(131,24,67,.13)
 }
-*{box-sizing:border-box}
-html,body{margin:0;background:linear-gradient(180deg,var(--bg),#fff);color:var(--ink);font-family:Arial,Helvetica,sans-serif}
-body{padding:10px 10px 96px}
-.app{max-width:760px;margin:0 auto}
-.hero{background:linear-gradient(135deg,#fbcfe8,#f9a8d4,#f472b6);border:1px solid #f8bad8;border-radius:26px;padding:15px;box-shadow:var(--shadow)}
-.tag{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;color:var(--deep)}
-h1{font-size:25px;line-height:1.05;margin:8px 0}
-h2{font-size:20px;margin:0 0 8px}
-h3{font-size:17px;margin:0 0 8px}
-p,li,label{line-height:1.42}
-.small{font-size:12px;color:var(--muted)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:21px;padding:13px;margin:11px 0;box-shadow:var(--shadow)}
-.pinkcard{background:#fff7fb}.notice{border-left:5px solid var(--pink);background:#fff7fb}.warnbox{border-left:5px solid var(--warn);background:#fffbeb}
-.row{display:flex;gap:8px;flex-wrap:wrap}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-button,.btn{border:0;border-radius:15px;padding:12px 13px;background:var(--soft);color:var(--deep);font-weight:900;cursor:pointer;text-decoration:none;display:inline-flex;justify-content:center;align-items:center;gap:6px}
-button.primary{background:var(--pink);color:#fff} button.deep{background:var(--deep);color:#fff} button.good{background:var(--good);color:#fff} button.ghost{background:#fff;border:1px solid var(--line)} button.danger{background:var(--danger);color:#fff}
-button.full{width:100%} button.active{background:var(--deep);color:#fff} button:disabled{opacity:.45}
-input,select,textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:15px;background:#fff;color:var(--ink);font-size:16px}
-textarea{min-height:90px;resize:vertical}
-details{border:1px solid var(--line);border-radius:17px;background:#fff;padding:12px;margin:9px 0}
-summary{list-style:none;display:flex;justify-content:space-between;align-items:center;font-weight:900;cursor:pointer}
-summary::-webkit-details-marker{display:none}.inside{padding-top:10px}
-.stat{border:1px solid var(--line);background:#fff7fb;border-radius:15px;padding:10px}.big{font-size:22px;font-weight:900}
-.exercise,.recipe{border:1px solid #f7c9df;background:#fffafd;border-radius:15px;padding:10px;margin:8px 0}
-.exercise b,.recipe b{display:block}.video{margin-top:6px;font-weight:900;color:var(--pink2);font-size:13px;display:block}
-.bar{height:12px;border-radius:999px;background:var(--soft);overflow:hidden}.fill{height:100%;background:var(--pink);width:0%}
-.nav{position:sticky;top:0;z-index:10;background:rgba(255,241,248,.94);backdrop-filter:blur(10px);display:flex;gap:7px;overflow:auto;padding:8px 0}
-.nav button{white-space:nowrap;padding:10px 12px}
-.sticky{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(255,241,248,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:9px 10px calc(9px + env(safe-area-inset-bottom))}
-.sticky .inner{max-width:760px;margin:0 auto;display:flex;gap:8px}.sticky button{flex:1}
-.hidden{display:none!important} .lockedRoute{display:none}
-@media(max-width:560px){.grid{grid-template-columns:1fr}h1{font-size:23px}.card{padding:12px}.hero{border-radius:23px}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:linear-gradient(180deg,var(--bg),#fff);color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.42}
+body{padding:10px 10px calc(100px + env(safe-area-inset-bottom))}.app{max-width:900px;margin:0 auto}
+.hero{background:linear-gradient(135deg,#fbcfe8,#f9a8d4,#f472b6);border:1px solid #f8bad8;border-radius:28px;padding:16px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;right:-60px;top:-58px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.24)}
+.kicker{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:900;color:var(--deep)}
+h1{font-size:28px;line-height:1.05;margin:8px 0 6px;letter-spacing:-.035em}h2{font-size:21px;margin:0 0 8px}h3{font-size:17px;margin:0 0 7px}p,li,label{line-height:1.42}.small{font-size:12px;color:var(--muted)}.tiny{font-size:11px;color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:14px;margin:11px 0;box-shadow:var(--shadow)}
+.inner{background:rgba(255,255,255,.62);border:1px solid rgba(255,255,255,.78);border-radius:19px;padding:12px;margin-top:10px}
+.notice{border-left:5px solid var(--pink);background:var(--soft2)}.warnbox{border-left:5px solid var(--warn);background:#fffbeb}.goodbox{border-left:5px solid var(--good);background:#f0fdf4}.bluebox{border-left:5px solid var(--blue);background:#eff6ff}.purplebox{border-left:5px solid var(--purple);background:#f5f3ff}.orangebox{border-left:5px solid var(--orange);background:#fff7ed}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.spread{display:flex;justify-content:space-between;gap:12px;align-items:center}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}
+button,.btn{border:0;border-radius:15px;padding:12px 13px;background:var(--soft);color:var(--deep);font-weight:900;cursor:pointer;text-decoration:none;display:inline-flex;justify-content:center;align-items:center;gap:6px;min-height:44px;text-align:center;font-size:14px}
+button.primary,.btn.primary{background:var(--pink);color:#fff}button.deep{background:var(--deep);color:#fff}button.good{background:var(--good);color:#fff}button.blue{background:var(--blue);color:#fff}button.purple{background:var(--purple);color:#fff}button.orange{background:var(--orange);color:#fff}button.ghost{background:#fff;border:1px solid var(--line)}button.danger{background:var(--danger);color:#fff}button.active{background:var(--deep);color:#fff}button.full,.btn.full{width:100%}button:disabled{opacity:.45;cursor:not-allowed}
+input,select,textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:15px;background:#fff;color:var(--ink);font-size:16px}textarea{min-height:96px;resize:vertical}
+details{border:1px solid var(--line);border-radius:18px;background:#fff;padding:12px;margin:9px 0}summary{list-style:none;display:flex;justify-content:space-between;align-items:center;font-weight:900;cursor:pointer;gap:8px}summary::-webkit-details-marker{display:none}summary:after{content:"+";height:27px;width:27px;border-radius:50%;background:var(--pink);color:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 auto}details[open] summary:after{content:"×"}.inside{padding-top:10px}
+.nav{position:sticky;top:0;z-index:30;background:rgba(255,241,248,.96);backdrop-filter:blur(11px);display:flex;gap:7px;overflow:auto;padding:9px 0}.nav button{white-space:nowrap;padding:10px 12px;min-height:40px}.section{display:none}.section.activeSection{display:block}
+.bottom{position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(255,241,248,.98);backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:9px 10px calc(9px + env(safe-area-inset-bottom))}.bottom .innerBottom{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1.1fr;gap:8px}.bottom button{min-height:45px;padding:10px 7px;font-size:12px}
+.bar{height:13px;background:var(--soft);border-radius:999px;overflow:hidden;margin-top:8px}.fill{height:100%;background:linear-gradient(90deg,var(--pink),var(--deep));width:0%;transition:width .25s ease}.pill{border:1px solid var(--line);background:var(--soft2);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:900;color:var(--deep)}
+.task,.foodItem,.hairItem,.ugcItem,.workoutItem{border:1px solid #f7c9df;background:#fffafd;border-radius:16px;padding:11px;margin:8px 0}.task.done,.hairItem.done,.workoutItem.done{border-color:#86efac;background:#f0fdf4}.taskHead{display:flex;gap:9px;align-items:flex-start}.check{height:30px;width:30px;border-radius:50%;border:2px solid var(--pink);display:flex;align-items:center;justify-content:center;font-weight:900;flex:0 0 auto;background:#fff}.done .check{background:var(--good);border-color:var(--good);color:#fff}.owner{font-size:11px;font-weight:900;color:#fff;border-radius:999px;padding:4px 7px;background:var(--deep);display:inline-flex;margin-right:4px}.owner.jr{background:#111827}.owner.four{background:#2563eb}.owner.devon{background:#db2777}.owner.family{background:#16a34a}.owner.baby{background:#0f766e}.owner.ugc{background:#ea580c}
+.hidden{display:none!important}.miniStat{border:1px solid var(--line);background:var(--soft2);border-radius:15px;padding:10px;text-align:left}.miniStat b{display:block;font-size:20px}.editBox{border:1px dashed var(--line);border-radius:14px;padding:10px;margin-top:8px;background:#fff}.copyBox{font-family:Arial,Helvetica,sans-serif;font-size:14px;min-height:120px;background:#fff}.toast{position:fixed;left:10px;right:10px;bottom:92px;z-index:90;max-width:900px;margin:0 auto;background:var(--deep);color:#fff;border-radius:17px;padding:12px 14px;box-shadow:var(--shadow);display:none;font-weight:900;text-align:center}.toast.show{display:block;animation:pop .2s ease}@keyframes pop{from{transform:translateY(8px);opacity:.5}to{transform:translateY(0);opacity:1}}
+.weekGrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.dayDot{border:1px solid var(--line);border-radius:14px;background:#fff;padding:8px;text-align:center;font-size:11px}.dayDot b{display:block;font-size:13px}.dayDot.on{background:#fdf2f8;border-color:#ec4899}
+@media(max-width:680px){body{padding-left:9px;padding-right:9px}.grid,.grid3,.grid4{grid-template-columns:1fr}.hero{border-radius:24px;padding:15px}h1{font-size:24px}.card{padding:12px;border-radius:20px}.bottom .innerBottom{grid-template-columns:1fr 1fr 1.15fr}.bottom button{font-size:11px}.weekGrid{grid-template-columns:repeat(4,1fr)}}
 </style>
 </head>
 <body>
+<div class="toast" id="toast"></div>
 <div class="app">
 <section class="hero">
- <div class="tag">Devon 60 Day Postpartum Body Rebuild</div>
- <h1>Weight loss, shape, confidence, and peace.</h1>
- <p>Mobile first plan for breastfeeding, real mom stress, body composition, steps, workouts, meals, and daily mindset.</p>
- <div id="affirmation" class="card pinkcard" style="margin-bottom:0"></div>
+ <div class="kicker">Devon Daily Rebuild</div>
+ <h1>Start calm. Pick the next best move.</h1>
+ <p>Check in once, then let the day adjust around the baby, kids, meals, workouts, hair, chores, and UGC work.</p>
+ <div class="inner">
+  <div class="spread"><div><div class="small">Today</div><h2 id="heroDate">Today</h2></div><div style="text-align:right"><div class="small">Daily Flow</div><h2 id="heroPct">0%</h2></div></div>
+  <div class="bar"><div class="fill" id="heroFill"></div></div>
+  <div class="row" style="margin-top:10px"><span class="pill" id="babyPill">Baby</span><span class="pill" id="energyPill">Energy</span><span class="pill" id="waterPill">Water</span><span class="pill" id="calPill">Calories</span></div>
+ </div>
 </section>
 
-<div class="nav">
- <button onclick="jump('historyTop')">History</button>
- <button id="quitBtn" class="danger hidden" type="button">Quit Program</button>
- <button onclick="jump('routeSec')">Route</button>
- <button onclick="jump('todaySec')">Today</button>
- <button onclick="jump('foodSec')">Food</button>
- <button onclick="jump('journalSec')">Journal</button>
+<div class="nav" id="mainNav">
+ <button data-tab="todaySec" onclick="showTab('todaySec')">Today</button>
+ <button data-tab="flowSec" onclick="showTab('flowSec')">Daily Flow</button>
+ <button data-tab="foodSec" onclick="showTab('foodSec')">Meals</button>
+ <button data-tab="bodySec" onclick="showTab('bodySec')">Workout</button>
+ <button data-tab="hairSec" onclick="showTab('hairSec')">Hair</button>
+ <button data-tab="kidsSec" onclick="showTab('kidsSec')">Kids</button>
+ <button data-tab="ugcSec" onclick="showTab('ugcSec')">UGC</button>
+ <button data-tab="journalSec" onclick="showTab('journalSec')">Journal</button>
+ <button data-tab="profileSec" onclick="showTab('profileSec')">Profile</button>
 </div>
 
-<section id="historyTop" class="card">
- <details>
-  <summary>Saved growth history <span>+</span></summary>
-  <div class="inside" id="historyList"></div>
- </details>
- <div id="quitConfirmPanel" class="card warnbox hidden">
-  <b>Quit current 60 day program?</b>
-  <p class="small">This will reset the locked route, program day, food log, journal history, and completed days. You will be able to choose a new route after quitting.</p>
-  <div id="quitStepOne" class="grid">
-   <button type="button" class="danger" id="quitFirstConfirm">Yes, I want to quit</button>
-   <button type="button" class="ghost" id="quitCancelOne">Cancel</button>
-  </div>
-  <div id="quitStepTwo" class="grid hidden">
-   <button type="button" class="danger" id="quitFinalConfirm">Final confirm, reset it</button>
-   <button type="button" class="ghost" id="quitCancelTwo">Cancel</button>
-  </div>
- </div>
-</section>
-
-<section id="routeSec" class="card">
- <h2>1. Lock the Body Goal Route</h2>
- <p class="small">Each route has a different 7 day split with active recovery and full rest. Once locked, the other route options disappear until the program is quit or completed.</p>
- <div id="routeStatus" class="card notice"></div>
- <div id="routePicker">
-  <div class="grid">
-   <button id="r_balanced" onclick="selectRoute('balanced')">Balanced weight loss</button>
-   <button id="r_curvy" onclick="selectRoute('curvy')">Curvier built with weights</button>
-   <button id="r_slim" onclick="selectRoute('slim')">Slimmer cardio focused</button>
-   <button id="r_slimthick" onclick="selectRoute('slimthick')">Slim thick glute focused</button>
-  </div>
-  <button id="lockRouteButton" type="button" class="primary full">Lock this 60 day route</button>
-  <div id="lockConfirmPanel" class="card notice hidden">
-    <b id="lockConfirmTitle">Confirm route</b>
-    <p class="small">This locks the selected body goal route for 60 days. Other route options will disappear unless the program is quit and reset.</p>
-    <div class="grid">
-      <button type="button" class="primary" id="confirmLockButton">Yes, lock it in</button>
-      <button type="button" class="ghost" id="cancelLockButton">Cancel</button>
-    </div>
-  </div>
- </div>
-</section>
-
-<section class="card">
- <h2>2. Devon’s Challenge Mode</h2>
- <p class="small">This changes sets, reps, exercises, cardio minutes, intensity, and steps.</p>
+<section id="todaySec" class="section activeSection card">
+ <div class="spread"><div><h2>Morning Check In</h2><p class="small">Enter the basics first. The targets, next move, food ideas, workout intensity, and hair steps update from here.</p></div><button class="deep" onclick="resetTodayConfirm()">Reset Today</button></div>
  <div class="grid">
-  <button id="m_taylor" onclick="setMode('taylor')">Taylor Swift: Easy</button>
-  <button id="m_cardi" onclick="setMode('cardi')">Cardi B: Moderate</button>
-  <button id="m_latto" onclick="setMode('latto')">Latto Big Mama: Hard</button>
-  <button onclick="autoMode()">Auto from journal</button>
- </div>
- <div id="modeExplain" class="small" style="margin-top:8px"></div>
-</section>
-
-<section class="card">
- <h2>3. Training Location</h2>
- <p class="small">This changes warmup, main workout, cardio/finisher, and cool down based on access.</p>
- <div class="grid">
-  <button id="loc_gym" onclick="setLocation('gym')">Gym</button>
-  <button id="loc_home" onclick="setLocation('home')">Indoor home</button>
-  <button id="loc_outdoor" onclick="setLocation('outdoor')">Outdoor</button>
-  <button onclick="cycleLocation()">Switch location</button>
- </div>
-</section>
-
-<section class="card">
- <h2>4. Body, Baby, Steps, and Calories</h2>
- <div class="grid">
-  <label>Weight lbs<input id="weight" type="number" inputmode="decimal" value="180" onchange="saveInputs();refreshAll()"></label>
-  <label>Height inches<input id="height" type="number" inputmode="decimal" value="64" onchange="saveInputs();refreshAll()"></label>
-  <label>Age<input id="age" type="number" inputmode="numeric" value="33" onchange="saveInputs();refreshAll()"></label>
-  <label>Baby age months<input id="babyMonths" type="number" inputmode="numeric" value="8" onchange="saveInputs();refreshAll()"></label>
+  <label>Weight today lbs<input id="dailyWeight" type="number" inputmode="decimal" step="0.1" onchange="saveDailyWeight()"></label>
+  <label>Sleep hours<input id="sleep" type="number" inputmode="decimal" step="0.1" onchange="saveInputs();refreshAll()"></label>
+  <label>Energy<select id="energy" onchange="saveInputs();refreshAll()"><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></label>
+  <label>Mood<select id="mood" onchange="saveInputs();refreshAll()"><option value="steady">Steady</option><option value="happy">Happy</option><option value="motivated">Motivated</option><option value="stressed">Stressed</option><option value="overwhelmed">Overwhelmed</option><option value="sad">Sad</option></select></label>
+  <label>Baby status<select id="babyStatus" onchange="saveInputs();refreshAll()"><option value="awake">Awake and calm</option><option value="feeding">Feeding or nursing</option><option value="nap">Napping</option><option value="fussy">Fussy or clingy</option><option value="out">Out of the house</option></select></label>
   <label>Breastfeeding<select id="breastfeeding" onchange="saveInputs();refreshAll()"><option value="yes">Yes</option><option value="partial">Partial</option><option value="no">No</option></select></label>
-  <label>Steps walked today<input id="steps" type="number" inputmode="numeric" value="0" onchange="saveInputs();refreshAll()"></label>
+  <label>Water so far gallons<input id="waterGallons" type="number" inputmode="decimal" step="0.05" onchange="saveInputs();refreshAll()"></label>
+  <label>Available workout time<select id="availableTime" onchange="saveInputs();refreshAll()"><option value="15">15 minutes</option><option value="25">25 minutes</option><option value="40">40 minutes</option><option value="60">60 minutes</option></select></label>
  </div>
- <div class="grid" style="margin-top:10px">
-  <div class="stat"><div class="small">Calorie target</div><div class="big" id="calTarget">0</div></div>
-  <div class="stat"><div class="small">Estimated maintenance</div><div class="big" id="maintenance">0</div></div>
-  <div class="stat"><div class="small">Step goal</div><div class="big" id="stepGoal">0</div></div>
-  <div class="stat"><div class="small">Step calories</div><div class="big" id="stepBurn">0</div></div>
-  <div class="stat"><div class="small">Calories left</div><div class="big" id="remaining">0</div></div>
-  <div class="stat"><div class="small">Route deficit</div><div class="big" id="deficit">0</div></div>
+ <div class="grid4" style="margin-top:10px">
+  <div class="miniStat"><span class="small">Calories</span><b id="targetCalMini">0</b></div>
+  <div class="miniStat"><span class="small">Protein</span><b id="targetProMini">0g</b></div>
+  <div class="miniStat"><span class="small">Water goal</span><b id="targetWaterMini">0 gal</b></div>
+  <div class="miniStat"><span class="small">Tasks done</span><b id="tasksDoneMini">0</b></div>
  </div>
- <p id="calExplain" class="small"></p>
+ <div id="coachCard" class="card notice"></div>
+ <div id="nextMoveCard" class="card goodbox"></div>
 </section>
 
-<section id="todaySec" class="card">
- <div class="row" style="justify-content:space-between;align-items:center">
-  <div><h2 id="dayHeader">Today</h2><p id="planSummary" class="small"></p></div>
-  <button class="primary" onclick="buildToday(true)">Build Today</button>
+<section id="flowSec" class="section card notice">
+ <div class="spread"><div><h2>Adaptive Daily Flow</h2><p class="small">This is the preferred order for the day. Complete what gets done. Anything left stays visible so the day can bend without feeling lost.</p></div><button class="primary" onclick="completeNextBest()">Complete Next Move</button></div>
+ <div class="grid4">
+  <button id="flow_left" onclick="renderFlow('left')">Left</button>
+  <button id="flow_devon" onclick="renderFlow('devon')">Devon</button>
+  <button id="flow_jr" onclick="renderFlow('jr')">Jr</button>
+  <button id="flow_four" onclick="renderFlow('four')">4 Year Old</button>
  </div>
- <div class="bar"><div class="fill" id="dayFill"></div></div>
- <div id="todayPlan"></div>
-</section>
-
-<section id="foodSec" class="card">
- <h2>Meal and Macro Tracker</h2>
- <p class="small">Includes a lightweight recipe generator for breakfast, lunch, and dinner using your approved food list.</p>
- <div class="grid">
-  <input id="foodName" placeholder="Food name">
-  <input id="foodAmount" type="number" inputmode="decimal" placeholder="Amount">
-  <select id="foodUnit"><option value="g">grams</option><option value="oz">ounces</option><option value="lb">pounds</option><option value="ml">ml</option><option value="floz">fl oz</option></select>
-  <button class="primary" onclick="addFood()">Add food</button>
- </div>
- <div class="grid" style="margin-top:10px">
-  <div class="stat"><div class="small">Calories</div><div class="big" id="mCal">0</div></div>
-  <div class="stat"><div class="small">Protein</div><div class="big" id="mPro">0g</div></div>
-  <div class="stat"><div class="small">Carbs</div><div class="big" id="mCarb">0g</div></div>
-  <div class="stat"><div class="small">Fat</div><div class="big" id="mFat">0g</div></div>
-  <div class="stat"><div class="small">Fiber</div><div class="big" id="mFiber">0g</div></div>
-  <div class="stat"><div class="small">Macro advice</div><div id="macroAdvice" class="small"></div></div>
- </div>
- <div id="foodList"></div>
- <button class="ghost full" onclick="clearFood()">Clear today’s food</button>
-
+ <div id="flowSummary" class="card bluebox"></div>
+ <div id="flowList"></div>
  <details>
-  <summary>Recipe idea generator <span>+</span></summary>
+  <summary>Add one thing to today</summary>
+  <div class="inside grid">
+   <input id="customTitle" placeholder="Task name">
+   <select id="customOwner"><option value="devon">Devon</option><option value="jr">Jr</option><option value="four">Four year old</option><option value="baby">Baby</option><option value="family">Family</option><option value="ugc">UGC</option></select>
+   <select id="customAnchor"><option value="morning">Morning</option><option value="midday">Midday</option><option value="afternoon">Afternoon</option><option value="evening">Evening</option><option value="bedtime">Bedtime</option></select>
+   <input id="customDuration" type="number" inputmode="numeric" placeholder="Minutes" value="20">
+   <button class="primary full" onclick="addCustomTask()">Add task</button>
+  </div>
+ </details>
+</section>
+
+<section id="foodSec" class="section card">
+ <h2>Meals and Macros</h2>
+ <p class="small">Type what she ate. The app estimates calories, protein, carbs, fat, and sodium. She can edit the food, amount, unit, or macros anytime.</p>
+ <div class="grid">
+  <input id="foodName" placeholder="Food name like chicken thigh, eggs, rice">
+  <input id="foodAmount" type="number" inputmode="decimal" step="0.1" placeholder="Amount">
+  <select id="foodUnit"><option value="g">grams</option><option value="oz">ounces</option><option value="lb">pounds</option><option value="serving">serving</option><option value="cup">cup</option><option value="ml">ml</option><option value="floz">fl oz</option></select>
+  <select id="mealType"><option>Breakfast</option><option>Snack 1</option><option>Lunch</option><option>Snack 2</option><option>Dinner</option><option>Snack 3</option></select>
+ </div>
+ <details>
+  <summary>Manual override if the label is different</summary>
+  <div class="inside grid">
+   <input id="manualCal" type="number" inputmode="decimal" placeholder="Calories optional">
+   <input id="manualP" type="number" inputmode="decimal" placeholder="Protein grams optional">
+   <input id="manualC" type="number" inputmode="decimal" placeholder="Carbs grams optional">
+   <input id="manualF" type="number" inputmode="decimal" placeholder="Fat grams optional">
+   <input id="manualS" type="number" inputmode="decimal" placeholder="Sodium mg optional">
+  </div>
+ </details>
+ <div class="grid3"><button class="blue" onclick="fixFoodInput()">Clean Food Name</button><button class="primary" onclick="addFood()">Add Food</button><button class="good" onclick="buildMealIdeas()">Meal Ideas</button></div>
+ <div class="grid4" style="margin-top:10px">
+  <div class="miniStat"><span class="small">Calories</span><b id="mCal">0</b></div>
+  <div class="miniStat"><span class="small">Protein</span><b id="mPro">0g</b></div>
+  <div class="miniStat"><span class="small">Carbs</span><b id="mCarb">0g</b></div>
+  <div class="miniStat"><span class="small">Sodium</span><b id="mSod">0mg</b></div>
+ </div>
+ <div id="macroAdvice" class="card notice"></div>
+ <div id="foodMatchBox" class="card bluebox hidden"></div>
+ <div id="foodList"></div>
+ <details>
+  <summary>Build quick meals from what is in the house</summary>
   <div class="inside">
-   <p class="small">No typing needed. Tap a meal type and the app creates 6 healthy recipes with cook times and steps.</p>
-   <div class="grid">
-    <button class="primary" type="button" onclick="generateRecipes('breakfast')">Breakfast ideas</button>
-    <button class="primary" type="button" onclick="generateRecipes('lunch')">Lunch ideas</button>
-    <button class="primary" type="button" onclick="generateRecipes('dinner')">Dinner ideas</button>
-    <button class="ghost" type="button" onclick="generateRecipes('any')">Surprise me</button>
-   </div>
+   <textarea id="pantryInput" placeholder="Example: eggs, chicken breast, rice, Greek yogurt, bananas, turkey, potatoes, spinach"></textarea>
+   <button class="good full" onclick="buildMealIdeas()">Build simple high protein meals</button>
    <div id="mealIdeas"></div>
   </div>
  </details>
+ <button class="danger full" onclick="clearFoodConfirm()">Clear Food Today</button>
 </section>
 
-<section id="journalSec" class="card">
- <h2>Daily Journal and Adaptation</h2>
+<section id="bodySec" class="section card notice">
+ <div class="spread"><div><h2>Workout Plan</h2><p class="small">Choose the route, location, and difficulty. The plan changes by goal, day, equipment, energy, and available time.</p></div><button class="primary" onclick="buildWorkout(true)">Refresh Workout</button></div>
  <div class="grid">
-  <label>Mood<select id="mood"><option>steady</option><option>happy</option><option>motivated</option><option>stressed</option><option>sad</option><option>overwhelmed</option></select></label>
-  <label>Energy<select id="energy"><option>medium</option><option>low</option><option>high</option></select></label>
-  <label>Sleep hours<input id="sleep" type="number" inputmode="decimal" value="6"></label>
-  <label>Soreness 1 to 10<input id="soreness" type="number" inputmode="numeric" value="3"></label>
+  <label>Body route<select id="route" onchange="saveInputs();refreshAll()"><option value="curvy">Curvier weights</option><option value="slim">Cardio slimmer</option><option value="slimthick">Slim thick glute focus</option><option value="balanced">Balanced weight loss</option></select></label>
+  <label>Difficulty<select id="difficulty" onchange="saveInputs();refreshAll()"><option value="cardi">Get my Cardi B on Easy</option><option value="latto">Get my Latto on Moderate</option><option value="taylor">Get my Taylor Swift on Hard</option></select></label>
+  <label>Location<select id="workoutLocation" onchange="saveInputs();refreshAll()"><option value="home">Home</option><option value="gym">Gym</option><option value="outdoor">Outdoor</option></select></label>
+  <label>Plan lock<select id="planLocked" onchange="togglePlanLockFromSelect()"><option value="no">Unlocked</option><option value="yes">Locked for 60 days</option></select></label>
  </div>
- <label>Thoughts, feelings, cravings, foods, wins, dislikes<textarea id="journalText" placeholder="Devon, write what today felt like. The app will adapt tomorrow only if it supports better results and consistency."></textarea></label>
- <button class="primary full" onclick="saveJournal()">Save journal and adapt tomorrow</button>
- <div id="adaptBox" class="card notice hidden"></div>
+ <div id="lockNote" class="card bluebox"></div>
+ <div id="workoutPlan"></div>
 </section>
 
-<section class="card warnbox">
- <h3>Recipe and database note</h3>
- <p class="small">This version uses a lightweight recipe generator instead of storing thousands of full recipes, which keeps the app fast on mobile. It uses your approved foods and healthy fats only: olive oil, sesame oil, and avocado.</p>
+<section id="hairSec" class="section card bluebox">
+ <h2>Hair Routine</h2>
+ <p class="small">Answer the hair check. The app keeps track of wash day, deep mask day, dry hair, and night protection.</p>
+ <div class="grid">
+  <label>How does it feel today<select id="hairFeel" onchange="saveInputs();refreshAll()"><option value="normal">Normal</option><option value="dry">Dry or frizzy</option><option value="oily">Oily or heavy</option><option value="tangled">Tangled</option><option value="itchy">Itchy scalp</option></select></label>
+  <label>Did she wash today?<select id="washedToday" onchange="logWashFromSelect()"><option value="no">No</option><option value="yes">Yes</option></select></label>
+  <label>Deep mask done this week?<select id="deepMaskThisWeek" onchange="logDeepMaskFromSelect()"><option value="no">No</option><option value="yes">Yes</option></select></label>
+  <label>Night protection done?<select id="nightHairDone" onchange="toggleNamedHair('night_protection', this.value==='yes')"><option value="no">No</option><option value="yes">Yes</option></select></label>
+ </div>
+ <div class="weekGrid" id="hairWeek"></div>
+ <div id="hairCoach" class="card notice"></div>
+ <div class="grid3"><button class="primary" onclick="renderHairMode('today')">Today</button><button class="blue" onclick="renderHairMode('wash')">Wash Day Steps</button><button class="purple" onclick="renderHairMode('weekly')">Weekly Plan</button></div>
+ <div id="hairPlan"></div>
+</section>
+
+<section id="kidsSec" class="section card">
+ <h2>Kids and Chores</h2>
+ <p class="small">Use the Daily Flow tab for completion. This tab explains what each kid is supposed to do and gives quick learning blocks.</p>
+ <details open><summary>Jr homeschool and training</summary><div class="inside" id="jrPlan"></div></details>
+ <details><summary>Four year old learning and attention plan</summary><div class="inside" id="fourPlan"></div></details>
+ <details><summary>Chore board</summary><div class="inside" id="choreBoard"></div></details>
+</section>
+
+<section id="ugcSec" class="section card goodbox">
+ <h2>UGC Work Center</h2>
+ <p class="small">Use this like a simple brand desk. Add the company, product, what she found about the brand, and the app will shape the angle, script, outreach, and recording plan.</p>
+ <div class="grid">
+  <input id="brandName" placeholder="Company name">
+  <input id="productName" placeholder="Product or item">
+  <input id="brandWebsite" placeholder="Website or social link optional">
+  <select id="brandStatus"><option>Idea</option><option>Researching</option><option>Need contact</option><option>Contacted</option><option>Follow up</option><option>Accepted</option><option>Recorded</option><option>Posted</option></select>
+  <input id="contactEmail" placeholder="Contact email if found">
+  <button class="good" onclick="addBrand()">Save Brand Workspace</button>
+ </div>
+ <details open>
+  <summary>Brand research notes</summary>
+  <div class="inside">
+   <textarea id="brandMission" placeholder="Paste mission statement, about us notes, or what the brand stands for."></textarea>
+   <textarea id="brandContentNotes" placeholder="What kind of content do they post? Example: clean aesthetic, funny mom clips, before and afters, wellness tips, family lifestyle."></textarea>
+   <textarea id="productDescription" placeholder="Describe the UGC item, what it does, who it helps, texture, smell, taste, quality, problem solved, or first impression."></textarea>
+   <textarea id="brandIdea" placeholder="Video idea or rough angle she wants to use."></textarea>
+  </div>
+ </details>
+ <div class="grid4" style="margin-top:8px">
+  <button class="blue" onclick="openBrandSearch('mission')">Search Mission</button>
+  <button class="purple" onclick="openBrandSearch('social')">Search Content</button>
+  <button class="orange" onclick="openBrandSearch('contact')">Find Contact</button>
+  <button class="ghost" onclick="openBrandSearch('ugc')">UGC Email Search</button>
+ </div>
+ <div class="grid3" style="margin-top:8px">
+  <button class="blue" onclick="rewriteBrandIdea()">Clean Angle</button>
+  <button class="primary" onclick="generateUGCScript()">Build Content Plan</button>
+  <button class="ghost" onclick="copyUGCOutreach()">Copy Outreach</button>
+ </div>
+ <div id="ugcCoach" class="card notice"></div>
+ <div id="ugcPrompt" class="card"></div>
+ <div id="brandList"></div>
+</section>
+
+<section id="journalSec" class="section card">
+ <h2>Journal and Reset</h2>
+ <p class="small">One honest note helps tomorrow adjust. Keep it quick.</p>
+ <div class="grid">
+  <label>Workout done<select id="workoutDone"><option>No</option><option>Partial</option><option>Yes</option></select></label>
+  <label>Stress 1 to 10<input id="stressScore" type="number" inputmode="numeric" value="5"></label>
+ </div>
+ <textarea id="journalText" placeholder="What worked today? What felt heavy? What needs to move tomorrow?"></textarea>
+ <button class="primary full" onclick="saveJournal()">Save Journal</button>
+ <div id="journalHistory"></div>
+</section>
+
+<section id="profileSec" class="section card warnbox">
+ <h2>Profile and Backup</h2>
+ <p class="small">These numbers help the app set meal targets and water goals.</p>
+ <div class="grid">
+  <label>Current weight lbs<input id="weight" type="number" inputmode="decimal" step="0.1" onchange="saveInputs();refreshAll()"></label>
+  <label>Height inches<input id="height" type="number" inputmode="decimal" step="0.1" onchange="saveInputs();refreshAll()"></label>
+  <label>Age<input id="age" type="number" inputmode="numeric" onchange="saveInputs();refreshAll()"></label>
+  <label>Baby age months<input id="babyMonths" type="number" inputmode="numeric" onchange="saveInputs();refreshAll()"></label>
+  <label>Daily meal goal<select id="mealGoal" onchange="saveInputs();refreshAll()"><option value="5">5 meals</option><option value="6">6 meals</option></select></label>
+  <label>Usual wake time<select id="wakeTime" onchange="saveInputs();refreshAll()"><option value="630">6:30 AM</option><option value="700">7:00 AM</option></select></label>
+ </div>
+ <div class="grid" style="margin-top:10px"><button class="blue" onclick="backupData()">Download Backup</button><button class="danger" onclick="fullResetConfirm()">Full Reset</button></div>
+ <p class="small">For severe postpartum symptoms, sudden major hair loss, chest pain, fainting, heavy bleeding, incision problems, or serious mood changes, contact a qualified clinician.</p>
 </section>
 </div>
 
-<div class="sticky"><div class="inner"><button onclick="buildToday(true)">Refresh Plan</button><button class="primary" onclick="completeToday()">Complete Day</button></div></div>
+<div class="bottom"><div class="innerBottom"><button onclick="showTab('todaySec')">Today</button><button onclick="showTab('foodSec')">Add Food</button><button class="primary" onclick="completeNextBest()">Complete Next</button></div></div>
 
 <script>
-const KEY="devon_v20_";
-
-const RECIPE_ENGINE={
- proteins:["ground turkey","lean ground beef","lean steak","white fish","eggs","greek yogurt","dairy free yogurt"],
- carbs:["oats","jasmine rice","potatoes","rice cakes","quinoa"],
- veg:["spinach","kale","bell peppers","onions"],
- fruits:["blueberries","raspberries","strawberries","bananas","mango","pineapple","apples","grapes"],
- dairy:["dairy free yogurt","greek yogurt","almond milk","coconut milk","cashew milk"],
- fats:["olive oil","sesame oil","avocado"],
- breakfast:[
-  ["Protein Oat Bowl","Cook oats with milk, add yogurt or eggs on the side, top with fruit.","10 to 15 min"],
-  ["Smoothie Bowl","Blend milk, yogurt, fruit, and oats. Pour into a bowl and keep toppings measured.","5 to 8 min"],
-  ["Egg Potato Breakfast Bowl","Cook potatoes, add eggs and vegetables, finish with avocado if needed.","15 to 20 min"],
-  ["Yogurt Berry Crunch Bowl","Layer yogurt, berries, and crushed rice cakes or oats.","5 min"],
-  ["Warm Fruit Oats","Cook oats with almond milk, warm fruit on top, add Greek yogurt for protein.","10 to 12 min"],
-  ["Rice Cake Breakfast Stack","Top rice cakes with yogurt or eggs and fruit.","5 to 7 min"]
- ],
- lunch:[
-  ["Lean Power Bowl","Cook protein, add carb base, fold in vegetables, finish with measured healthy fat.","18 to 25 min"],
-  ["Meal Prep Bowl","Batch cook protein and carb, add vegetables, and portion it into a balanced bowl.","20 to 30 min"],
-  ["Rice Cake Lunch Plate","Top rice cakes with protein, greens, and avocado, then add fruit if needed.","8 to 10 min"],
-  ["Quinoa Protein Bowl","Serve protein over quinoa with vegetables and measured olive oil or avocado.","18 to 22 min"],
-  ["Potato Protein Bowl","Roast or mash potatoes, add protein and vegetables, then finish with healthy fat.","20 to 28 min"],
-  ["Sesame Lunch Bowl","Use sesame oil lightly with protein, rice or quinoa, and vegetables.","18 to 22 min"]
- ],
- dinner:[
-  ["Glute Day Dinner Plate","Prioritize protein and carb around training, add vegetables, and keep fats measured.","20 to 30 min"],
-  ["Lean Comfort Bowl","Make it warm with protein, potatoes or rice, vegetables, and avocado or oil.","22 to 30 min"],
-  ["White Fish Dinner Plate","Bake or air fry fish, add carb and vegetables, and finish with olive oil or avocado.","18 to 22 min"],
-  ["Steak Strength Plate","Cook lean steak, serve with potatoes or rice, add greens, and keep fat measured.","22 to 28 min"],
-  ["Turkey Dinner Bowl","Cook ground turkey with vegetables, serve over rice, quinoa, or potatoes.","18 to 24 min"],
-  ["Simple Family Plate","Use one protein, one carb, one vegetable, and one healthy fat in measured portions.","18 to 25 min"]
- ]
-};
-
+const KEY="devon_v24_daily_rebuild";
 const today=()=>new Date().toISOString().slice(0,10);
-const q=s=>"https://www.youtube.com/results?search_query="+encodeURIComponent(s);
-
-const affirmations=[
-"Devon, your body is not the enemy. It is the home you are rebuilding.",
-"Devon, one calm choice at a time still changes everything.",
-"Devon, motherhood did not erase you. It revealed another level of you.",
-"Devon, soft life and strong discipline can exist together.",
-"Devon, you are allowed to want your body back and still love the body that carried life.",
-"Devon, today we move for energy, peace, shape, and confidence.",
-"Devon, the win is not perfection. The win is coming back.",
-"Devon, your consistency can be gentle and still be powerful.",
-"Devon, eat enough to heal and train enough to transform.",
-"Devon, you do not need punishment. You need a plan.",
-"Devon, the woman you are becoming is already showing up.",
-"Devon, breathe, reset, move, nourish, repeat."
-];
-
-const foods=[
-["ground beef",250,26,0,15,0],["ground turkey",170,27,0,8,0],["lean steak",190,29,0,8,0],["white fish",105,23,0,1,0],["egg",143,13,1.1,10,0],["eggs",143,13,1.1,10,0],
-["oats",389,17,66,7,10.6],["jasmine rice",130,2.7,28,.3,.4],["potatoes",87,1.9,20,.1,1.8],["rice cakes",387,8,82,3,4],["quinoa",120,4.4,21.3,1.9,2.8],
-["spinach",23,2.9,3.6,.4,2.2],["kale",49,4.3,8.8,.9,3.6],["bell peppers",31,1,6,.3,2.1],["onions",40,1.1,9,.1,1.7],
-["blueberries",57,.7,14,.3,2.4],["raspberries",52,1.2,12,.7,6.5],["strawberries",32,.7,7.7,.3,2],["bananas",89,1.1,23,.3,2.6],["mango",60,.8,15,.4,1.6],["pineapple",50,.5,13,.1,1.4],["apples",52,.3,14,.2,2.4],["grapes",69,.7,18,.2,.9],
-["dairy free yogurt",90,2,16,2,1],["greek yogurt",59,10,3.6,.4,0],["almond milk",15,.6,.3,1.2,0],["coconut milk",31,.2,2.9,2.1,0],["cashew milk",25,.4,1,2,0],
-["olive oil",884,0,0,100,0],["sesame oil",884,0,0,100,0],["avocado",160,2,9,15,7]
-];
-const db=Object.fromEntries(foods.map(f=>[f[0],{cal:f[1],p:f[2],c:f[3],fat:f[4],fi:f[5]}]));
+const dayName=()=>new Date().toLocaleDateString(undefined,{weekday:"long"});
+const niceDate=()=>new Date().toLocaleDateString(undefined,{weekday:"long",month:"short",day:"numeric"});
+const $=id=>document.getElementById(id);
+const num=v=>Number(v||0);
+const round=(v,d=0)=>Number(v||0).toFixed(d).replace(/\.0+$/,'');
+const uid=()=>"id"+Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4);
+const store=(name,val)=>localStorage.setItem(KEY+name,JSON.stringify(val));
+const read=(name,fallback)=>{try{return JSON.parse(localStorage.getItem(KEY+name))??fallback}catch(e){return fallback}};
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x.toISOString().slice(0,10)};
+const startOfWeek=()=>{const d=new Date();const day=(d.getDay()+6)%7;d.setDate(d.getDate()-day);return d.toISOString().slice(0,10)};
+const daysBetween=(a,b)=>Math.max(0,Math.floor((new Date(b)-new Date(a))/(1000*60*60*24)));
 
 const routes={
-balanced:{label:"Balanced weight loss",def:325,protein:.78,steps:8000,split:["Lower body + incline burn","Upper tone + core","Glutes + hamstrings","Cardio mobility","Full body strength","Recovery","Rest"]},
-curvy:{label:"Curvier built with weights",def:225,protein:.86,steps:7500,split:["Heavy glutes + legs","Upper posture + waist","Glute volume","Deep core recovery","Lower body shape","Recovery","Rest"]},
-slim:{label:"Slimmer cardio focused",def:425,protein:.72,steps:9800,split:["Cardio base + tone","Low impact intervals","Steady burn","Cardio circuit","Long walk tone","Recovery","Rest"]},
-slimthick:{label:"Slim thick glute focused",def:275,protein:.88,steps:8500,split:["Glute growth + burn","Small waist upper tone","Glute med + hamstrings","Core recovery + cardio","Glute pump conditioning","Recovery","Rest"]}
+ balanced:{label:"Balanced weight loss",deficit:350,steps:8500,protein:.82,carbSplit:.34,fatSplit:.28,focus:"fat loss with strength, walking, and recovery"},
+ curvy:{label:"Curvier weights",deficit:225,steps:7500,protein:.9,carbSplit:.32,fatSplit:.30,focus:"smaller waist, glute shape, legs, posture, and toned arms"},
+ slim:{label:"Cardio slimmer",deficit:450,steps:10000,protein:.76,carbSplit:.30,fatSplit:.26,focus:"conditioning, HIIT, steps, and steady weight loss"},
+ slimthick:{label:"Slim thick glute focus",deficit:275,steps:8500,protein:.92,carbSplit:.34,fatSplit:.29,focus:"wellness style lower body, glutes, legs, core, and shape"}
 };
-
-const workoutBank={
-gym:{
- balanced:[
-  [["Treadmill walk","Pelvic floor breathing","Glute activation bridge"],["Goblet squat","Step up","Glute bridge"],["Incline treadmill walk","Dead bug postpartum"],["Hip flexor stretch","Child pose breathing"]],
-  [["Bike warmup","Band pull apart","Cat cow"],["Dumbbell row","Incline push up","Pallof press"],["Treadmill walk","Shoulder taps"],["Chest stretch","Deep core breathing"]],
-  [["Treadmill walk","Bodyweight hinge","Glute bridge"],["Dumbbell Romanian deadlift","Hip thrust","Reverse lunge"],["Bike cardio","Hamstring curl"],["Hamstring stretch","Breathing reset"]],
-  [["Bike warmup","Pelvic floor breathing","Bird dog"],["Low impact cardio","Cable row","Bodyweight squat"],["Brisk treadmill walk","Full body stretch"],["Hip mobility","Cat cow"]],
-  [["Treadmill walk","Dynamic mobility","Glute bridge"],["Kettlebell deadlift","Dumbbell shoulder press","Cable row"],["Farmer carry","Incline walk"],["Calf stretch","Deep breathing"]],
-  [["Easy walk","Breathing"],["Mobility flow","Stretch"],["Optional sauna breathing","Hydrate"],["Rest"]],
-  [["Rest"],["Rest"],["Rest"],["Rest"]]
- ],
- curvy:[
-  [["Treadmill walk","Glute activation bridge","Banded side steps"],["Hip thrust","Leg press","Cable kickback","Hip abduction machine"],["Incline walk","Glute bridge hold"],["Hip flexor stretch","Figure four stretch"]],
-  [["Bike warmup","Band pull apart"],["Lat pulldown","Seated row","Incline push up"],["Dead bug","Side plank modified"],["Chest stretch","Breathing"]],
-  [["Treadmill walk","Glute bridge"],["Dumbbell Romanian deadlift","Hack squat or goblet squat","Bulgarian split squat beginner","Hamstring curl"],["Incline walk","Hip abduction burnout"],["Hamstring stretch","Glute stretch"]],
-  [["Bike easy","Pelvic floor breathing"],["Heel slides postpartum","Bird dog","Cable Pallof press"],["Easy bike cardio"],["Hip mobility","Deep breathing"]],
-  [["Treadmill walk","Banded glutes"],["Leg press","Hip thrust","Hip abduction machine","Calf raise"],["Incline walk","Cable pull through"],["Quad stretch","Breathing"]],
-  [["Easy walk","Glute activation"],["Foam roll legs","Hip stretch"],["Hydrate"],["Rest"]],
-  [["Rest"],["Rest"],["Rest"],["Rest"]]
- ],
- slim:[
-  [["Treadmill walk","Mobility"],["Incline treadmill intervals","Bodyweight squat","Band row"],["Bike cardio","Dead bug"],["Stretch routine"]],
-  [["Treadmill warmup"],["Treadmill interval walk","Step up","Incline push up"],["Pallof press","Breathing"],["Calf and hip stretch"]],
-  [["Bike warmup"],["Stationary bike steady","Glute bridge","Bird dog"],["Walk intervals"],["Hip stretch"]],
-  [["Elliptical warmup"],["Low impact cardio circuit","Dumbbell row","Wall sit"],["Marching core"],["Stretch"]],
-  [["Treadmill walk"],["Long incline walk","Reverse lunge","Shoulder press light"],["Side plank modified"],["Mobility"]],
-  [["Easy walk"],["Stretch routine","Pelvic floor breathing"],["Meal prep"],["Rest"]],
-  [["Rest"],["Rest"],["Rest"],["Rest"]]
- ],
- slimthick:[
-  [["Treadmill walk","Glute activation bridge","Banded side steps"],["Hip thrust","Leg press","Hack squat","Cable pull through"],["Incline walk","Core breathing"],["Hip flexor stretch","Glute stretch"]],
-  [["Bike warmup","Posture reset"],["Lat pulldown","Cable row","Pallof press"],["Incline walk","Dead bug"],["Chest stretch","Breathing"]],
-  [["Treadmill walk","Glute bridge"],["Dumbbell Romanian deadlift","Step up","Hip abduction machine","Side lying clamshell"],["Stairmaster low impact","Hamstring curl"],["Hamstring stretch","Breathing"]],
-  [["Bike easy","Pelvic floor breathing"],["Heel taps postpartum","Bird dog","Cable anti rotation press"],["Easy incline walk"],["Hip mobility"]],
-  [["Treadmill walk","Banded glutes"],["Leg press","Hip thrust","Reverse lunge","Kettlebell deadlift"],["Incline walk","Glute bridge hold"],["Quad stretch","Glute stretch"]],
-  [["Easy walk"],["Foam roll","Hip stretch","Calf stretch"],["Breathing"]],
-  [["Rest"],["Rest"],["Rest"],["Rest"]]
- ]
-},
-home:{
- balanced:[
-  [["March in place","Pelvic floor breathing","Glute bridge"],["Bodyweight squat","Chair step up","Floor glute bridge"],["Hallway walk intervals","Dead bug postpartum"],["Hip flexor stretch","Child pose breathing"]],
-  [["March in place","Cat cow"],["Band row or towel row","Incline counter push up","Backpack Pallof press"],["Shoulder taps","Walk around house"],["Chest stretch","Breathing"]],
-  [["Bodyweight hinge","Glute bridge"],["Backpack Romanian deadlift","Single leg glute bridge","Reverse lunge"],["Stair steps","Hamstring walkout"],["Hamstring stretch","Breathing"]],
-  [["March warmup","Bird dog"],["Low impact cardio video","Bodyweight squat","Wall push up"],["Brisk house walk","Stretch"],["Hip mobility"]],
-  [["March warmup","Glute bridge"],["Backpack deadlift","Backpack shoulder press","Band row"],["Farmer carry with bags","Step ups"],["Calf stretch","Breathing"]],
-  [["Easy walk inside","Breathing"],["Mobility flow","Stretch"],["Hydrate"],["Rest"]],
-  [["Rest"],["Rest"],["Rest"],["Rest"]]
- ],
- curvy:[
-  [["March warmup","Banded glutes"],["Backpack hip thrust","Chair squat","Banded kickback","Banded abductions"],["Stair walk","Glute bridge hold"],["Glute stretch"]],
-  [["March warmup"],["Band pulldown","Band row","Counter push up"],["Dead bug","Side plank modified"],["Stretch"]],
-  [["Glute bridge"],["Backpack Romanian deadlift","Split squat to couch","Banded glute bridge","Hamstring walkout"],["Stair steps","Banded abduction burnout"],["Hamstring stretch"]],
-  [["Breathing"],["Heel slides postpartum","Bird dog","Standing anti rotation band"],["Easy walk"],["Hip mobility"]],
-  [["Banded glutes"],["Couch hip thrust","Backpack squat","Banded abduction","Calf raise"],["Step ups","Good morning"],["Stretch"]],
-  [["Easy walk","Glute activation"],["Hip stretch"],["Hydrate"],["Rest"]],
-  [["Rest"],["Rest"],["Rest"],["Rest"]]
- ],
- slim:[
-  [["March warmup"],["Low impact cardio intervals","Bodyweight squat","Band row"],["Step ups","Dead bug"],["Stretch"]],
-  [["March warmup"],["Stair intervals","Step up","Counter push up"],["Pallof band press","Breathing"],["Stretch"]],
-  [["March warmup"],["Low impact cardio steady","Glute bridge","Bird dog"],["Walk intervals"],["Hip stretch"]],
-  [["Warmup"],["Low impact cardio workout","Band row","Wall sit"],["Marching core"],["Stretch"]],
-  [["Walk warmup"],["Long brisk indoor walk","Reverse lunge","Light shoulder press"],["Side plank modified"],["Mobility"]],
-  [["Easy walk"],["Stretch","Breathing"],["Meal prep"],["Rest"]],
-  [["Rest"],["Rest"],["Rest"],["Rest"]]
- ],
- slimthick:[
-  [["Banded glute warmup"],["Couch hip thrust","Backpack squat","Split squat","Banded kickback"],["Stair walk","Core breathing"],["Glute stretch"]],
-  [["Posture warmup"],["Band row","Band pulldown","Pallof press"],["March intervals","Dead bug"],["Stretch"]],
-  [["Glute bridge"],["Backpack Romanian deadlift","Chair step up","Banded abduction","Side lying clamshell"],["Stair steps","Hamstring walkout"],["Stretch"]],
-  [["Breathing"],["Heel taps postpartum","Bird dog","Standing anti rotation"],["Easy walk"],["Hip mobility"]],
-  [["Banded glutes"],["Backpack squat","Couch hip thrust","Reverse lunge","Backpack deadlift"],["Step ups","Glute bridge hold"],["Stretch"]],
-  [["Easy walk"],["Foam roll substitute stretch","Calf stretch"],["Breathing"]],
-  [["Rest"],["Rest"],["Rest"],["Rest"]]
- ]
-},
-outdoor:{
- balanced:[
-  [["Easy walk","Breathing","Bodyweight mobility"],["Park bench squat","Step up","Glute bridge on mat"],["Brisk walk intervals","Dead bug on mat"],["Hip flexor stretch","Breathing"]],
-  [["Walk warmup","Arm circles"],["Bench incline push up","Band row if available","Pallof hold with band"],["Walk intervals","Shoulder taps"],["Stretch"]],
-  [["Walk warmup","Hip hinge"],["Bodyweight Romanian deadlift","Walking lunge","Single leg glute bridge"],["Hill walk","Hamstring curl towel at home later"],["Stretch"]],
-  [["Walk warmup"],["Low impact outdoor circuit","Bodyweight squat","Bird dog"],["Brisk walk","Full body stretch"],["Breathing"]],
-  [["Walk warmup"],["Backpack deadlift","Push up on bench","Band row"],["Farmer carry bags","Incline hill walk"],["Stretch"]],
-  [["Easy walk"],["Outdoor stretch","Breathing"],["Hydrate"],["Rest"]],
-  [["Rest"],["Rest"],["Rest"],["Rest"]]
- ],
- curvy:[
-  [["Walk warmup","Banded glutes"],["Bench hip thrust","Park squat","Banded kickback","Banded abductions"],["Hill walk","Glute hold"],["Stretch"]],
-  [["Walk warmup"],["Band row","Bench incline push up","Band pulldown"],["Dead bug","Side plank"],["Stretch"]],
-  [["Walk warmup"],["Backpack Romanian deadlift","Walking lunge","Bench step up","Glute bridge"],["Hill walk"],["Stretch"]],
-  [["Breathing"],["Bird dog","Heel slides later indoors","Band anti rotation"],["Easy walk"],["Hip mobility"]],
-  [["Banded glutes"],["Bench hip thrust","Park squat","Step up","Calf raise"],["Hill walk"],["Stretch"]],
-  [["Easy walk"],["Hip stretch"],["Hydrate"],["Rest"]],
-  [["Rest"],["Rest"],["Rest"],["Rest"]]
- ],
- slim:[
-  [["Walk warmup"],["Power walk intervals","Bodyweight squat","Bench push up"],["Brisk walk","Dead bug later"],["Stretch"]],
-  [["Walk warmup"],["Hill walk intervals","Step up","Bench push up"],["Core breathing"],["Stretch"]],
-  [["Walk warmup"],["Steady walk","Glute bridge on mat","Bird dog"],["Walk intervals"],["Hip stretch"]],
-  [["Warmup walk"],["Outdoor cardio circuit","Bodyweight row if available","Wall sit"],["Marching core"],["Stretch"]],
-  [["Walk warmup"],["Long brisk walk","Reverse lunge","Arm raise with bottles"],["Side plank later"],["Mobility"]],
-  [["Easy walk"],["Stretch","Breathing"],["Meal prep"],["Rest"]],
-  [["Rest"],["Rest"],["Rest"],["Rest"]]
- ],
- slimthick:[
-  [["Walk warmup","Banded glutes"],["Bench hip thrust","Park squat","Walking lunge","Banded kickback"],["Hill walk","Core breathing"],["Stretch"]],
-  [["Posture warmup"],["Band row","Band pulldown","Pallof press"],["Walk intervals","Dead bug later"],["Stretch"]],
-  [["Walk warmup"],["Backpack Romanian deadlift","Bench step up","Banded abduction","Side lying clamshell"],["Hill walk"],["Stretch"]],
-  [["Breathing"],["Bird dog","Heel taps later","Standing anti rotation"],["Easy walk"],["Hip mobility"]],
-  [["Banded glutes"],["Park squat","Bench hip thrust","Reverse lunge","Backpack deadlift"],["Hill walk","Glute hold"],["Stretch"]],
-  [["Easy walk"],["Hip stretch","Calf stretch"],["Breathing"],["Rest"]],
-  [["Rest"],["Rest"],["Rest"],["Rest"]]
- ]
-}
+const difficulties={
+ cardi:{label:"Get my Cardi B on Easy",sets:2,reps:"8 to 10",rest:"75 to 90 sec",intensity:"easy pace, low impact, form first",minutes:25,interval:"20 sec work, 40 sec rest"},
+ latto:{label:"Get my Latto on Moderate",sets:3,reps:"10 to 12",rest:"45 to 75 sec",intensity:"moderate pace, sweat but controlled",minutes:40,interval:"30 sec work, 30 sec rest"},
+ taylor:{label:"Get my Taylor Swift on Hard",sets:4,reps:"12 to 15",rest:"30 to 60 sec",intensity:"hard pace, supersets, finish strong",minutes:55,interval:"40 sec work, 20 sec rest"}
 };
+const defaultInputs={babyStatus:"awake",energy:"medium",mood:"steady",sleep:6,waterGallons:0,weight:180,height:64,age:33,babyMonths:9,mealGoal:"6",breastfeeding:"yes",route:"curvy",workoutLocation:"home",difficulty:"latto",availableTime:"40",hairFeel:"normal",wakeTime:"630",planLocked:false,lockedUntil:"",lockedRoute:"",lockedDifficulty:""};
+let state=read("state",{date:today(),done:{},foods:{},hairLogs:[],hairDone:{},brands:[],journal:[],customTasks:[],weightLog:{},workoutDone:{},inputs:defaultInputs,startDate:today()});
+state.inputs={...defaultInputs,...(state.inputs||{})};
+let activeTab="todaySec";
+let activeFlow="left";
+let activeHairMode="today";
 
-let state={route:null,selectedRoute:"balanced",routeStart:null,programDay:1,mode:"cardi",location:"gym",inputs:{weight:180,height:64,age:33,babyMonths:8,breastfeeding:"yes",steps:0},food:[],journals:[],completed:{}};
+function saveState(){store("state",state)}
+function ensureDate(){if(state.date!==today()){state.date=today();state.done[today()]=state.done[today()]||[];state.foods[today()]=state.foods[today()]||[];state.hairDone[today()]=state.hairDone[today()]||[];state.inputs.waterGallons=0;saveState()}}
+function toast(msg){const el=$("toast");el.textContent=msg;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2200)}
+function showTab(id){activeTab=id;document.querySelectorAll(".section").forEach(s=>s.classList.toggle("activeSection",s.id===id));document.querySelectorAll("#mainNav button").forEach(b=>b.classList.toggle("active",b.dataset.tab===id));window.scrollTo({top:0,behavior:"smooth"});saveState()}
+function saveInputs(){["babyStatus","energy","mood","sleep","waterGallons","weight","height","age","babyMonths","mealGoal","breastfeeding","route","workoutLocation","difficulty","availableTime","hairFeel","wakeTime"].forEach(id=>{if($(id))state.inputs[id]=$(id).value});saveState()}
+function setInputs(){Object.entries(state.inputs).forEach(([k,v])=>{if($(k))$(k).value=v});if($("dailyWeight"))$("dailyWeight").value=state.weightLog[today()]||state.inputs.weight;if($("planLocked"))$("planLocked").value=state.inputs.planLocked?"yes":"no";if($("washedToday"))$("washedToday").value=hasHairLog(today(),"wash")?"yes":"no";if($("deepMaskThisWeek"))$("deepMaskThisWeek").value=weekHairLogs("mask").length?"yes":"no";if($("nightHairDone"))$("nightHairDone").value=hairDone().includes("night_protection")?"yes":"no"}
+function saveDailyWeight(){const w=num($("dailyWeight").value);if(w>0){state.inputs.weight=w;state.weightLog[today()]=w;if($("weight"))$("weight").value=w;saveState();refreshAll();toast("Weight saved")}}
+function doneList(){state.done[today()]=state.done[today()]||[];return state.done[today()]}
+function foodList(){state.foods[today()]=state.foods[today()]||[];return state.foods[today()]}
+function hairDone(){state.hairDone[today()]=state.hairDone[today()]||[];return state.hairDone[today()]}
+function isDone(id){return doneList().includes(id)}
+function toggleDone(id,force){let d=doneList();const should=typeof force==="boolean"?force:!d.includes(id);state.done[today()]=should?[...new Set([...d,id])]:d.filter(x=>x!==id);saveState();refreshAll()}
+function toggleHairStep(id){let d=hairDone();state.hairDone[today()]=d.includes(id)?d.filter(x=>x!==id):[...d,id];saveState();renderHair();refreshHeader()}
+function toggleNamedHair(id,force){let d=hairDone();state.hairDone[today()]=force?[...new Set([...d,id])]:d.filter(x=>x!==id);saveState();refreshAll()}
 
-function load(){try{const x=JSON.parse(localStorage.getItem(KEY+"state"));if(x)state={...state,...x,inputs:{...state.inputs,...(x.inputs||{})}}}catch(e){console.log(e)}}
-function save(){localStorage.setItem(KEY+"state",JSON.stringify(state))}
-function jump(id){document.getElementById(id).scrollIntoView({behavior:"smooth",block:"start"})}
-function init(){load();renderAffirmation();hydrate();refreshAll()}
-function renderAffirmation(){document.getElementById("affirmation").innerHTML=`<h3>Daily Affirmation</h3><p>${affirmations[Math.floor(Math.random()*affirmations.length)]}</p><button onclick="renderAffirmation()">New affirmation</button>`}
-function hydrate(){["weight","height","age","babyMonths","steps"].forEach(id=>document.getElementById(id).value=state.inputs[id]);document.getElementById("breastfeeding").value=state.inputs.breastfeeding}
-function saveInputs(){["weight","height","age","babyMonths","steps"].forEach(id=>state.inputs[id]=Number(document.getElementById(id).value||0));state.inputs.breastfeeding=document.getElementById("breastfeeding").value;save()}
-function route(){return state.route||state.selectedRoute}
-function dayNum(){return state.route?Math.min(60,Math.max(1,Number(state.programDay||1))):1}
-function weekIdx(){return (dayNum()-1)%7}
-function weekNum(){return Math.floor((dayNum()-1)/7)+1}
-function modeInfo(){
- if(state.mode==="taylor")return{name:"Taylor Swift easy",setAdd:0,extraExercises:0,repAdd:0,int:60,cardio:-4,step:-1000};
- if(state.mode==="latto")return{name:"Latto Big Mama hard",setAdd:1,extraExercises:2,repAdd:4,int:85,cardio:8,step:1200};
- return{name:"Cardi B moderate",setAdd:0,extraExercises:1,repAdd:2,int:72,cardio:0,step:0};
-}
-function selectRoute(r){if(state.route){alert("Route locked until Day 60 is complete. Use Quit Program if you truly want to reset.");return}state.selectedRoute=r;save();refreshAll()}
-function lockRoute(){
- openLockConfirm();
-}
-function quitProgram(){
- if(!state.route){alert("No program is locked right now.");return}
- if(!confirm("Are you sure you want to quit Devon's current 60 day program? This will reset the route and allow a new one."))return;
- if(!confirm("Second confirmation: quit and reset the program back to the beginning?"))return;
- const keepInputs=state.inputs;
- state={route:null,selectedRoute:"balanced",routeStart:null,programDay:1,mode:"cardi",location:"gym",inputs:keepInputs,food:[],journals:[],completed:{}};
- save();hydrate();refreshAll();jump("routeSec");alert("Program reset. You can choose a new route.");
-}
-function openQuitConfirm(){
- if(!state.route){alert("No program is locked right now.");return}
- const panel=document.getElementById("quitConfirmPanel");
- const stepOne=document.getElementById("quitStepOne");
- const stepTwo=document.getElementById("quitStepTwo");
- if(stepOne) stepOne.classList.remove("hidden");
- if(stepTwo) stepTwo.classList.add("hidden");
- if(panel){
-   panel.classList.remove("hidden");
-   panel.scrollIntoView({behavior:"smooth",block:"center"});
- }
-}
-function quitSecondConfirm(){
- const stepOne=document.getElementById("quitStepOne");
- const stepTwo=document.getElementById("quitStepTwo");
- if(stepOne) stepOne.classList.add("hidden");
- if(stepTwo) stepTwo.classList.remove("hidden");
-}
-function cancelQuitConfirm(){
- const panel=document.getElementById("quitConfirmPanel");
- if(panel) panel.classList.add("hidden");
-}
-function finalQuitProgram(){
- const keepInputs=state.inputs;
- state={route:null,selectedRoute:"balanced",routeStart:null,programDay:1,mode:"cardi",location:"gym",inputs:keepInputs,food:[],journals:[],completed:{}};
- save();
- hydrate();
- const panel=document.getElementById("quitConfirmPanel");
- if(panel) panel.classList.add("hidden");
- refreshAll();
- jump("routeSec");
- alert("Program reset. You can choose a new route.");
-}
-function quitProgram(){openQuitConfirm()}
-function setMode(m){state.mode=m;save();refreshAll()}
-function setLocation(l){state.location=l;save();refreshAll()}
-function cycleLocation(){state.location=state.location==="gym"?"home":state.location==="home"?"outdoor":"gym";save();refreshAll()}
-function autoMode(){
- const j=state.journals[state.journals.length-1];
- if(j&&(j.sleep<5||j.soreness>=7||["stressed","sad","overwhelmed"].includes(j.mood)))state.mode="taylor";
- else if(j&&j.energy==="high"&&j.sleep>=6.5&&j.soreness<=4)state.mode="latto";
- else state.mode="cardi";
- save();refreshAll();
-}
-function bmr(){let w=state.inputs.weight*0.453592,h=state.inputs.height*2.54,a=state.inputs.age;return 10*w+6.25*h-5*a-161}
-function nursing(){if(state.inputs.breastfeeding==="no")return 0;if(state.inputs.breastfeeding==="partial")return state.inputs.babyMonths>=6?220:180;return state.inputs.babyMonths>=6?400:330}
-function stepCals(s=state.inputs.steps){return Math.round((s/2200)*state.inputs.weight*.53)}
-function workoutCals(){let idx=weekIdx();if(idx>=5)return 70;return state.mode==="taylor"?170:state.mode==="latto"?350:255}
-function deficit(){let d=routes[route()].def;if(state.mode==="taylor")d-=100;if(state.mode==="latto")d+=100;return Math.max(150,Math.min(550,d))}
-function maintenance(){return Math.round(bmr()*1.35+nursing()+stepCals()+workoutCals())}
-function target(){return Math.max(state.inputs.breastfeeding==="no"?1500:1800,maintenance()-deficit())}
-function stepGoal(){return Math.max(4500,routes[route()].steps+modeInfo().step)}
-function grams(amount,unit){let a=Number(amount||0);if(unit==="g")return a;if(unit==="oz")return a*28.3495;if(unit==="lb")return a*453.592;if(unit==="ml")return a;if(unit==="floz")return a*29.5735;return a}
-function findFood(n){n=n.toLowerCase().trim();if(db[n])return db[n];let k=Object.keys(db).find(x=>n.includes(x)||x.includes(n));return k?db[k]:{cal:130,p:6,c:16,fat:4,fi:1.5}}
-function totals(){return state.food.filter(x=>x.date===today()).reduce((a,x)=>({cal:a.cal+x.cal,p:a.p+x.p,c:a.c+x.c,fat:a.fat+x.fat,fi:a.fi+x.fi}),{cal:0,p:0,c:0,fat:0,fi:0})}
-function refreshAll(){saveInputs();renderRoute();renderMode();renderLocation();renderCalories();renderFood();buildToday(false);renderHistory()}
-function renderRoute(){
- Object.keys(routes).forEach(r=>document.getElementById("r_"+r).classList.toggle("active",state.selectedRoute===r||state.route===r));
- document.getElementById("routePicker").classList.toggle("hidden",!!state.route);
- document.getElementById("quitBtn").classList.toggle("hidden",!state.route);
- document.getElementById("routeStatus").innerHTML=state.route?`<b>Locked route:</b> ${routes[state.route].label}<br><span class="small">Day ${dayNum()} of 60 • Week ${weekNum()} • Other routes hidden until program is quit or completed.</span>`:`<b>No route locked yet.</b><br><span class="small">Selected: ${routes[state.selectedRoute].label}. Press lock to start the 60 day plan.</span>`;
-}
-function renderMode(){["taylor","cardi","latto"].forEach(m=>document.getElementById("m_"+m).classList.toggle("active",state.mode===m));let mi=modeInfo();document.getElementById("modeExplain").innerText=`${mi.name}: adds ${mi.extraExercises} extra workout option(s), ${mi.setAdd} set(s), ${mi.repAdd} reps, intensity around ${mi.int}%, cardio adjustment ${mi.cardio} min.`}
-function renderLocation(){["gym","home","outdoor"].forEach(l=>document.getElementById("loc_"+l).classList.toggle("active",state.location===l))}
-function renderCalories(){
- let t=totals(), tg=target(), sg=stepGoal();
- document.getElementById("calTarget").innerText=tg;document.getElementById("maintenance").innerText=maintenance();document.getElementById("stepGoal").innerText=sg.toLocaleString();document.getElementById("stepBurn").innerText=stepCals();document.getElementById("remaining").innerText=Math.max(0,tg-t.cal);document.getElementById("deficit").innerText=deficit();
- document.getElementById("calExplain").innerText=`Route adjusted for ${routes[route()].label}. Breastfeeding adds ${nursing()} calories in this estimate. Walk ${Math.max(0,sg-state.inputs.steps).toLocaleString()} more steps to hit the movement target.`;
-}
-function ex(name,i,block){
- let mi=modeInfo(), weekBoost=Math.floor(dayNum()/21);
- let sets=(block==="main"?(3+mi.setAdd):(2+Math.max(0,mi.setAdd-1)));
- let reps=(block==="main"?(10+mi.repAdd+weekBoost):(8+mi.repAdd));
- let mins=block==="finisher"?Math.max(8,12+mi.cardio+weekBoost*2):null;
- if(weekIdx()>=5){sets=1;reps=8;mins=20;}
- const detail=mins?`${mins} minutes • effort ${Math.max(50,mi.int-5)}%`:`${sets} sets x ${reps} reps • effort ${mi.int}%`;
- return `<div class="exercise"><b>${name}</b><span class="small">${detail}. Rest 45 to 75 sec. Stop for pelvic pressure, pain, leaking, dizziness, or core doming.</span><a class="video" target="_blank" href="${q(name+' proper form postpartum beginner '+state.location+' workout')}">Watch matching video</a></div>`;
-}
-function buildToday(scroll){
- if(!state.route){
-  document.getElementById("dayHeader").innerText="Route not locked yet";
-  document.getElementById("planSummary").innerText="Choose and lock a 60 day body goal route first. Then Complete Day will unlock Day 2, Day 3, and so on.";
-  document.getElementById("dayFill").style.width="0%";
-  document.getElementById("todayPlan").innerHTML='<div class="card notice"><b>Plan waiting for lock in.</b><p class="small">This keeps Devon from jumping around randomly. Pick a route, lock it, then the split starts.</p></div>';
-  return;
- }
- let r=route(), loc=state.location, idx=weekIdx(), mi=modeInfo();
- const dayPlan=workoutBank[loc][r][idx];
- const warm=dayPlan[0], main=dayPlan[1].slice(0,3+mi.extraExercises), finish=dayPlan[2].slice(0,2+mi.extraExercises), cool=dayPlan[3];
- document.getElementById("dayHeader").innerText=`Day ${dayNum()} of 60`;
- document.getElementById("planSummary").innerText=`${routes[r].label} • ${routes[r].split[idx]} • ${mi.name} • ${loc}`;
- document.getElementById("dayFill").style.width=Math.round(dayNum()/60*100)+"%";
- let html="";
- if(idx===6){html=`<details><summary>Sunday Full Rest <span>+</span></summary><div class="inside"><p>No formal workout. Hydrate, eat protein, journal, and sleep.</p>${warm.map((x,i)=>ex(x,i,"cool")).join("")}</div></details>`}
- else if(idx===5){html=`<details><summary>Saturday Recovery <span>+</span></summary><div class="inside">${[...warm,...main,...finish,...cool].map((x,i)=>ex(x,i,"cool")).join("")}</div></details>`}
- else{
-  html+=`<details><summary>Warm Up 8 to 10 min <span>+</span></summary><div class="inside">${warm.map((x,i)=>ex(x,i,"warm")).join("")}</div></details>`;
-  html+=`<details><summary>Main Workout 30 to 35 min <span>+</span></summary><div class="inside">${main.map((x,i)=>ex(x,i,"main")).join("")}</div></details>`;
-  html+=`<details><summary>Cardio or Finisher 10 to 20 min <span>+</span></summary><div class="inside">${finish.map((x,i)=>ex(x,i,"finisher")).join("")}</div></details>`;
-  html+=`<details><summary>Cool Down 7 to 10 min <span>+</span></summary><div class="inside">${cool.map((x,i)=>ex(x,i,"cool")).join("")}</div></details>`;
- }
- if(state.lastAdaptation){
- html += `<details><summary>Latest adaptation feedback <span>+</span></summary><div class="inside"><p class="small">${state.lastAdaptation.date} ${state.lastAdaptation.time}</p><ul>${state.lastAdaptation.changes.map(c=>`<li>${c}</li>`).join("")}</ul></div></details>`;
-}
-document.getElementById("todayPlan").innerHTML=html;if(scroll)jump("todaySec")
-}
-function addFood(){
- let name=document.getElementById("foodName").value.trim(), amount=Number(document.getElementById("foodAmount").value||0), unit=document.getElementById("foodUnit").value;
- if(!name||!amount){alert("Enter food and amount.");return}
- let g=grams(amount,unit), f=findFood(name), m=g/100;
- state.food.push({date:today(),name,amount,unit,grams:Math.round(g),cal:Math.round(f.cal*m),p:Math.round(f.p*m),c:Math.round(f.c*m),fat:Math.round(f.fat*m),fi:Math.round(f.fi*m)});
- document.getElementById("foodName").value="";document.getElementById("foodAmount").value="";save();refreshAll()
-}
-function renderFood(){
- let t=totals(), tg=target(), pg=Math.round(state.inputs.weight*routes[route()].protein), fg=25;
- document.getElementById("mCal").innerText=t.cal;document.getElementById("mPro").innerText=t.p+"g";document.getElementById("mCarb").innerText=t.c+"g";document.getElementById("mFat").innerText=t.fat+"g";document.getElementById("mFiber").innerText=t.fi+"g";
- document.getElementById("macroAdvice").innerText=`Target ${tg} cal • protein ${pg}g • fiber ${fg}g. Left: ${Math.max(0,tg-t.cal)} cal, ${Math.max(0,pg-t.p)}g protein, ${Math.max(0,fg-t.fi)}g fiber.`;
- document.getElementById("foodList").innerHTML=state.food.filter(x=>x.date===today()).map(x=>`<div class="exercise"><b>${x.name}: ${x.amount} ${x.unit}</b><span class="small">${x.cal} cal • P ${x.p}g • C ${x.c}g • F ${x.fat}g • Fiber ${x.fi}g</span></div>`).join("");
-}
-function clearFood(){if(confirm("Clear today's foods?")){state.food=state.food.filter(x=>x.date!==today());save();refreshAll()}}
-function pick(arr,offset){
- return arr[(Date.now()+offset+Math.floor(Math.random()*arr.length))%arr.length];
-}
-function generateRecipes(category){
- let cats = category==="any" ? ["breakfast","lunch","dinner"] : [category];
- let results=[];
- for(let i=0;i<6;i++){
-   let cat=cats[i%cats.length];
-   let tpl=pick(RECIPE_ENGINE[cat],i*13);
-   let protein=cat==="breakfast" ? pick(["eggs","greek yogurt","dairy free yogurt","ground turkey"],i) : pick(["ground turkey","lean ground beef","lean steak","white fish"],i);
-   let carb=cat==="breakfast" ? pick(["oats","potatoes","rice cakes","quinoa"],i*2) : pick(RECIPE_ENGINE.carbs,i*2);
-   let veg=cat==="breakfast" && i%2===0 ? "" : pick(RECIPE_ENGINE.veg,i*3)+", "+pick(RECIPE_ENGINE.veg,i*5);
-   let fruit=cat==="breakfast" || i%3===0 ? pick(RECIPE_ENGINE.fruits,i*7) : "";
-   let dairy=cat==="breakfast" ? pick(RECIPE_ENGINE.dairy,i*9) : "";
-   let fat=pick(RECIPE_ENGINE.fats,i*11);
-   results.push({cat,name:tpl[0],method:tpl[1],time:tpl[2],protein,carb,veg,fruit,dairy,fat});
- }
- let out=results.map((r,idx)=>`<div class="recipe"><b>${r.cat.toUpperCase()}: ${r.name}</b><span class="small"><b>Cook time:</b> ${r.time}<br><b>Use:</b> ${[r.protein,r.carb,r.veg,r.fruit,r.dairy,r.fat].filter(Boolean).join(", ")}.<br><b>Instructions:</b><ol><li>${r.method}</li><li>Cook or prep ${r.protein} and ${r.carb} first.</li><li>Add ${r.veg||r.fruit||"fruit or vegetables"} and season how Devon likes.</li><li>Finish with measured ${r.fat}. Keep fats controlled for the calorie goal.</li></ol><b>Portion:</b> protein palm sized, carbs fist sized, fats thumb sized, vegetables 1 to 2 fists.</span></div>`);
- document.getElementById("mealIdeas").innerHTML=out.join("");
-}
-function buildMealIdeas(){generateRecipes("any")}
-function saveJournal(){
- let changes=[];
- let j={date:today(),time:new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}),mood:document.getElementById("mood").value,energy:document.getElementById("energy").value,sleep:Number(document.getElementById("sleep").value||0),soreness:Number(document.getElementById("soreness").value||0),text:document.getElementById("journalText").value};
- state.journals.push(j);
- const words=(j.text||"").toLowerCase();
+function effectiveRoute(){return state.inputs.planLocked&&state.inputs.lockedRoute?state.inputs.lockedRoute:state.inputs.route}
+function effectiveDifficulty(){return state.inputs.planLocked&&state.inputs.lockedDifficulty?state.inputs.lockedDifficulty:state.inputs.difficulty}
+function bmr(){const w=num(state.inputs.weight)*0.453592;const h=num(state.inputs.height)*2.54;const age=num(state.inputs.age)||33;return 10*w+6.25*h-5*age-161}
+function activityAdd(){const diff=effectiveDifficulty();const loc=state.inputs.workoutLocation;let add=diff==="taylor"?360:diff==="latto"?240:140;if(loc==="outdoor")add+=50;if(state.inputs.energy==="low")add-=90;if(state.inputs.energy==="high")add+=60;return add}
+function breastAdd(){return state.inputs.breastfeeding==="yes"?360:state.inputs.breastfeeding==="partial"?180:0}
+function targetCalories(){const r=routes[effectiveRoute()];let target=Math.round(bmr()*1.36+activityAdd()+breastAdd()-r.deficit);return Math.max(1500,target)}
+function proteinTarget(){return Math.round(num(state.inputs.weight)*(routes[effectiveRoute()].protein||.82))}
+function waterTarget(){let g=.75;if(state.inputs.breastfeeding==="yes")g+=.25;if(effectiveDifficulty()==="taylor")g+=.15;if(state.inputs.energy==="low")g+=.05;return Math.min(1.35,g)}
+function macroTargets(){const cal=targetCalories(), p=proteinTarget(), route=routes[effectiveRoute()];const proteinCal=p*4;const carbs=Math.round((cal*route.carbSplit)/4);const fat=Math.round(Math.max(40,(cal-proteinCal-carbs*4)/9));return {cal,p,carbs,fat,sodium:2300,water:waterTarget()}}
 
- if(j.sleep<5 || j.soreness>=7 || ["stressed","sad","overwhelmed"].includes(j.mood)){
-   if(state.mode!=="taylor") changes.push("Changed challenge mode to Taylor Swift easy for recovery.");
-   else changes.push("Kept Taylor Swift easy because recovery still needs protection.");
-   state.mode="taylor";
- } else if(j.energy==="high" && j.sleep>=6.5 && j.soreness<=4){
-   if(state.mode!=="latto") changes.push("Changed challenge mode to Latto Big Mama hard because recovery looked strong.");
-   else changes.push("Kept Latto Big Mama hard because recovery looked strong.");
-   state.mode="latto";
- } else {
-   if(state.mode!=="cardi") changes.push("Changed challenge mode to Cardi B moderate for steady results.");
-   else changes.push("Kept Cardi B moderate because the plan is balanced today.");
-   state.mode="cardi";
- }
+function baseTasks(){
+ const wd=["Monday","Tuesday","Wednesday","Thursday","Friday"].includes(dayName());
+ const saturday=dayName()==="Saturday", sunday=dayName()==="Sunday";
+ let order=1;
+ const t=(id,title,owner,anchor,duration,durationMax,priority,note,baby=["awake","feeding","nap","fussy","out"])=>({id,title,owner,anchor,duration,durationMax,priority,note,baby,order:order++});
+ let tasks=[
+  t("morning_check","Morning check in", "devon","morning",6,10,1,"Weight, energy, mood, baby status, and water."),
+  t("baby_reset","Baby diaper, feed, and calm reset","baby","morning",20,35,1,"Start with the baby so the house does not start in panic mode.",["awake","feeding","fussy"]),
+  t("dog_morning","Dog out","jr","morning",10,15,1,"Fast responsibility win before the day builds."),
+  t("breakfast","Breakfast with protein","devon","morning",30,45,1,"Simple plate, leftovers, or meal prep. Log it after."),
+  t("meal_log_1","Log breakfast or first snack","devon","morning",6,10,2,"Capture it now. Edit the food name later if needed."),
+  t("four_attention","Four year old attention cup","four","morning",20,30,1,"Full attention before independent play. This can be reading, play, a puzzle, or calm connection."),
+  t("four_learning_1","Four year old learning burst","four","morning",25,35,2,"Letters, numbers, colors, matching, shapes, or one short book."),
+  t("baby_floor","Baby floor play or tummy time","baby","morning",15,25,2,"Safe nearby play while a small task gets handled.")
+ ];
+ if(wd){tasks.push(t("jr_school_1","Jr homeschool block 1","jr","morning",60,75,1,"First focused hour. Phone away. Core class first.",["awake","nap"]));}
+ tasks.push(
+  t("laundry_start","Start one laundry load","devon","midday",15,25,2,"One load started counts. Do not fight the whole mountain at once."),
+  t("snack_1","Snack and water check","family","midday",20,30,2,"Protein snack, kid snack, clean up, and water update."),
+  t("lunch","Lunch with protein","devon","midday",35,50,1,"Build around protein, veggies, and controlled carbs."),
+  t("dishes_1","Dishes reset","jr","midday",30,45,2,"Load, wash, dry, or clear dishes so the kitchen does not pile up.")
+ );
+ if(wd){tasks.push(t("jr_school_2","Jr homeschool block 2","jr","midday",60,75,1,"Second focused hour. Writing, science, history, or online work.",["awake","nap"]));}
+ tasks.push(
+  t("ugc_block","UGC work block","ugc","afternoon",35,60,2,"Research, script, contact, record, edit, or follow up. One real step counts.",["nap","feeding","awake"]),
+  t("devon_workout","Devon workout or walk","devon","afternoon",35,60,2,"Use today workout plan. Low energy can be a walk and mobility.",["nap","awake","out"]),
+  t("snack_2","Snack 2 and counter reset","family","afternoon",18,30,2,"Snack plus a kitchen reset without rushing the kids."),
+  t("floors","Sweep floors","jr","afternoon",25,40,2,"Move this around baby naps and kid energy."),
+  t("four_independent","Four year old independent bin","four","afternoon",25,40,2,"Blocks, coloring, cars, sorting, puzzles, matching, or pretend play."),
+  t("fold_basket","Fold one basket of laundry","devon","afternoon",30,45,3,"One basket is a win."),
+  t("reset_zone","Reset office, laundry room, or bedroom","devon","afternoon",25,40,3,"Pick one zone and close the loop.")
+ );
+ if(wd){tasks.push(t("jr_training","Jr football training","jr","afternoon",120,180,1,"Two to three hours of speed, skill, strength, recovery, or film.",["awake","nap","out"]));}
+ tasks.push(
+  t("dinner","Dinner or family meal prep","devon","evening",60,90,1,"Goal is home cooked at least four times this week."),
+  t("dishes_2","Dinner dishes reset","jr","evening",30,45,2,"Kitchen closes cleaner than it started."),
+  t("snack_3","Snack 3 if needed","family","evening",15,25,3,"Useful for breastfeeding hunger, kid hunger, or bedtime fuel."),
+  t("four_bed","Four year old bedtime routine","four","bedtime",35,50,1,"Target 8 PM. Bath, pajamas, book, calm voice, and reset."),
+  t("hair_night","Night hair protection","devon","bedtime",10,15,2,"Loose braid or pineapple ponytail plus satin pillowcase or bonnet."),
+  t("baby_bed","Baby bedtime routine","baby","bedtime",35,55,1,"Target 9 PM. Nurse or bottle, dim lights, diaper, sleep cue."),
+  t("jr_room","Jr room and gear reset","jr","bedtime",20,35,2,"Room, gear, clothes, and reading."),
+  t("jr_bed","Jr shutdown and lights out","jr","bedtime",30,45,1,"Target 10 PM. Shower, reading, tomorrow setup."),
+  t("journal","Journal and reset tomorrow","devon","bedtime",8,12,3,"Quick note on what worked and what moves tomorrow.")
+ );
+ if(saturday)tasks.push(t("mow_lawn","Mow lawn","jr","morning",60,90,2,"Weekly outside chore. Hydrate first."));
+ if(sunday)tasks.push(t("meal_prep_sunday","Sunday meal prep","family","afternoon",90,150,1,"Prep protein, carbs, snacks, and grab and go meals."));
+ return tasks.concat(state.customTasks||[]).sort((a,b)=>a.order-b.order);
+}
+function ownerTag(owner){const label={jr:"Jr",four:"4 Year Old",devon:"Devon",family:"Family",baby:"Baby",ugc:"UGC"}[owner]||owner;return `<span class="owner ${owner}">${label}</span>`}
+function taskMinutes(t){return t.durationMax?Math.round((num(t.duration)+num(t.durationMax))/2):num(t.duration)}
+function timeRange(t){return t.durationMax?`${t.duration} to ${t.durationMax} min`:`${t.duration} min`}
+function taskHTML(t,compact=false){return `<div class="task ${isDone(t.id)?"done":""}"><div class="taskHead"><button class="check" onclick="toggleDone('${t.id}')">${isDone(t.id)?"✓":""}</button><div style="flex:1"><b>${t.order?String(t.order).padStart(2,"0")+". ":""}${t.title}</b><p class="small">${ownerTag(t.owner)} ${t.anchor} • target ${timeRange(t)} • ${t.note}</p>${compact?"":`<div class="row"><button class="ghost" onclick="makeTaskNext('${t.id}')">Make Next</button><button class="primary" onclick="toggleDone('${t.id}')">${isDone(t.id)?"Undo":"Complete"}</button></div>`}</div></div></div>`}
+function taskScore(t){const h=new Date().getHours();let score=100-t.priority*13-t.order;const status=state.inputs.babyStatus, mins=taskMinutes(t);if(t.baby&&t.baby.includes(status))score+=25;if(status==="nap"&&["ugc","devon"].includes(t.owner))score+=18;if(status==="feeding"&&["ugc","four","devon"].includes(t.owner))score+=12;if(status==="fussy"&&["baby","four"].includes(t.owner))score+=18;if(state.inputs.energy==="low"&&mins<=30)score+=18;if(state.inputs.energy==="high"&&mins>=35)score+=8;if(h<11&&t.anchor==="morning")score+=30;if(h>=11&&h<15&&t.anchor==="midday")score+=30;if(h>=15&&h<19&&t.anchor==="afternoon")score+=30;if(h>=19&&t.anchor==="evening")score+=25;if(h>=20&&t.anchor==="bedtime")score+=30;if(state.pinnedNext===t.id)score+=200;return score}
+function nextBest(){return baseTasks().filter(t=>!isDone(t.id)).sort((a,b)=>taskScore(b)-taskScore(a))[0]}
+function makeTaskNext(id){state.pinnedNext=id;saveState();refreshAll();toast("Moved to next best move")}
+function progressStats(){const all=baseTasks();const done=all.filter(t=>isDone(t.id)).length;return {done,total:all.length,pct:Math.round(done/(all.length||1)*100)}}
+function renderFlow(filter=activeFlow){activeFlow=filter;document.querySelectorAll("[id^='flow_']").forEach(b=>b.classList.remove("active"));if($("flow_"+filter))$("flow_"+filter).classList.add("active");let tasks=baseTasks();if(filter==="left")tasks=tasks.filter(t=>!isDone(t.id));else tasks=tasks.filter(t=>t.owner===filter);const stats=progressStats();const next=nextBest();$("flowSummary").innerHTML=`<b>${stats.done} of ${stats.total} completed</b><p class="small">${next?"Next best move: "+next.title:"Everything important is handled. Take a reset."}</p><p class="small">Times are flexible windows, not strict deadlines. If the kids drag the day out, complete the next best item and keep moving.</p>`;$("flowList").innerHTML=tasks.map(t=>taskHTML(t)).join("")||`<p class="small">Nothing in this view right now.</p>`}
+function addCustomTask(){const title=$("customTitle").value.trim();if(!title){toast("Add the task name first");return}state.customTasks.push({id:uid(),title,owner:$("customOwner").value,anchor:$("customAnchor").value,duration:num($("customDuration").value)||20,priority:2,note:"Custom task for today.",baby:["awake","feeding","nap","fussy","out"],order:90+state.customTasks.length});$("customTitle").value="";saveState();refreshAll();toast("Task added")}
+function completeNextBest(){const n=nextBest();if(n){toggleDone(n.id,true);toast("Completed: "+n.title)}}
 
- if(words.includes("outside") || words.includes("walk")){state.location="outdoor";changes.push("Changed workout location to outdoor because journal mentioned outside or walking.");}
- else if(words.includes("home") || words.includes("baby") || words.includes("tired")){state.location="home";changes.push("Changed workout location to indoor home because journal suggested convenience was needed.");}
- else if(words.includes("gym")){state.location="gym";changes.push("Changed workout location to gym because journal mentioned gym access.");}
- else changes.push("Location did not change because the journal did not point to gym, home, or outdoor needs.");
+const foodDb={
+ "chicken breast":{cal:165,p:31,c:0,f:3.6,s:74,unit:"100g",tags:["chicken","breast"]},"chicken thigh":{cal:209,p:26,c:0,f:11,s:90,unit:"100g",tags:["chicken","thigh"]},"egg":{cal:72,p:6.3,c:.4,f:4.8,s:71,unit:"serving",tags:["eggs"]},"egg whites":{cal:52,p:11,c:.7,f:.2,s:166,unit:"100g",tags:["egg white"]},"greek yogurt":{cal:59,p:10,c:3.6,f:.4,s:36,unit:"100g",tags:["yogurt"]},"protein shake":{cal:130,p:25,c:3,f:2,s:180,unit:"serving",tags:["protein","shake","whey"]},"ground turkey":{cal:170,p:27,c:0,f:7,s:90,unit:"100g",tags:["turkey"]},"salmon":{cal:208,p:20,c:0,f:13,s:59,unit:"100g",tags:["fish"]},"tuna":{cal:132,p:28,c:0,f:1,s:300,unit:"100g",tags:["tuna"]},"shrimp":{cal:99,p:24,c:.2,f:.3,s:111,unit:"100g",tags:["shrimp"]},"rice":{cal:130,p:2.7,c:28,f:.3,s:1,unit:"100g",tags:["white rice","brown rice"]},"potato":{cal:87,p:1.9,c:20,f:.1,s:6,unit:"100g",tags:["potatoes"]},"sweet potato":{cal:86,p:1.6,c:20,f:.1,s:55,unit:"100g",tags:["yam"]},"oats":{cal:389,p:17,c:66,f:7,s:2,unit:"100g",tags:["oatmeal"]},"banana":{cal:105,p:1.3,c:27,f:.4,s:1,unit:"serving",tags:["bananas"]},"avocado":{cal:160,p:2,c:9,f:15,s:7,unit:"100g",tags:["avocado"]},"broccoli":{cal:35,p:2.4,c:7,f:.4,s:41,unit:"100g",tags:["broccoli"]},"spinach":{cal:23,p:2.9,c:3.6,f:.4,s:79,unit:"100g",tags:["spinach"]},"cottage cheese":{cal:98,p:11,c:3.4,f:4.3,s:364,unit:"100g",tags:["cottage"]},"turkey slices":{cal:104,p:17,c:4,f:2,s:900,unit:"100g",tags:["deli turkey","turkey lunch meat"]},"peanut butter":{cal:188,p:8,c:6,f:16,s:150,unit:"serving",tags:["pb"]},"apple":{cal:95,p:.5,c:25,f:.3,s:2,unit:"serving",tags:["apples"]}
+};
+function cleanText(s){return String(s||"").toLowerCase().replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim()}
+function scoreFood(input,key,obj){const q=cleanText(input);let score=0;if(q===key)score+=100;if(q.includes(key)||key.includes(q))score+=55;const words=q.split(" ").filter(Boolean);words.forEach(w=>{if(key.includes(w))score+=18;if((obj.tags||[]).some(t=>t.includes(w)||w.includes(t)))score+=22});return score}
+function matchFood(name){let best={key:"",score:0,item:null};Object.entries(foodDb).forEach(([k,v])=>{const s=scoreFood(name,k,v);if(s>best.score)best={key:k,score:s,item:v}});return best.score>18?best:null}
+function unitToBaseAmount(amount,unit,matched){amount=num(amount)||1;if(unit==="g")return amount/100;if(unit==="oz")return (amount*28.3495)/100;if(unit==="lb")return (amount*453.592)/100;if(unit==="cup")return amount*1.4;if(unit==="serving")return matched&&matched.unit==="serving"?amount:amount;if(unit==="ml")return amount/100;if(unit==="floz")return (amount*29.5735)/100;return amount}
+function estimateFood(name,amount,unit){const matched=matchFood(name);if(!matched){return {match:"Custom food",cal:0,p:0,c:0,f:0,s:0,confidence:"Needs label",note:"No close match found. Use the manual override from the package or label."}}const mult=unitToBaseAmount(amount,unit,matched.item);return {match:matched.key,cal:matched.item.cal*mult,p:matched.item.p*mult,c:matched.item.c*mult,f:matched.item.f*mult,s:matched.item.s*mult,confidence:matched.score>70?"Good match":"Closest match",note:matched.score>70?"Matched automatically.":"Check the name before saving."}}
+function fixFoodInput(){const val=$("foodName").value.trim();if(!val){toast("Type the food first");return}const m=matchFood(val);if(!m){$("foodMatchBox").classList.remove("hidden");$("foodMatchBox").innerHTML=`<b>No close food match yet</b><p class="small">Use manual calories from the label or try a simpler name like chicken breast, rice, eggs, yogurt, or salmon.</p>`;return}$("foodName").value=m.key;$("foodMatchBox").classList.remove("hidden");$("foodMatchBox").innerHTML=`<b>Cleaned to: ${m.key}</b><p class="small">Add it now, or edit the name if this is not right.</p>`}
+function addFood(){const name=$("foodName").value.trim();if(!name){toast("Type the food name first");return}const amount=num($("foodAmount").value)||1, unit=$("foodUnit").value, meal=$("mealType").value;let est=estimateFood(name,amount,unit);const manual={cal:num($("manualCal").value),p:num($("manualP").value),c:num($("manualC").value),f:num($("manualF").value),s:num($("manualS").value)};const item={id:uid(),name:est.match==="Custom food"?name:est.match,rawName:name,amount,unit,meal,cal:manual.cal||est.cal,p:manual.p||est.p,c:manual.c||est.c,f:manual.f||est.f,s:manual.s||est.s,confidence:est.confidence,note:est.note,created:new Date().toLocaleTimeString([], {hour:"numeric",minute:"2-digit"})};foodList().push(item);["foodName","foodAmount","manualCal","manualP","manualC","manualF","manualS"].forEach(id=>{if($(id))$(id).value=""});saveState();refreshAll();toast("Food added")}
+function foodTotals(){return foodList().reduce((a,x)=>({cal:a.cal+num(x.cal),p:a.p+num(x.p),c:a.c+num(x.c),f:a.f+num(x.f),s:a.s+num(x.s)}),{cal:0,p:0,c:0,f:0,s:0})}
+function renderFood(){const totals=foodTotals(), mt=macroTargets();$("mCal").textContent=Math.round(totals.cal);$("mPro").textContent=Math.round(totals.p)+"g";$("mCarb").textContent=Math.round(totals.c)+"g";$("mSod").textContent=Math.round(totals.s)+"mg";let left=Math.max(0,mt.cal-totals.cal), pLeft=Math.max(0,mt.p-totals.p);$("macroAdvice").innerHTML=`<b>Today target:</b> ${mt.cal} calories, ${mt.p}g protein, about ${mt.carbs}g carbs, ${mt.fat}g fat, water ${round(mt.water,2)} gallons.<p class="small">Left today: ${Math.round(left)} calories and ${Math.round(pLeft)}g protein. ${totals.s>mt.sodium?"Sodium is high today, so keep the next meal lower sodium and push water.":"Sodium is still in a reasonable zone."}</p>`;$("foodList").innerHTML=foodList().map(renderFoodItem).join("")||`<p class="small">No food logged yet.</p>`}
+function renderFoodItem(x){return `<div class="foodItem"><div class="spread"><div><b>${x.meal}: ${x.name}</b><p class="small">${x.amount} ${x.unit} • ${Math.round(x.cal)} cal • ${Math.round(x.p)}g P • ${Math.round(x.c)}g C • ${Math.round(x.f)}g F • ${Math.round(x.s)}mg sodium</p><p class="tiny">${x.confidence||""} • ${x.note||""}</p></div><div class="row"><button class="ghost" onclick="editFood('${x.id}')">Edit</button><button class="danger" onclick="deleteFood('${x.id}')">Delete</button></div></div><div id="edit_${x.id}" class="editBox hidden"></div></div>`}
+function editFood(id){const x=foodList().find(f=>f.id===id);if(!x)return;const box=$("edit_"+id);box.classList.toggle("hidden");box.innerHTML=`<div class="grid"><input id="en_${id}" value="${x.name}"><input id="ea_${id}" type="number" step="0.1" value="${x.amount}"><select id="eu_${id}"><option value="g">grams</option><option value="oz">ounces</option><option value="lb">pounds</option><option value="serving">serving</option><option value="cup">cup</option><option value="ml">ml</option><option value="floz">fl oz</option></select><select id="em_${id}"><option>Breakfast</option><option>Snack 1</option><option>Lunch</option><option>Snack 2</option><option>Dinner</option><option>Snack 3</option></select><input id="ecal_${id}" type="number" step="0.1" value="${round(x.cal,1)}"><input id="ep_${id}" type="number" step="0.1" value="${round(x.p,1)}"><input id="ec_${id}" type="number" step="0.1" value="${round(x.c,1)}"><input id="ef_${id}" type="number" step="0.1" value="${round(x.f,1)}"><input id="es_${id}" type="number" step="0.1" value="${round(x.s,1)}"><button class="primary" onclick="saveFoodEdit('${id}')">Save</button></div>`;$("eu_"+id).value=x.unit;$("em_"+id).value=x.meal}
+function saveFoodEdit(id){const x=foodList().find(f=>f.id===id);if(!x)return;x.name=$("en_"+id).value.trim()||x.name;x.amount=num($("ea_"+id).value)||x.amount;x.unit=$("eu_"+id).value;x.meal=$("em_"+id).value;x.cal=num($("ecal_"+id).value);x.p=num($("ep_"+id).value);x.c=num($("ec_"+id).value);x.f=num($("ef_"+id).value);x.s=num($("es_"+id).value);x.confidence="Edited";saveState();refreshAll();toast("Food updated")}
+function deleteFood(id){state.foods[today()]=foodList().filter(f=>f.id!==id);saveState();refreshAll()}
+function clearFoodConfirm(){if(confirm("Clear today's food entries?")){state.foods[today()]=[];saveState();refreshAll()}}
+function buildMealIdeas(){const pantry=cleanText($("pantryInput")?.value||"");const r=effectiveRoute(), mt=macroTargets();let meals=[];const has=w=>pantry.includes(w)||!pantry;
+ if(has("egg"))meals.push("Egg white and whole egg scramble with spinach, turkey slices, and fruit on the side.");
+ if(has("chicken"))meals.push("Chicken bowl with veggies, small rice or potato portion, and avocado or olive oil for healthy fat.");
+ if(has("yogurt"))meals.push("Greek yogurt bowl with protein powder mixed in, berries or banana, and cinnamon.");
+ if(has("tuna")||has("salmon")||has("shrimp"))meals.push("Seafood plate with potatoes or rice, greens, lemon, and low sodium seasoning.");
+ if(has("turkey"))meals.push("Turkey lettuce wrap or rice bowl with veggies and a side of fruit.");
+ if(r==="slim")meals.push("Cardio slimmer option: lean protein, big veggie volume, smaller carb serving, and water before the meal.");
+ if(r==="slimthick"||r==="curvy")meals.push("Shape focused option: protein plus controlled carbs around the workout so legs and glutes have fuel.");
+ $("mealIdeas").innerHTML=`<div class="card goodbox"><b>Quick meal ideas</b><p class="small">Aim for about ${Math.round(mt.p/num(state.inputs.mealGoal))}g protein per meal or snack.</p><ul>${meals.slice(0,6).map(m=>`<li>${m}</li>`).join("")}</ul></div>`}
 
- changes.push("Meal and macro targets updated using current weight, baby age, breastfeeding status, route, mode, and steps.");
- state.lastAdaptation={date:j.date,time:j.time,changes,newMode:state.mode,newLocation:state.location,newSteps:stepGoal()};
- save();
- document.getElementById("journalText").value="";
- document.getElementById("adaptBox").classList.remove("hidden");
- document.getElementById("adaptBox").innerHTML="<b>Saved and adapted.</b><ul>"+changes.map(c=>`<li>${c}</li>`).join("")+"</ul>";
- refreshAll();
-}
-function renderHistory(){
- let arr=state.journals.slice().reverse();
- document.getElementById("historyList").innerHTML=arr.length?arr.map(j=>`<details><summary>${j.date} ${j.time||""} • ${j.mood} <span>+</span></summary><div class="inside small">Energy: ${j.energy} • Sleep: ${j.sleep} • Soreness: ${j.soreness}/10<p>${j.text||""}</p></div></details>`).join(""):"<p class='small'>No saved journals yet.</p>";
-}
-function completeToday(){
- if(!state.route){alert("Lock a 60 day route first. Then the app will let Devon move forward.");jump("routeSec");return}
- state.completed["day_"+dayNum()]=true;
- if(state.programDay<60){state.programDay+=1;save();refreshAll();jump("todaySec");alert("Completed. Next day unlocked.");}
- else{save();refreshAll();alert("60 day block complete. Devon finished the route.")}
-}
+const workoutFocusByDay={Monday:"glutes and legs",Tuesday:"cardio and core",Wednesday:"upper body and posture",Thursday:"glute pump and conditioning",Friday:"full body shape",Saturday:"outdoor movement and recovery",Sunday:"meal prep walk and mobility"};
+const bank={
+ curvy:{home:["Banded glute bridge","Goblet squat with backpack","Reverse lunge","Banded side step","Incline push up","Dead bug","Waist vacuum breathing"],gym:["Hip thrust","Leg press","Romanian deadlift","Cable kickback","Seated row","Dumbbell incline press","Cable crunch"],outdoor:["Hill walk","Walking lunge","Bench step up","Squat to calf raise","Incline push up on bench","Standing core march","Glute bridge on mat"]},
+ slim:{home:["Low impact jumping jack","Bodyweight squat","Mountain climber slow","Step back lunge","Plank shoulder tap","High knee march","Shadow boxing"],gym:["Incline treadmill intervals","Rower intervals","Kettlebell deadlift","Battle rope","Cable chop","Sled push or bike sprint","Plank"],outdoor:["Power walk intervals","Hill repeats","Stair walk","Park bench step up","Fast march","Core walkouts","Cooldown walk"]},
+ slimthick:{home:["Hip thrust off couch","Bulgarian split squat","Banded kickback","Sumo squat","Single leg glute bridge","Side lying abduction","Core heel taps"],gym:["Barbell hip thrust","Hack squat or leg press","Romanian deadlift","Seated abduction","Walking lunge","Hamstring curl","Cable kickback"],outdoor:["Hill sprint walk combo","Walking lunge","Bench hip thrust","Step up with knee drive","Lateral walk","Glute bridge hold","Deep squat stretch"]},
+ balanced:{home:["Squat","Glute bridge","Incline push up","Backpack row","Reverse lunge","Bird dog","March in place"],gym:["Leg press","Lat pulldown","Chest press","Romanian deadlift","Cable row","Bike intervals","Pallof press"],outdoor:["Brisk walk","Stair climb","Walking lunge","Bench push up","Step up","Core march","Stretch walk"]}
+};
+function buildWorkout(force=false){const r=effectiveRoute(), d=effectiveDifficulty(), loc=state.inputs.workoutLocation, diff=difficulties[d];const focus=workoutFocusByDay[dayName()]||"full body";const ex=(bank[r]&&bank[r][loc]?bank[r][loc]:bank.balanced.home).slice();const low=state.inputs.energy==="low"||num(state.inputs.availableTime)<=25;let sets=low?Math.max(1,diff.sets-1):diff.sets;let reps=low?"8 to 10":diff.reps;let finisher="";if(r==="slim")finisher=`HIIT finisher: ${diff.interval} for ${d==="cardi"?6:d==="latto"?10:14} rounds.`;else if(r==="slimthick")finisher=`Glute finisher: frog pumps, abductions, and bridge hold for ${d==="cardi"?2:d==="latto"?3:4} rounds.`;else if(r==="curvy")finisher=`Shape finisher: waist breathing, glute hold, and posture work for ${d==="cardi"?6:d==="latto"?9:12} minutes.`;else finisher=`Conditioning finisher: walk or bike ${d==="cardi"?10:d==="latto"?15:20} minutes.`;const html=`<div class="card"><h3>${routes[r].label}</h3><p class="small">Today focus: ${focus}. Location: ${loc}. Difficulty: ${diff.label}. Goal: ${routes[r].focus}.</p><div class="workoutItem ${state.workoutDone[today()]?"done":""}"><b>Main work</b><ol>${ex.slice(0,6).map(e=>`<li>${e}: ${sets} sets of ${reps}. Rest ${diff.rest}.</li>`).join("")}</ol><p class="small"><b>Intensity:</b> ${low?"Keep it realistic today. Short, clean, and done beats perfect.":diff.intensity}</p><p class="small"><b>Finish:</b> ${finisher}</p><button class="primary full" onclick="completeWorkout()">${state.workoutDone[today()]?"Workout Completed":"Complete Workout"}</button></div></div>`;$("workoutPlan").innerHTML=html;renderLockNote()}
+function completeWorkout(){state.workoutDone[today()]=true;toggleDone("devon_workout",true);saveState();refreshAll();toast("Workout logged")}
+function togglePlanLockFromSelect(){const locked=$("planLocked").value==="yes";if(locked&&!state.inputs.planLocked){state.inputs.planLocked=true;state.inputs.lockedRoute=state.inputs.route;state.inputs.lockedDifficulty=state.inputs.difficulty;state.inputs.lockedUntil=addDays(today(),60);toast("Plan locked for 60 days")}else if(!locked){state.inputs.planLocked=false;state.inputs.lockedUntil="";state.inputs.lockedRoute="";state.inputs.lockedDifficulty="";toast("Plan unlocked")}saveState();refreshAll()}
+function renderLockNote(){const locked=state.inputs.planLocked;$("lockNote").innerHTML=locked?`<b>Plan locked</b><p class="small">Locked into ${routes[effectiveRoute()].label} and ${difficulties[effectiveDifficulty()].label} until ${state.inputs.lockedUntil}. She can still change location day to day.</p>`:`<b>Plan unlocked</b><p class="small">Pick the route and difficulty that match the next 60 days. Lock it when she is ready.</p>`}
 
-function openLockConfirm(){
- if(state.route){alert("Already locked.");return}
- const panel=document.getElementById("lockConfirmPanel");
- const title=document.getElementById("lockConfirmTitle");
- if(title) title.innerText="Confirm: "+routes[state.selectedRoute].label;
- if(panel){
-   panel.classList.remove("hidden");
-   panel.scrollIntoView({behavior:"smooth",block:"center"});
- }
-}
-function cancelLockConfirm(){
- const panel=document.getElementById("lockConfirmPanel");
- if(panel) panel.classList.add("hidden");
-}
-function confirmLockRoute(){
- if(state.route){alert("Already locked.");return}
- state.route=state.selectedRoute;
- state.routeStart=today();
- state.programDay=1;
- const panel=document.getElementById("lockConfirmPanel");
- if(panel) panel.classList.add("hidden");
- save();
- refreshAll();
- jump("todaySec");
- alert("Program locked. Day 1 is ready.");
-}
+function hasHairLog(date,type){return (state.hairLogs||[]).some(x=>x.date===date&&x.type===type)}
+function weekHairLogs(type){const start=startOfWeek();return (state.hairLogs||[]).filter(x=>x.type===type&&x.date>=start&&x.date<=today())}
+function lastHairLog(type){return (state.hairLogs||[]).filter(x=>x.type===type).sort((a,b)=>b.date.localeCompare(a.date))[0]}
+function addHairLog(type){if(!hasHairLog(today(),type)){state.hairLogs.push({id:uid(),date:today(),type});saveState()}}
+function removeHairLogToday(type){state.hairLogs=(state.hairLogs||[]).filter(x=>!(x.date===today()&&x.type===type));saveState()}
+function logWashFromSelect(){if($("washedToday").value==="yes")addHairLog("wash");else removeHairLogToday("wash");refreshAll()}
+function logDeepMaskFromSelect(){if($("deepMaskThisWeek").value==="yes")addHairLog("mask");else state.hairLogs=(state.hairLogs||[]).filter(x=>!(x.type==="mask"&&x.date>=startOfWeek()&&x.date<=today()));saveState();refreshAll()}
+function hairRecommendation(){const feel=state.inputs.hairFeel;const washes=weekHairLogs("wash").length;const mask=weekHairLogs("mask").length;const last=lastHairLog("wash");const days=last?daysBetween(last.date,today()):99;let mode="morning";let reason="Start with the easy daily routine.";if((feel==="oily"||feel==="itchy"||days>=4)&&washes<2){mode="wash";reason="Today can be a wash day based on scalp feel, days since wash, and weekly wash count."}else if(feel==="dry"||feel==="tangled"){mode="dry";reason="Hair needs moisture and gentle detangling more than a full wash."}else if(!mask&&washes>=1){mode="mask";reason="A deep mask is still open for this week."}return {mode,reason,washes,mask,days}}
+function renderHairMode(mode){activeHairMode=mode;renderHair()}
+function hairStep(id,title,note){return `<div class="hairItem ${hairDone().includes(id)?"done":""}"><div class="taskHead"><button class="check" onclick="toggleHairStep('${id}')">${hairDone().includes(id)?"✓":""}</button><div><b>${title}</b><p class="small">${note}</p></div></div></div>`}
+function renderHair(){const rec=hairRecommendation();renderHairWeek();$("hairCoach").innerHTML=`<b>Hair status:</b> ${rec.washes} wash day${rec.washes===1?"":"s"} this week, ${rec.mask?"deep mask done":"deep mask still open"}.<p class="small">${rec.reason}</p>`;let steps=[];let mode=activeHairMode==="today"?rec.mode:activeHairMode;if(mode==="wash")steps=[
+ hairStep("wash_wet","Wet hair with warm water","Use warm water, not hot water."),
+ hairStep("wash_shampoo","Shampoo scalp only","Use SheaMoisture shampoo. Massage scalp about 60 seconds and let lather run through lengths."),
+ hairStep("wash_condition","Condition and detangle","Apply SheaMoisture conditioner mid lengths to ends. Leave 5 to 10 minutes. Detangle from ends upward with wide tooth comb or Wet Brush. Rinse cool."),
+ hairStep("wash_leavein","Apply leave in while soaking wet","Use 2 to 4 pumps Mielle Leave In from mid lengths to ends."),
+ hairStep("wash_serum","Smooth serum","Rub 1 to 2 pumps Garnier Serum between hands. Smooth mid lengths and ends. Avoid scalp."),
+ hairStep("wash_dry","Dry gently","Air dry or use microfiber towel or cotton T shirt. Avoid regular towel friction.")
+];else if(mode==="dry")steps=[
+ hairStep("dry_mist","Light mist","Mist hair lightly with water."),
+ hairStep("dry_leavein","Moisturize ends","Use pea sized amount of Mielle Leave In on ends."),
+ hairStep("dry_serum","Smooth frizz","Use half pump Garnier Serum only if needed."),
+ hairStep("dry_detangle","Gentle detangle","Only detangle from ends upward. Do not rip through knots.")
+];else if(mode==="mask"||mode==="weekly")steps=[
+ hairStep("weekly_mask","Deep conditioning mask","Once weekly, use a deep conditioning mask instead of regular conditioner."),
+ hairStep("weekly_track","Check wash count","Goal is 1 to 2 wash days per week. Do not overwash if hair feels dry."),
+ hairStep("weekly_product","Product note","SheaMoisture Manuka Honey and Yogurt mask is a good add when ready.")
+];else steps=[
+ hairStep("morning_check","Morning feel check","If hair feels dry, mist lightly with water."),
+ hairStep("morning_leavein","Ends only if dry","Apply pea sized Mielle Leave In to the ends if needed."),
+ hairStep("morning_serum","Smooth frizz if needed","Use half pump Garnier Serum only if needed."),
+ hairStep("night_protection","Night protection","Loose braid or pineapple ponytail. Sleep on satin pillowcase or wear satin bonnet.")
+];$("hairPlan").innerHTML=steps.join("");setInputs()}
+function renderHairWeek(){const start=startOfWeek();let html="";for(let i=0;i<7;i++){const d=addDays(start,i);const label=new Date(d+"T00:00:00").toLocaleDateString(undefined,{weekday:"short"});const wash=hasHairLog(d,"wash"), mask=hasHairLog(d,"mask");html+=`<div class="dayDot ${(wash||mask)?"on":""}"><b>${label}</b>${wash?"Wash":""}${wash&&mask?" + ":""}${mask?"Mask":""}${!wash&&!mask?"Open":""}</div>`}$("hairWeek").innerHTML=html}
 
-function wireButtons(){
- const lockBtn=document.getElementById("lockRouteButton");
- const yesBtn=document.getElementById("confirmLockButton");
- const cancelBtn=document.getElementById("cancelLockButton");
- if(lockBtn) lockBtn.addEventListener("click", openLockConfirm);
- if(yesBtn) yesBtn.addEventListener("click", confirmLockRoute);
- if(cancelBtn) cancelBtn.addEventListener("click", cancelLockConfirm);
- const quitBtn=document.getElementById("quitBtn");
- const quitFirst=document.getElementById("quitFirstConfirm");
- const quitFinal=document.getElementById("quitFinalConfirm");
- const quitCancelOne=document.getElementById("quitCancelOne");
- const quitCancelTwo=document.getElementById("quitCancelTwo");
- if(quitBtn) quitBtn.addEventListener("click", openQuitConfirm);
- if(quitFirst) quitFirst.addEventListener("click", quitSecondConfirm);
- if(quitFinal) quitFinal.addEventListener("click", finalQuitProgram);
- if(quitCancelOne) quitCancelOne.addEventListener("click", cancelQuitConfirm);
- if(quitCancelTwo) quitCancelTwo.addEventListener("click", cancelQuitConfirm);
+function renderKids(){
+ $("jrPlan").innerHTML=`<div class="card"><b>Jr daily anchors</b><ul><li>Two hours homeschool Monday through Friday.</li><li>Two to three hours football training, recovery, or film.</li><li>Read a book daily.</li><li>Dog out, dishes, floors, room reset, gear organized.</li><li>Mow lawn once weekly.</li></ul></div>`;
+ $("fourPlan").innerHTML=`<div class="card"><b>Four year old rhythm</b><ul><li>Start with ten minutes of full attention so he does not have to fight for the spotlight.</li><li>Use 15 to 20 minute learning bursts: letters, numbers, matching, colors, shapes, puzzles, and short books.</li><li>Give movement breaks: animal walks, dance clean up, jumping, outside walk, ball toss.</li><li>Independent bins should be simple: blocks, cars, coloring, sorting, matching, magnets, or pretend kitchen.</li><li>Praise calm waiting and finishing, not just loud energy.</li></ul></div>`;
+ $("choreBoard").innerHTML=baseTasks().filter(t=>["jr","four","devon","family"].includes(t.owner)&&["floors","dishes_1","dishes_2","dog_morning","jr_room","laundry_start","fold_basket","reset_zone","mow_lawn","dinner"].includes(t.id)).map(t=>taskHTML(t,true)).join("")||`<p class="small">No chores loaded.</p>`;
 }
-wireButtons();
-init();
+function esc(s){return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]))}
+function brandFormData(){return {name:$("brandName")?.value.trim()||"",product:$("productName")?.value.trim()||"",website:$("brandWebsite")?.value.trim()||"",email:$("contactEmail")?.value.trim()||"",status:$("brandStatus")?.value||"Idea",mission:$("brandMission")?.value.trim()||"",contentNotes:$("brandContentNotes")?.value.trim()||"",item:$("productDescription")?.value.trim()||"",idea:$("brandIdea")?.value.trim()||""}}
+function clearBrandForm(){["brandName","productName","brandWebsite","contactEmail","brandMission","brandContentNotes","productDescription","brandIdea"].forEach(id=>{if($(id))$(id).value=""});if($("brandStatus"))$("brandStatus").value="Idea"}
+function addBrand(){const b=brandFormData();if(!b.name&&!b.product){toast("Add the company or product first");return}state.brands.unshift({id:uid(),date:today(),...b,name:b.name||b.product,product:b.product||b.name});clearBrandForm();saveState();refreshAll();toast("UGC workspace saved")}
+function currentBrand(){const f=brandFormData();if(f.name||f.product||f.idea||f.mission||f.item)return {id:"form",date:today(),...f,name:f.name||f.product||"the brand",product:f.product||f.name||"the product"};return state.brands[0]||{name:"the brand",product:"the product",idea:"real mom life angle",status:"Idea",mission:"",contentNotes:"",item:"",email:""}}
+function loadBrand(id){const b=(state.brands||[]).find(x=>x.id===id);if(!b)return;$("brandName").value=b.name||"";$("productName").value=b.product||"";$("brandWebsite").value=b.website||"";$("contactEmail").value=b.email||"";$("brandStatus").value=b.status||"Idea";$("brandMission").value=b.mission||"";$("brandContentNotes").value=b.contentNotes||"";$("productDescription").value=b.item||"";$("brandIdea").value=b.idea||"";showTab("ugcSec");toast("Loaded workspace")}
+function openBrandSearch(type){const b=currentBrand();const base=[b.name,b.product].filter(Boolean).join(" ").trim()||"brand";const q={mission:`${base} mission statement about us values`,social:`${base} TikTok Instagram UGC ads content examples`,contact:`${base} contact email marketing PR creator partnerships`,ugc:`${base} UGC creator collaboration email PR influencer marketing`}[type]||base;window.open("https://www.google.com/search?q="+encodeURIComponent(q),"_blank")}
+function brandVibe(b){const text=cleanText([b.mission,b.contentNotes,b.item,b.idea].join(" "));let vibe=[];if(text.includes("natural")||text.includes("clean"))vibe.push("clean and trustworthy");if(text.includes("family")||text.includes("mom")||text.includes("baby"))vibe.push("real family life");if(text.includes("fitness")||text.includes("wellness")||text.includes("health"))vibe.push("wellness and routine focused");if(text.includes("beauty")||text.includes("hair")||text.includes("skin"))vibe.push("beauty routine friendly");if(text.includes("funny")||text.includes("relatable"))vibe.push("relatable and funny");return vibe.length?vibe.join(", "):"realistic mom lifestyle"}
+function bestRecordingWindow(){const rec=nextBest();if(state.inputs.babyStatus==="nap")return "Record the main clips during the nap window, then do voiceover later if needed.";if(state.inputs.babyStatus==="feeding")return "Write the hook, shot list, or outreach during feeding, then record product shots later.";if(state.inputs.energy==="low")return "Do a low effort voiceover, product close ups, or one honest talking clip today.";return rec?`After ${rec.title}, record one scene or send one contact message.`:"Record one simple scene before the day closes."}
+function rewriteBrandIdea(){const b=currentBrand();const angle=`Real mom test for ${b.product}: show the normal problem, use the product during a real house moment, explain the quick benefit, and end with an honest reaction that matches ${brandVibe(b)}.`;$("brandIdea").value=angle;toast("Angle cleaned")}
+function generateUGCScript(){const b=currentBrand();const mission=b.mission?esc(b.mission):"Paste the mission or about us notes here after searching.";const content=b.contentNotes?esc(b.contentNotes):"Add notes from their TikTok, Instagram, site, or ads.";const item=b.item?esc(b.item):"Describe what the product is, what it does, and how it feels in real life.";const idea=b.idea?esc(b.idea):`Real mom lifestyle angle for ${esc(b.product)}.`;const plan=`<b>${esc(b.name)} Content Plan</b><p class="small"><b>Product:</b> ${esc(b.product)}</p><p class="small"><b>Brand fit:</b> Match the content to ${esc(brandVibe(b))}. Mission notes: ${mission}</p><p class="small"><b>Content style notes:</b> ${content}</p><p class="small"><b>Item notes:</b> ${item}</p><p class="small"><b>Best angle:</b> ${idea}</p><ol><li><b>Hook:</b> I needed something that actually fits a real mom day, not a perfect internet day.</li><li><b>Problem scene:</b> Show the messy or busy moment first so the content feels human.</li><li><b>Product scene:</b> Show the product close up, how it is used, and one clear benefit.</li><li><b>Proof scene:</b> Show the result, reaction, texture, fit, time saved, or kid friendly moment.</li><li><b>Close:</b> Keep it honest: simple wins matter when the whole house needs you.</li></ol><p class="small"><b>Shot list:</b> product close up, unboxing or first touch, using it in a normal room, reaction clip, final result, and one short voiceover.</p><p class="small"><b>Caption idea:</b> A real mom day does not need perfect. It needs products that actually make the day smoother.</p><p class="small"><b>Best recording window:</b> ${bestRecordingWindow()}</p>`;$("ugcPrompt").innerHTML=plan}
+function renderUGC(){const b=currentBrand();$("ugcCoach").innerHTML=`<b>Today UGC move:</b> ${state.inputs.babyStatus==="nap"?"Use this nap for research, recording, or editing." : state.inputs.babyStatus==="feeding"?"Use feeding time for research notes, outreach, or the hook." : "Pick one brand and move it one step forward."}<p class="small">Search the brand, paste mission and content notes, then build the plan. The app will shape the message around Devon's real mom perspective.</p>`;$("brandList").innerHTML=(state.brands||[]).map(x=>`<div class="ugcItem"><div class="spread"><div><b>${esc(x.name)} ${x.product?"• "+esc(x.product):""}</b><p class="small">${esc(x.status||"Idea")} • ${esc(x.idea||"No angle saved")}</p><p class="tiny">${x.email?"Email: "+esc(x.email)+" • ":""}${x.website?esc(x.website):"No website saved"}</p></div><div class="row"><button class="ghost" onclick="loadBrand('${x.id}')">Load</button><button class="primary" onclick="generatePlanForBrand('${x.id}')">Plan</button><button class="ghost" onclick="moveBrand('${x.id}')">Next</button><button class="danger" onclick="deleteBrand('${x.id}')">Delete</button></div></div></div>`).join("")||`<p class="small">No UGC workspaces yet.</p>`}
+function generatePlanForBrand(id){const b=(state.brands||[]).find(x=>x.id===id);if(!b)return;loadBrand(id);setTimeout(generateUGCScript,50)}
+function moveBrand(id){const flow=["Idea","Researching","Need contact","Contacted","Follow up","Accepted","Recorded","Posted"];const b=state.brands.find(x=>x.id===id);if(!b)return;b.status=flow[Math.min(Math.max(flow.indexOf(b.status),0)+1,flow.length-1)];saveState();refreshAll()}
+function deleteBrand(id){state.brands=state.brands.filter(x=>x.id!==id);saveState();refreshAll()}
+function copyUGCOutreach(){const b=currentBrand();const product=b.product&&b.product!==b.name?` for ${b.product}`:"";const missionLine=b.mission?` I noticed your brand focuses on ${b.mission.slice(0,140)}${b.mission.length>140?"":""}, and I think that could fit naturally into realistic mom lifestyle content.`:"";const txt=`Hi, my name is Devon. I create realistic mom lifestyle UGC around postpartum routines, family life, home systems, wellness, beauty, and products that make busy days easier. I would love to create a short authentic video for ${b.name}${product}.${missionLine} My angle would show the product inside a real day with kids, a clear problem, simple product use, and an honest final reaction. Would you be open to discussing a collaboration?`;navigator.clipboard?.writeText(txt);toast(b.email?`Outreach copied. Send to ${b.email}`:"Outreach copied")}
+
+function coachMessage(){const stats=progressStats(), totals=foodTotals(), mt=macroTargets(), n=nextBest();let line=`<b>Right now:</b> ${n?n.title:"Take a reset"}.`;let food=`You have logged ${Math.round(totals.cal)} of ${mt.cal} calories and ${Math.round(totals.p)} of ${mt.p}g protein.`;let water=`Water is ${round(state.inputs.waterGallons,2)} of ${round(mt.water,2)} gallons.`;let adjust="";if(state.inputs.babyStatus==="fussy")adjust="Regulate the baby first, then pick a ten minute task. No guilt.";else if(state.inputs.babyStatus==="nap")adjust="Nap window is premium. Do UGC, workout, food prep, or one closed loop chore.";else if(state.inputs.babyStatus==="feeding")adjust="Feeding window is for one handed tasks: food log, UGC hook, reading with the four year old, or planning dinner.";else adjust="Keep moving in small blocks. Done is better than perfect.";if(state.inputs.energy==="low")adjust+=" Since energy is low, the workout will stay shorter and meals should prioritize protein and easy carbs.";return `<p>${line}</p><p class="small">${food} ${water}</p><p class="small">${adjust}</p>`}
+function renderNextMove(){const n=nextBest();$("coachCard").innerHTML=coachMessage();$("nextMoveCard").innerHTML=n?`<h3>Next Best Move</h3>${taskHTML(n,true)}<button class="primary full" onclick="toggleDone('${n.id}',true)">Complete This</button>`:`<h3>Daily flow clear</h3><p class="small">Hydrate, stretch, breathe, or rest.</p>`}
+function saveJournal(){const entry={id:uid(),date:new Date().toLocaleString(),mood:state.inputs.mood,energy:state.inputs.energy,sleep:state.inputs.sleep,water:state.inputs.waterGallons,weight:state.inputs.weight,workout:$("workoutDone").value,stress:$("stressScore").value,text:$("journalText").value.trim()};state.journal.unshift(entry);state.journal=state.journal.slice(0,60);$("journalText").value="";saveState();refreshAll();toast("Journal saved")}
+function renderJournal(){$("journalHistory").innerHTML=(state.journal||[]).slice(0,8).map(j=>`<div class="card"><b>${j.date}</b><p class="small">Mood ${j.mood} • Energy ${j.energy} • Sleep ${j.sleep} • Water ${j.water} gallons • Weight ${j.weight} lbs • Stress ${j.stress}</p><p class="small">${j.text||"No note saved"}</p></div>`).join("")||`<p class="small">No journal entries yet.</p>`}
+function backupData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="devon_daily_rebuild_backup_"+today()+".json";a.click();URL.revokeObjectURL(a.href)}
+function resetTodayConfirm(){if(confirm("Reset today's checkmarks, food, hair steps, and workout?")){state.done[today()]=[];state.foods[today()]=[];state.hairDone[today()]=[];state.workoutDone[today()]=false;saveState();refreshAll();toast("Today reset")}}
+function fullResetConfirm(){if(confirm("Full reset this app data?")){localStorage.removeItem(KEY+"state");location.reload()}}
+function refreshHeader(){const stats=progressStats(), totals=foodTotals(), mt=macroTargets();$("heroDate").textContent=niceDate();$("heroPct").textContent=stats.pct+"%";$("heroFill").style.width=stats.pct+"%";$("babyPill").textContent="Baby: "+state.inputs.babyStatus;$("energyPill").textContent="Energy: "+state.inputs.energy;$("waterPill").textContent=`Water: ${round(state.inputs.waterGallons,2)} / ${round(mt.water,2)} gal`;$("calPill").textContent=`${Math.round(totals.cal)} / ${mt.cal} cal`;$("targetCalMini").textContent=mt.cal;$("targetProMini").textContent=mt.p+"g";$("targetWaterMini").textContent=round(mt.water,2)+" gal";$("tasksDoneMini").textContent=stats.done+" / "+stats.total}
+function refreshAll(){ensureDate();setInputs();refreshHeader();renderNextMove();renderFlow(activeFlow);renderFood();buildWorkout();renderHair();renderKids();renderUGC();renderJournal();document.querySelectorAll("#mainNav button").forEach(b=>b.classList.toggle("active",b.dataset.tab===activeTab));saveState()}
+ensureDate();setInputs();showTab("todaySec");refreshAll();
 </script>
 </body>
 </html>
