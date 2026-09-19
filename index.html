@@ -269,6 +269,12 @@ textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:1
 .pill{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 9px;border-radius:999px;background:var(--soft);color:var(--ink)}
 .pill.due{background:var(--accent);color:var(--paper)}
 .evt span.pill{display:inline-block;margin-top:0}
+.kv{display:flex;gap:12px;justify-content:space-between;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line)}
+.kv:first-child{border-top:0}
+.kv .k{font-size:14px;font-weight:600;flex:0 0 38%}
+.kv .v{flex:1;text-align:right;font-size:14px;font-weight:600}
+.kv .v small{display:block;font-size:12.5px;font-weight:400;color:var(--muted);margin-top:2px;line-height:1.35}
+.form .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .tonight .btn:not(.primary){background:var(--paper);border:1px solid var(--line)}
 .mhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:14px 0 6px;font-family:var(--serif);font-size:18px}
 .mhead .btn{min-width:46px;padding:0}
@@ -335,7 +341,7 @@ var MOTION=!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').m
 var KEY='daybook.v1',S;
 function load(){try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);if(o&&o.v===1&&o.days)return o}}catch(e){}return {v:1,days:{}}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
-function norm(){S.events=S.events||[];S.ugc=S.ugc||[];S.groc=S.groc||[];S.fav=S.fav||{};S.rf=S.rf||{};S.stepGoal=S.stepGoal||5000}
+function norm(){S.events=S.events||[];S.ugc=S.ugc||[];S.groc=S.groc||[];S.fav=S.fav||{};S.rf=S.rf||{};S.stepGoal=S.stepGoal||5000;S.nut=Object.assign(nutDefaults(),S.nut||{});if(!S.vits)S.vits=[{id:'v_pre',name:'Prenatal vitamin or multivitamin'},{id:'v_dha',name:'Omega-3 DHA, if you do not eat fish 2 to 3 times a week'}]}
 S=load();norm();
 
 /* ================= words ================= */
@@ -665,7 +671,7 @@ function chapters(c){
   return L;
 }
 function getCH(){var t=ymd();if(!CH||CHdate!==t){ensureToday();CH=chapters(ctxFor(t));CHdate=t}return CH}
-function order(){return ['toc'].concat(getCH().map(function(c){return c.id}),['cal','meals','move','ugc','recap','sched','setup'])}
+function order(){return ['toc'].concat(getCH().map(function(c){return c.id}),['cal','meals','nut','move','ugc','recap','sched','setup'])}
 function curChapter(){var m=nowMin(),c=getCH();for(var i=0;i<c.length;i++)if(m>=c[i].t[0]&&m<c[i].t[1])return c[i];return m<c[0].t[0]?c[0]:c[c.length-1]}
 var LANES=['mom','jr','st'];
 function chProg(c){var d=D();if(c.id==='close')return {done:d.closed?1:0,tot:1};var done=0,tot=0;LANES.forEach(function(k){c[k].forEach(function(it){if(it.opt)return;tot++;if(d.done[it.id])done++})});return {done:done,tot:tot}}
@@ -736,6 +742,10 @@ function chapterHTML(ch){
   h+='<div class="ptitle"><div class="time">'+range(ch.t)+'</div><h2 class="title">'+esc(ch.title)+'</h2><p class="lede">'+esc(ch.lede)+'</p>'+(full?'<div class="stamp'+(freshStamp===ch.id?' fresh':'')+'">Done</div>':'')+'</div>';
   if(d.baby==='asleep')h+=quietBanner();
   (ch.notes||[]).forEach(function(n){h+='<div class="note"><b>'+esc(n.b)+':</b> '+esc(n.t)+(n.link?' <button class="pglink" data-a="goto" data-p="'+n.link+'">'+esc(n.lk||'Open')+'</button>':'')+'</div>'});
+  if(ch.id!=='close'){var em=nowMin();eatList().forEach(function(x){
+    if(d.eat&&d.eat[x.k])return;if(x.t>em+30||x.t<em-180)return;
+    if(x.t<ch.t[0]||x.t>=ch.t[1])return;
+    h+='<div class="note"><b>Time to eat:</b> '+esc(x.n)+', about '+x.kcal+' calories. '+esc(x.ex)+' <button class="pglink" data-a="eat" data-k="'+x.k+'">Ate it</button> <button class="pglink" data-a="goto" data-p="nut">Nutrition</button></div>'})}
   if(ch.teamPicker)h+='<div class="note"><b>Bonus shared area if everyone finishes early:</b> '+esc(TEAM[teamIndex()])+' <button class="btn primary" style="margin-left:6px;min-height:40px" data-a="teamzone">Pick another</button></div>';
   if(ch.id==='close')return h+closeHTML(ch);
   LANES.forEach(function(k){h+=laneHTML(ch,k)});
@@ -766,6 +776,7 @@ function tocHTML(){
   if(gentle)h+='<div class="banner"><b>Gentle day</b>'+esc(gentleWhy())+' Two must-dos, small versions of the rest. Everything else is a bonus.<br><button class="btn" data-a="gentle" data-v="0">Switch to a full day</button></div>';
   else if(d.gentle===false)h+='<div class="banner"><b>Full day</b>You switched back to the full plan. <button class="btn" data-a="gentle" data-v="1">Go gentle instead</button></div>';
   h+=calCardHTML();
+  h+=fuelCardHTML();
   h+=tvCardHTML();
   var bd=st.filter(function(x){return d.done[x.id]}).length;
   h+='<div class="card big mom"><h3>'+(st.length===3?'Your Big 3':'Your must-dos')+'</h3><p class="sub">'+bd+' of '+st.length+' done. Do these first. Tap the star on any task to add or remove it.</p>';
@@ -782,7 +793,7 @@ function tocHTML(){
   h+='</div><h3 class="shh">Back of the book</h3><div class="toc" style="margin-top:6px">';
   var tn=tonight(),ud=ugcDue().length,evn=eventsOn(ymd()).length;
   function brow(p,tt,ttl,sub){return '<button class="trow" data-a="goto" data-p="'+p+'"><span class="tt">'+tt+'</span><span class="ttl">'+ttl+(sub?'<span class="sub">'+esc(sub)+'</span>':'')+'</span><span class="prog"></span></button>'}
-  h+=brow('cal','Plan','Calendar',evn?evn+' event'+(evn===1?'':'s')+' today':'Appointments and plans')+brow('meals','Dinner','Meals','Tonight: '+tn.n)+brow('move','Move','Move',todayMove().n+(d.moved?' (done)':''))+brow('ugc','Work','UGC Desk',ud?ud+' follow-up'+(ud===1?'':'s')+' due':(S.ugc.length?S.ugc.length+' brand'+(S.ugc.length===1?'':'s'):'Brands and contacts'))+brow('recap','Week','Recap and journal','')+brow('sched','TV','Fights and football','Every UFC card and NFL Sunday, in Central time')+brow('setup','App','Set up','Save to your phone and back up')+'</div>';
+  h+=brow('cal','Plan','Calendar',evn?evn+' event'+(evn===1?'':'s')+' today':'Appointments and plans')+brow('meals','Dinner','Meals','Tonight: '+tn.n)+brow('nut','Fuel','Nutrition',nutTocSub())+brow('move','Move','Move',todayMove().n+(d.moved?' (done)':''))+brow('ugc','Work','UGC Desk',ud?ud+' follow-up'+(ud===1?'':'s')+' due':(S.ugc.length?S.ugc.length+' brand'+(S.ugc.length===1?'':'s'):'Brands and contacts'))+brow('recap','Week','Recap and journal','')+brow('sched','TV','Fights and football','Every UFC card and NFL Sunday, in Central time')+brow('setup','App','Set up','Save to your phone and back up')+'</div>';
   h+='<div class="seg" role="group" aria-label="Type of day"><button data-a="daytype" data-v="school" aria-pressed="'+ctxFor(ymd()).wd+'">School day</button><button data-a="daytype" data-v="weekend" aria-pressed="'+(!ctxFor(ymd()).wd)+'">Weekend</button></div>';
   return h;
 }
@@ -795,6 +806,7 @@ function recapHTML(){
   h+='<div class="card"><h3>Must-dos</h3><p class="sub">Every must-do finished on '+bigDays+' of '+tot+' recorded days.</p><div class="dots" aria-label="Day ratings">'+days.map(function(x){var dd=S.days[x.k];return '<span class="dot '+(dd&&dd.rating||'')+'" title="'+x.k+'"></span>'}).join('')+'</div><p class="sub" style="margin-top:6px">Dots: green good, amber okay, red rough, grey not recorded.</p></div>';
   h+=walkCard(days);
   h+=moveCard(days);
+  h+=nutCard(days);
   h+=napCard();
   var notes=Object.keys(S.days).filter(function(k){return S.days[k].note}).sort().reverse().slice(0,7);
   h+='<h3 style="font-family:var(--serif);font-size:19px;margin:18px 0 4px">Journal</h3>';
@@ -1234,7 +1246,187 @@ function setupHTML(){
   h+='<div class="card"><h3>Restore from a backup</h3><p class="sub" style="color:var(--ink)">Paste your backup text here. This replaces what is in the book right now.</p><textarea id="bk_in" rows="3" placeholder="Paste backup text" aria-label="Paste backup text"></textarea><div class="acts"><button class="btn" data-a="bkrestore">Restore</button></div></div>';
   return h}
 
+/* ================= nutrition ================= */
+var ACTS=[['inactive','Mostly sitting, light chores'],['low','On my feet with the kids, walking most days'],['active','About an hour of exercise most days, on top of that'],['very','Hard training every day']];
+var BABYA=[['n','Baby is under 2 months'],['a','2 to 6 months'],['b','7 to 12 months'],['c','Over 12 months']];
+var MODES=[['full','Only breast milk, or nearly all feeds'],['half','About half of feeds'],['some','A few feeds a day']];
+var GOALS=[['keep','Keep my weight steady'],['lose','Lose weight slowly']];
+var TEE_EQ={inactive:[584.90,5.72,11.71],low:[575.77,6.60,12.14],active:[710.25,6.54,12.34],very:[511.83,9.07,12.56]};
+var LV=[1600,1800,2000,2200,2400,2600,2800,3000,3200];
+/* USDA Healthy US-Style pattern: fruit c, vegetables c, grains oz-eq, protein oz-eq, dairy c, oils g */
+var PAT={1600:[1.5,2,5,5,3,22],1800:[1.5,2.5,6,5,3,24],2000:[2,2.5,6,5.5,3,27],2200:[2,3,7,6,3,29],2400:[2,3,8,6.5,3,31],2600:[2,3.5,9,6.5,3,34],2800:[2.5,3.5,10,7,3,36],3000:[2.5,4,10,7,3,44],3200:[2.5,4,10,7,3,51]};
+var EATS=[
+ {k:'b',n:'Breakfast',w:420,e:480,share:.22,ex:'Protein plus a whole grain or fruit: eggs and toast, yogurt and oats, or a breakfast bowl.'},
+ {k:'s1',n:'Morning snack',w:585,e:630,share:.10,ex:'Protein plus fruit or a vegetable: cheese and fruit, yogurt, nuts, or a smoothie.'},
+ {k:'l',n:'Lunch',w:750,e:750,share:.25,ex:'A bowl: protein, rice or potato, peppers and onions, and greens.'},
+ {k:'s2',n:'Afternoon snack',w:855,e:900,share:.12,ex:'Protein and a carb: a shake, trail mix, or hummus and crackers.'},
+ {k:'d',n:'Dinner',w:990,e:990,share:.23,ex:'The family dinner. Get your protein, your carb and your greens.'},
+ {k:'s3',n:'Evening snack',w:1170,e:1170,share:.08,ex:'Something light with protein: cottage cheese, oatmeal, or peanut butter toast.'}];
+var NUTR=[
+ ['Vitamins',[
+  ['Vitamin A','1,300 mcg RAE','Sweet potato, carrots, spinach, kale, eggs. Skip extra vitamin A supplements unless your provider says so.'],
+  ['Vitamin C','120 mg','Bell peppers, oranges, strawberries, broccoli.'],
+  ['Vitamin D','15 mcg (600 IU)','Fatty fish, fortified milk, eggs, sunshine. Ask your provider whether you need a supplement.'],
+  ['Vitamin E','19 mg','Sunflower seeds, almonds, spinach, avocado.'],
+  ['Vitamin K','90 mcg','Kale, spinach, broccoli, green beans.'],
+  ['Thiamin (B1)','1.4 mg','Pork, beans, whole grains, fortified cereal.'],
+  ['Riboflavin (B2)','1.6 mg','Milk, yogurt, eggs, lean beef.'],
+  ['Niacin (B3)','17 mg','Chicken, turkey, beef, peanuts.'],
+  ['Vitamin B6','2.0 mg','Chicken, turkey, potatoes, bananas, chickpeas.'],
+  ['Folate','500 mcg DFE','Spinach, beans, asparagus, fortified grains, avocado.'],
+  ['Vitamin B12','2.8 mcg','Beef, eggs, dairy, fish. People who eat no animal foods need a supplement.'],
+  ['Choline','550 mg','Eggs (about 150 mg each), beef, chicken, soybeans. Prenatal vitamins often have little, so check the label.']]],
+ ['Minerals',[
+  ['Calcium','1,000 mg','Milk, yogurt, cheese, fortified plant milk, kale, broccoli.'],
+  ['Iron','9 mg','Beef, chicken thighs, turkey, beans, spinach. Pair with vitamin C foods. This is lower than in pregnancy.'],
+  ['Iodine','290 mcg','Iodized salt, dairy, eggs, seafood. Ask your provider if your prenatal vitamin has enough.'],
+  ['Zinc','12 mg','Beef, chicken thighs, pumpkin seeds, beans.'],
+  ['Magnesium','310 mg (ages 19 to 30) or 320 mg (31 to 50)','Nuts, beans, leafy greens, whole grains.'],
+  ['Selenium','70 mcg','Eggs, fish, chicken, turkey.'],
+  ['Potassium','2,800 mg','Potatoes, sweet potatoes, beans, bananas, spinach.']]],
+ ['Fats and fiber',[
+  ['Fiber','29 g','Beans, oats, fruit, vegetables, whole grains.'],
+  ['Omega-3 (ALA)','1.3 g','Walnuts, flaxseed, chia seeds.'],
+  ['DHA and fish','2 to 3 servings a week (8 to 12 oz, 225 to 340 g)','Salmon, shrimp, sardines, cod, canned light tuna. Avoid tilefish, swordfish, shark and king mackerel because of mercury. If you eat no fish, ask about a DHA supplement.']]]];
+var CONV=[
+ ['1 cup','8 fl oz','237 mL'],['1 tablespoon','0.5 fl oz','15 mL'],['1 teaspoon','','5 mL'],['1 fl oz','','30 mL'],['1 liter','34 fl oz','4.2 cups'],
+ ['1 oz (weight)','','28 g'],['4 oz cooked meat','palm-sized','115 g'],['1 pound','16 oz','454 g'],['1 kilogram','','2.2 lb'],
+ ['1 calorie (kcal)','','4.184 kJ'],['1 mg','','1,000 mcg'],['1 mcg vitamin D','','40 IU']];
+var NUT_SRC=[
+ ['CDC: Maternal diet and breastfeeding','https://www.cdc.gov/breastfeeding-special-circumstances/hcp/diet-micronutrients/maternal-diet.html'],
+ ['National Academies: Dietary Reference Intakes for Energy (2023)','https://www.ncbi.nlm.nih.gov/books/NBK591020/'],
+ ['National Academies: RDA and AI vitamin and mineral table','https://www.nationalacademies.org/cdn/materials/9fb9fae8-82dc-4e60-8521-30dd740d1b5e'],
+ ['National Academies: DRI macronutrient tables','https://www.ncbi.nlm.nih.gov/books/NBK208874/'],
+ ['National Academies: Dietary Reference Intakes for Water','https://www.nationalacademies.org/read/10925/chapter/6'],
+ ['Academy of Nutrition and Dietetics: Losing weight while breastfeeding','https://www.eatright.org/health/pregnancy/breastfeeding-and-formula/losing-weight-while-breastfeeding'],
+ ['MedlinePlus: Losing weight after pregnancy','https://medlineplus.gov/ency/patientinstructions/000586.htm'],
+ ['Mayo Clinic: Breastfeeding nutrition tips','https://www.mayoclinic.org/healthy-lifestyle/infant-and-toddler-health/in-depth/breastfeeding-nutrition/art-20046912'],
+ ['USDA Healthy US-Style food patterns','https://odphp.health.gov/sites/default/files/2020-01/Appendix-E3-1-Table-A1.pdf'],
+ ['American Academy of Pediatrics: Vitamin D for babies','https://www.healthychildren.org/English/healthy-living/nutrition/Pages/vitamin-d-on-the-double.aspx'],
+ ['Children\'s Hospital of Philadelphia: Diet for breastfeeding mothers','https://www.chop.edu/centers-programs/breastfeeding-and-lactation-program/diet-breastfeeding-mothers']];
+
+function nutDefaults(){return {units:'us',age:null,wt:null,ht:null,act:'low',baby:'a',mode:'full',goal:'keep'}}
+function kg2lb(x){return x/0.45359237}
+function lb2kg(x){return x*0.45359237}
+function r5(x){return Math.round(x/5)*5}
+function r50(x){return Math.round(x/50)*50}
+function num(x){return Math.round(x).toLocaleString()}
+function fr(c){var w=Math.floor(c+1e-9),f=Math.round((c-w)*4)/4,s=f===0?'':f===.25?'¼':f===.5?'½':'¾';return (w?w:'')+s||'0'}
+function cupsMl(c){return fr(c)+' cup'+(c>1?'s':'')+' ('+num(r5(c*237))+' mL)'}
+function ozG(o){return (Math.round(o*2)/2)+' oz ('+num(r5(o*28.35))+' g)'}
+function nutTargets(){
+  var n=S.nut,ok=!!(n.wt&&n.ht&&n.age),r={personal:ok,lose:false,floor:false,wait:false};
+  var mode={full:1,half:0.5,some:0.25}[n.mode]||1,add=({n:400,a:400,b:380,c:380}[n.baby]||400)*mode;
+  var kcal=2400,base=null;
+  if(ok){var e=TEE_EQ[n.act]||TEE_EQ.low;base=e[0]-7.01*n.age+e[1]*n.ht+e[2]*n.wt;kcal=base+add;
+    if(n.goal==='lose'){if(n.baby==='n')r.wait=true;else{var t=kcal-250;if(t<1800){t=1800;r.floor=true}kcal=t;r.lose=true}}}
+  r.base=base;r.add=add;r.kcal=r50(kcal);r.lo=r50(kcal-100);r.hi=r50(kcal+100);
+  r.protein=ok?Math.max(71,Math.round(1.3*n.wt)):71;
+  r.carbLo=Math.max(210,Math.round(r.kcal*.45/4/5)*5);r.carbHi=Math.round(r.kcal*.65/4/5)*5;
+  r.fatLo=Math.round(r.kcal*.20/9/5)*5;r.fatHi=Math.round(r.kcal*.35/9/5)*5;
+  var lv=LV[0];LV.forEach(function(x){if(Math.abs(x-r.kcal)<Math.abs(lv-r.kcal))lv=x});r.level=lv;
+  return r}
+function waterGoalCups(){return 13}
+function eatList(){var wd=ctxFor(ymd()).wd,t=nutTargets();return EATS.map(function(x){return {k:x.k,n:x.n,t:wd?x.w:x.e,kcal:Math.round(t.kcal*x.share/10)*10,ex:x.ex}})}
+function eatNext(){
+  var d=D(),m=nowMin(),L=eatList(),due=null,nx=null;
+  L.forEach(function(x){if(d.eat&&d.eat[x.k])return;if(x.t<=m+30&&x.t>=m-180)due=x;else if(x.t>m+30&&!nx)nx=x});
+  if(due)return {e:due,due:true};if(nx)return {e:nx,due:false};return null}
+function fuelNudge(){var nx=eatNext();return (nx&&nx.due&&nowMin()>=nx.e.t-10)?'Time to eat: <b>'+esc(nx.e.n)+'</b>':''}
+function fuelCardHTML(){
+  var d=D(),L=eatList(),done=L.filter(function(x){return d.eat&&d.eat[x.k]}).length,nx=eatNext();
+  var h='<div class="card"><h3>Fuel today</h3><p class="sub" style="color:var(--ink)">'+done+' of 6 meals and snacks · '+(d.water||0)+' of '+waterGoalCups()+' cups of water</p>';
+  if(nx)h+='<p class="sub">'+(nx.due?'Due now: ':'Next: ')+esc(nx.e.n)+' at '+fmt(nx.e.t)+'</p>';
+  h+='<div class="acts">'+(nx?'<button class="btn primary" data-a="eat">Ate '+esc(nx.e.n.toLowerCase())+'</button>':'')+'<button class="btn" data-a="wat" data-v="1">+1 cup of water</button><button class="btn" data-a="goto" data-p="nut">Open</button></div></div>';
+  return h}
+function nutTocSub(){var nx=eatNext();return nx?(nx.due?'Due now: ':'Next: ')+nx.e.n+' at '+fmt(nx.e.t):'Calories, water, vitamins, eating times'}
+function nutFormHTML(){
+  var n=S.nut,us=n.units==='us',wtv='',hf='',hi='',hc='';
+  if(n.wt)wtv=us?Math.round(kg2lb(n.wt)):Math.round(n.wt*10)/10;
+  if(n.ht){if(us){var ti=n.ht/2.54;hf=Math.floor(ti/12);hi=Math.round(ti-hf*12)}else hc=Math.round(n.ht)}
+  function sel(id,list,v){return '<select id="'+id+'">'+list.map(function(o){return '<option value="'+o[0]+'"'+(v===o[0]?' selected':'')+'>'+o[1]+'</option>'}).join('')+'</select>'}
+  var h='<div class="seg" role="group" aria-label="Units"><button data-a="nutunits" data-v="us" aria-pressed="'+us+'">US units</button><button data-a="nutunits" data-v="metric" aria-pressed="'+!us+'">Metric units</button></div>';
+  h+='<label for="n_age">Your age</label><input id="n_age" type="number" inputmode="numeric" min="15" max="55" value="'+(n.age||'')+'" placeholder="Years">';
+  h+='<label for="n_wt">Your weight now ('+(us?'pounds':'kilograms')+')</label><input id="n_wt" type="number" inputmode="decimal" value="'+wtv+'" placeholder="'+(us?'Pounds':'Kilograms')+'">';
+  if(us)h+='<label for="n_ft">Your height</label><div class="two"><input id="n_ft" type="number" inputmode="numeric" value="'+hf+'" placeholder="Feet" aria-label="Feet"><input id="n_in" type="number" inputmode="numeric" value="'+hi+'" placeholder="Inches" aria-label="Inches"></div>';
+  else h+='<label for="n_cm">Your height (centimeters)</label><input id="n_cm" type="number" inputmode="numeric" value="'+hc+'" placeholder="Centimeters">';
+  h+='<label for="n_act">How active are you</label>'+sel('n_act',ACTS,n.act);
+  h+='<label for="n_baby">Baby\'s age</label>'+sel('n_baby',BABYA,n.baby);
+  h+='<label for="n_mode">How much does baby nurse</label>'+sel('n_mode',MODES,n.mode);
+  h+='<label for="n_goal">Your goal</label>'+sel('n_goal',GOALS,n.goal);
+  h+='<button class="btn primary full" style="margin-top:12px" data-a="nutsave">Save my details</button>';
+  return h}
+function kvRow(k,v,s){return '<div class="kv"><div class="k">'+k+'</div><div class="v">'+v+(s?'<small>'+s+'</small>':'')+'</div></div>'}
+function nutHTML(){
+  var d=D(),n=S.nut,t=nutTargets(),L=eatList(),done=L.filter(function(x){return d.eat&&d.eat[x.k]}).length,cups=d.water||0,goal=waterGoalCups();
+  var h='<div class="ptop"><span class="eyebrow">Back pages</span>'+babyToggle()+'</div><div class="ptitle"><div class="time">Fuel</div><h2 class="title">Nutrition</h2><p class="lede">What to eat, how often, how much to drink, and the vitamins that keep you and your milk supply going. General guidance for a healthy breastfeeding mother.</p></div>';
+  /* targets */
+  h+='<div class="card tonight"><h3>'+(t.personal?'Your daily calories':'Typical daily calories')+'</h3><p class="rn2">'+(t.personal?'About '+num(t.kcal):'Most nursing moms need 2,200 to 2,800')+' calories</p><p class="sub">'+(t.personal?num(Math.round(t.kcal*4.184/10)*10)+' kilojoules · range '+num(t.lo)+' to '+num(t.hi):'That is about '+num(2200*4.184)+' to '+num(2800*4.184)+' kilojoules. Add your details below for your own number.')+'</p>';
+  if(t.personal){
+    h+='<p class="sub" style="color:var(--ink)">Your usual needs are about '+num(r50(t.base))+' calories. Making milk adds about '+num(r5(t.add))+'.'+(t.lose?' Your goal trims 250 calories a day, about half a pound a week.':'')+'</p>';
+    if(t.floor)h+='<p class="sub" style="color:var(--warn)">The plan stops at 1,800 calories. Going lower can cut your milk supply.</p>';
+    if(t.wait)h+='<p class="sub" style="color:var(--warn)">Wait until your baby is about 2 months old and your milk supply has settled before trimming calories.</p>';
+  }
+  h+='</div>';
+  h+='<details class="rec" data-k="nutform" id="rec_nutform"'+(recOpen.nutform||!t.personal?' open':'')+'><summary><span class="rn">'+(t.personal?'Edit my details':'Add my details')+'</span><span class="rm">For a number that fits you. Stays on this phone.</span></summary><div class="rbody form">'+nutFormHTML()+'</div></details>';
+  h+='<div class="card"><h3>Daily targets</h3>'+
+    kvRow('Calories',(t.personal?'About '+num(t.kcal):'About 2,400')+' kcal',num(Math.round(t.kcal*4.184/10)*10)+' kJ')+
+    kvRow('Protein','At least '+t.protein+' g','1.3 g per kg of body weight. Include some at every meal and snack.')+
+    kvRow('Carbohydrate',t.carbLo+' to '+t.carbHi+' g','At least 210 g, about 45 to 65 percent of calories')+
+    kvRow('Fat',t.fatLo+' to '+t.fatHi+' g','About 20 to 35 percent of calories')+
+    kvRow('Fiber','29 g','')+
+    kvRow('Water, all sources','3.8 L','128 fl oz, or 16 cups, from drinks and food')+
+    kvRow('Water, drinks','About 3.1 L','105 fl oz, or 13 cups')+'</div>';
+  /* eating rhythm */
+  h+='<div class="card"><h3>Eating rhythm today</h3><p class="sub">'+done+' of 6 done. Three meals and three snacks, about 2 to 3 hours apart. This is a practical pattern, not a medical rule. If you are hungry between times, eat.</p>';
+  L.forEach(function(x){var on=!!(d.eat&&d.eat[x.k]);
+    h+='<div class="it mom"><button class="chk" data-a="eatt" data-k="'+x.k+'" aria-pressed="'+on+'"><span class="box"></span><span class="txt"><span class="tm">'+fmt(x.t)+'</span> '+esc(x.n)+' · about '+x.kcal+' kcal<span class="hint" style="color:var(--muted)">'+esc(x.k==='d'?'Tonight: '+tonight().n+'. Get your protein, your carb and your greens.':x.ex)+'</span></span></button></div>'});
+  h+='</div>';
+  /* water */
+  var oz=cups*8,pct=Math.min(100,Math.round(cups/goal*100));
+  h+='<div class="card"><h3>Water</h3><p class="sub">'+cups+' of '+goal+' cups · '+oz+' of 104 fl oz · '+(Math.round(oz*29.5735)/1000).toFixed(1)+' of 3.1 L</p><div class="pbar" role="img" aria-label="'+pct+' percent of your water goal"><i style="width:'+pct+'%"></i></div><div class="acts"><button class="btn primary" data-a="wat" data-v="1">+1 cup (8 fl oz, 240 mL)</button><button class="btn" data-a="wat" data-v="-1">Undo one</button></div><p class="rtip">Have a glass of water each time you nurse or pump, and drink to thirst. Pale yellow urine is a good sign. Forcing extra fluids does not raise your milk supply. Coffee and tea count as fluid. Keep caffeine near 300 mg or less a day, about 2 to 3 cups of coffee.</p></div>';
+  /* vitamins */
+  h+='<div class="card"><h3>Vitamins today</h3><p class="sub">Tick them off when you take them. Take supplements with a meal.</p>';
+  S.vits.forEach(function(v){var on=!!(d.vit&&d.vit[v.id]),armed=delArm==='v'+v.id;
+    h+='<div class="it mom"><button class="chk" data-a="vtog" data-id="'+v.id+'" aria-pressed="'+on+'"><span class="box"></span><span class="txt">'+esc(v.name)+'</span></button><button class="pglink" data-a="vdel" data-id="'+v.id+'">'+(armed?'Tap again':'Remove')+'</button></div>'});
+  h+='<div class="add"><input id="vin" type="text" placeholder="Add a supplement" aria-label="Add a supplement"><button class="btn" data-a="vadd">Add</button></div>';
+  h+='<p class="rtip">Many providers recommend continuing a prenatal or multivitamin while you nurse. Check the label against the table below, and ask your provider before adding anything else, especially high doses or herbs. Your baby needs 400 IU of vitamin D a day as a drop if breastfed, so ask the pediatrician. That is separate from yours.</p></div>';
+  /* food groups */
+  var p=PAT[t.level];
+  h+='<details class="rec" data-k="nutfood" id="rec_nutfood"'+(recOpen.nutfood?' open':'')+'><summary><span class="rn">What to eat each day</span><span class="rm">Food group amounts for about '+num(t.level)+' calories</span></summary><div class="rbody"><ul>'+
+    '<li><b>Vegetables:</b> '+cupsMl(p[1])+'. Include greens most days. 2 cups of raw leafy greens count as 1 cup.</li>'+
+    '<li><b>Fruit:</b> '+cupsMl(p[0])+'. Whole fruit is best.</li>'+
+    '<li><b>Grains:</b> '+p[2]+' oz-equivalents (about '+num(r5(p[2]*28.35))+' g), at least half whole grain. 1 slice of bread or 1/2 cup cooked rice is 1 oz-equivalent.</li>'+
+    '<li><b>Protein foods:</b> '+p[3]+' oz-equivalents (about '+num(r5(p[3]*28.35))+' g of cooked meat, fish or poultry). 1 egg or 1/4 cup beans is 1 oz-equivalent.</li>'+
+    '<li><b>Dairy or fortified alternatives:</b> '+cupsMl(p[4])+'. 1 cup of milk or yogurt, or 1.5 oz (42 g) of natural cheese.</li>'+
+    '<li><b>Oils:</b> about '+p[5]+' g, or '+Math.round(p[5]/4.5)+' teaspoons, including cooking oil and nuts.</li></ul><p class="rtip">These amounts come from the USDA healthy eating patterns, matched to your calorie level.</p></div></details>';
+  /* nutrients */
+  var mg=(n.age&&n.age>=31)?'320 mg':'310 mg';
+  NUTR.forEach(function(g,gi){
+    h+='<details class="rec" data-k="nutn'+gi+'" id="rec_nutn'+gi+'"'+(recOpen['nutn'+gi]?' open':'')+'><summary><span class="rn">'+g[0]+' you need</span><span class="rm">'+(gi===0?'Daily amounts while breastfeeding':gi===1?'Daily amounts while breastfeeding':'Plus fish for DHA')+'</span></summary><div class="rbody">'+
+    g[1].map(function(r){var amt=r[0]==='Magnesium'&&n.age?mg:r[1];return '<div class="kv"><div class="k">'+esc(r[0])+'</div><div class="v">'+esc(amt)+'<small>'+esc(r[2])+'</small></div></div>'}).join('')+'</div></details>'});
+  /* supply and watch-outs */
+  h+='<details class="rec" data-k="nutsup" id="rec_nutsup"'+(recOpen.nutsup?' open':'')+'><summary><span class="rn">Milk supply and watch-outs</span><span class="rm">What helps, and what to ask about</span></summary><div class="rbody"><ul>'+
+    '<li><b>Eat enough.</b> Do not go under 1,800 calories a day. Eating too little can lower supply.</li>'+
+    '<li><b>Eat regularly.</b> Skipping meals is a common way supply dips. Stress and exhaustion can also lower it, so rest when you can.</li>'+
+    '<li><b>Nurse or pump often.</b> Supply follows how often milk is removed. A lactation consultant can help with supply worries.</li>'+
+    '<li><b>No single food is proven to raise supply.</b> Herbal supplements such as fenugreek need a conversation with your provider first.</li>'+
+    '<li><b>Losing weight:</b> wait until baby is about 2 months old, then aim for about 1 pound a week at most. Brisk walking does not lower supply.</li>'+
+    '<li><b>Alcohol:</b> wait at least 2 hours after one drink (12 fl oz beer, 5 fl oz wine, 1.5 fl oz liquor) before nursing.</li>'+
+    '<li><b>Call your provider</b> if the baby is not gaining well, you have fewer wet diapers, or you feel faint or very depleted.</li></ul></div></details>';
+  /* converter */
+  h+='<details class="rec" data-k="nutconv" id="rec_nutconv"'+(recOpen.nutconv?' open':'')+'><summary><span class="rn">Measurement converter</span><span class="rm">Cups, ounces, milliliters, grams</span></summary><div class="rbody">'+CONV.map(function(c){return '<div class="kv"><div class="k">'+c[0]+'</div><div class="v">'+[c[1],c[2]].filter(Boolean).join(' = ')+'</div></div>'}).join('')+'</div></details>';
+  /* sources */
+  h+='<p class="rtip" style="margin-top:16px"><b>Not medical advice.</b> The calorie number is an estimate from the 2023 National Academies energy equations plus the extra energy of making milk. Individual needs vary. Your hunger, your energy and your baby\'s growth matter most. Ask your doctor, midwife or a lactation consultant about supplements, medicines, or any concern.</p>';
+  h+='<details class="rec" data-k="nutsrc" id="rec_nutsrc"'+(recOpen.nutsrc?' open':'')+'><summary><span class="rn">Sources</span><span class="rm">Checked September 2026</span></summary><div class="rbody"><ul>'+NUT_SRC.map(function(s){return '<li><a href="'+esc(s[1])+'" target="_blank" rel="noopener">'+esc(s[0])+'</a></li>'}).join('')+'</ul></div></details>';
+  return h}
+function nutCard(days){
+  var eats=0,ed=0,wc=0,wd=0,vd=0;
+  days.forEach(function(x){var dd=S.days[x.k];if(!dd)return;var e=Object.keys(dd.eat||{}).length;if(e){eats+=e;ed++}if(dd.water){wc+=dd.water;wd++}if(dd.vit&&Object.keys(dd.vit).length)vd++});
+  return '<div class="card"><h3>Fuel</h3><p class="sub">'+(ed?'Meals and snacks logged: about '+(Math.round(eats/ed*10)/10)+' a day (goal 6). ':'No meals logged yet this week. ')+(wd?'Water: about '+Math.round(wc/wd)+' cups a day (goal '+waterGoalCups()+'). ':'')+(vd?'Vitamins on '+vd+' of the last 7 days.':'')+'</p></div>'}
+
 function pageHTML(key){
+  if(key==='nut')return nutHTML();
   if(key==='toc')return tocHTML();
   if(key==='recap')return recapHTML();
   if(key==='sched')return schedHTML();
@@ -1263,11 +1455,12 @@ function renderCover(){
    '<div class="chips" role="group" aria-label="Baby status"><small>Baby</small><button class="cchip" data-a="baby" data-v="awake" aria-pressed="'+(d.baby==='awake')+'">Awake</button><button class="cchip" data-a="baby" data-v="asleep" aria-pressed="'+(d.baby==='asleep')+'">Asleep</button></div>'+sleepQ+
    '<button class="openbtn" data-a="open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 5.5C5.5 4 9 4 12 6c3-2 6.5-2 9-.5v13C18.500 17 15 17 12 19c-3-2-6.500-2-9-.5z" stroke-linejoin="round"/><path d="M12 6v13"/></svg>Open today\'s book</button></div><div class="ribbon"></div>';
 }
-function evLine(){var n=nextEv();return '<div class="cv-ev" id="cvEv">'+(n?'Next up: <b>'+esc(n.txt)+'</b>':'')+'</div>'}
+function coverLine(){var n=nextEv(),f=fuelNudge(),p=[];if(n)p.push('Next up: <b>'+esc(n.txt)+'</b>');if(f)p.push(f);return p.join(' · ')}
+function evLine(){return '<div class="cv-ev" id="cvEv">'+coverLine()+'</div>'}
 function tickCover(){
   if(open)return;
   var h=new Date().getHours();if(period(h)!==coverPeriod){renderCover();return}
-  var a=$('#cvTime'),b=$('#cvNow');if(a)a.textContent=fmt(nowMin());if(b)b.innerHTML='Right now: <b>'+fmt(nowMin())+'</b> · '+esc(curChapter().title);var ce=$('#cvEv');if(ce){var n=nextEv();ce.innerHTML=n?'Next up: <b>'+esc(n.txt)+'</b>':''}
+  var a=$('#cvTime'),b=$('#cvNow');if(a)a.textContent=fmt(nowMin());if(b)b.innerHTML='Right now: <b>'+fmt(nowMin())+'</b> · '+esc(curChapter().title);var ce=$('#cvEv');if(ce)ce.innerHTML=coverLine()
 }
 
 /* ================= navigation and animation ================= */
@@ -1275,7 +1468,7 @@ var open=false,busy=false,cur=0,freshStamp=null,DUR=880;
 var pinner=$('#pinner'),pageEl=$('#page'),pagesEl=$('#pages'),coverEl=$('#cover'),navEl=$('#nav');
 function drawNav(){
   var ord=order(),chs=getCH(),i=cur;
-  function nm(k){var BK={toc:'Contents',cal:'Calendar',meals:'Meals',move:'Move',ugc:'UGC Desk',recap:'Week recap',sched:'Fights and football',setup:'Set up'};if(BK[k])return BK[k];var c=chs.filter(function(x){return x.id===k})[0];return c?c.title:''}
+  function nm(k){var BK={toc:'Contents',cal:'Calendar',meals:'Meals',nut:'Nutrition',move:'Move',ugc:'UGC Desk',recap:'Week recap',sched:'Fights and football',setup:'Set up'};if(BK[k])return BK[k];var c=chs.filter(function(x){return x.id===k})[0];return c?c.title:''}
   var prevK=ord[i-1],nextK=ord[i+1];
   navEl.innerHTML='<button class="nbtn" data-a="prev"'+(prevK?'':' disabled')+'>‹ Back<small>'+esc(prevK?nm(prevK):'')+'</small></button>'+
     (i===0?'<button class="nbtn mid" data-a="close">Close</button>':'<button class="nbtn mid" data-a="toc">Contents</button>')+
@@ -1402,6 +1595,30 @@ Object.assign(A,{
   install:function(){if(!deferred)return;var d=deferred;d.prompt();if(d.userChoice&&d.userChoice.then)d.userChoice.then(function(r){deferred=null;hideSheet();if(r&&r.outcome==='dismissed')toast('No problem. You can install it later from Set up.',3500);if(open&&order()[cur]==='setup')draw(true)})},
   sheetno:function(){try{localStorage.setItem('daybook.install','no')}catch(e){}hideSheet()}
 });
+
+function readNut(){
+  var n=S.nut,us=n.units==='us',o={},g=function(id){var e=$('#'+id);return e?e.value:''};
+  var age=parseInt(g('n_age'),10);if(age>=15&&age<=55)o.age=age;
+  var w=parseFloat(g('n_wt'));if(w>0){var kg=us?lb2kg(w):w;if(kg>=35&&kg<=200)o.wt=Math.round(kg*10)/10}
+  var cm=null;if(us){var ft=parseInt(g('n_ft'),10),inn=parseInt(g('n_in'),10)||0;if(ft>0)cm=(ft*12+inn)*2.54}else{var cv=parseFloat(g('n_cm'));if(cv>0)cm=cv}
+  if(cm!=null&&cm>=120&&cm<=210)o.ht=Math.round(cm);
+  ['act','baby','mode','goal'].forEach(function(k){var v=g('n_'+k);if(v)o[k]=v});
+  return o}
+Object.assign(A,{
+  nutunits:function(t){var v=t.dataset.v;if(v===S.nut.units)return;Object.assign(S.nut,readNut());S.nut.units=v;recOpen.nutform=true;refresh()},
+  nutsave:function(){
+    var o=readNut(),bad=[];
+    if(!o.age)bad.push('age (15 to 55)');if(!o.wt)bad.push('weight');if(!o.ht)bad.push('height');
+    Object.assign(S.nut,o);
+    if(bad.length){recOpen.nutform=true;refresh();toast('Check your '+bad.join(', '),3500);return}
+    recOpen.nutform=false;CH=null;refresh();toast('Saved. Your numbers are updated.')},
+  eatt:function(t){var d=D(),k=t.dataset.k;d.eat=d.eat||{};if(d.eat[k])delete d.eat[k];else d.eat[k]=Date.now();CH=null;refresh()},
+  eat:function(t){var d=D(),k=t.dataset.k;if(!k){var nx=eatNext();if(!nx)return;k=nx.e.k}d.eat=d.eat||{};d.eat[k]=Date.now();CH=null;refresh();toast('Logged. Nice.')},
+  wat:function(t){var d=D(),v=parseInt(t.dataset.v,10)||0;d.water=Math.max(0,Math.min(40,(d.water||0)+v));refresh()},
+  vtog:function(t){var d=D(),id=t.dataset.id;d.vit=d.vit||{};if(d.vit[id])delete d.vit[id];else d.vit[id]=1;refresh()},
+  vadd:function(){var i=$('#vin'),nm=((i&&i.value)||'').trim().slice(0,60);if(!nm){toast('Type the name first');return}S.vits.push({id:'v'+Date.now(),name:nm});refresh();toast('Added')},
+  vdel:function(t){var id=t.dataset.id;if(delArm==='v'+id){S.vits=S.vits.filter(function(v){return v.id!==id});delArm=null;refresh();toast('Removed')}else armDel('v'+id)}
+});
 function armDel(k){delArm=k;refresh();setTimeout(function(){if(delArm===k){delArm=null;if(open)draw(true)}},4000)}
 document.addEventListener('click',function(e){
   var t=e.target.closest('[data-a]');
@@ -1411,6 +1628,7 @@ document.addEventListener('click',function(e){
 document.addEventListener('toggle',function(e){var el=e.target;if(el&&el.classList&&el.classList.contains('lane'))laneOpen[el.dataset.k]=el.open;else if(el&&el.classList&&el.classList.contains('rec'))recOpen[el.dataset.k]=el.open},true);
 document.addEventListener('keydown',function(e){
   if(e.key==='Enter'&&(e.target.id==='gin'||e.target.id==='steps_in')){var bb=$('[data-a='+(e.target.id==='gin'?'gadd':'stepsave')+']');if(bb)bb.click();return}
+  if(e.key==='Enter'&&e.target.id==='vin'){var vb=$('[data-a=vadd]');if(vb)vb.click();return}
   if(e.key==='Enter'&&e.target.id&&e.target.id.indexOf('add_')===0){var b=e.target.parentNode.querySelector('[data-a=addtask]');if(b)b.click();return}
   if(!open||/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))return;
   if(e.key==='ArrowRight')go(cur+1);else if(e.key==='ArrowLeft')go(cur-1);

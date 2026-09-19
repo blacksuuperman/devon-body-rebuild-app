@@ -29,7 +29,7 @@ The app shows an install card the first time it opens in a browser.
 
 ## Updating it
 
-Change `index.html`, commit and push. The app checks for a new copy each time it opens with a connection. Her saved data is not touched. If a change does not show up, bump `VERSION` in `sw.js` (for example to `daybook-v2`) and push again.
+Change `index.html`, commit and push. The app checks for a new copy each time it opens with a connection. Her saved data is not touched. If a change does not show up, bump `VERSION` in `sw.js` (this release is `daybook-v2`, so use `daybook-v3` next) and push again.
 
 ## Where the data lives
 
