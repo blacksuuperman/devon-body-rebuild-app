@@ -341,7 +341,7 @@ var MOTION=!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').m
 var KEY='daybook.v1',S;
 function load(){try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);if(o&&o.v===1&&o.days)return o}}catch(e){}return {v:1,days:{}}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
-function norm(){S.events=S.events||[];S.ugc=S.ugc||[];S.groc=S.groc||[];S.fav=S.fav||{};S.rf=S.rf||{};S.stepGoal=S.stepGoal||5000;S.nut=Object.assign(nutDefaults(),S.nut||{});if(!S.vits)S.vits=[{id:'v_pre',name:'Prenatal vitamin or multivitamin'},{id:'v_dha',name:'Omega-3 DHA, if you do not eat fish 2 to 3 times a week'}]}
+function norm(){S.events=S.events||[];S.ugc=S.ugc||[];S.groc=S.groc||[];S.fav=S.fav||{};S.rf=S.rf||{};S.stepGoal=S.stepGoal||5000;S.nut=Object.assign(nutDefaults(),S.nut||{});S.jr=Object.assign(jrDefaults(),S.jr||{});if(!S.vits)S.vits=[{id:'v_pre',name:'Prenatal vitamin or multivitamin'},{id:'v_dha',name:'Omega-3 DHA, if you do not eat fish 2 to 3 times a week'}]}
 S=load();norm();
 
 /* ================= words ================= */
@@ -671,7 +671,7 @@ function chapters(c){
   return L;
 }
 function getCH(){var t=ymd();if(!CH||CHdate!==t){ensureToday();CH=chapters(ctxFor(t));CHdate=t}return CH}
-function order(){return ['toc'].concat(getCH().map(function(c){return c.id}),['cal','meals','nut','move','ugc','recap','sched','setup'])}
+function order(){return ['toc'].concat(getCH().map(function(c){return c.id}),['cal','meals','nut','jr','move','ugc','recap','sched','setup'])}
 function curChapter(){var m=nowMin(),c=getCH();for(var i=0;i<c.length;i++)if(m>=c[i].t[0]&&m<c[i].t[1])return c[i];return m<c[0].t[0]?c[0]:c[c.length-1]}
 var LANES=['mom','jr','st'];
 function chProg(c){var d=D();if(c.id==='close')return {done:d.closed?1:0,tot:1};var done=0,tot=0;LANES.forEach(function(k){c[k].forEach(function(it){if(it.opt)return;tot++;if(d.done[it.id])done++})});return {done:done,tot:tot}}
@@ -748,7 +748,7 @@ function chapterHTML(ch){
     h+='<div class="note"><b>Time to eat:</b> '+esc(x.n)+', about '+x.kcal+' calories. '+esc(x.ex)+' <button class="pglink" data-a="eat" data-k="'+x.k+'">Ate it</button> <button class="pglink" data-a="goto" data-p="nut">Nutrition</button></div>'})}
   if(ch.teamPicker)h+='<div class="note"><b>Bonus shared area if everyone finishes early:</b> '+esc(TEAM[teamIndex()])+' <button class="btn primary" style="margin-left:6px;min-height:40px" data-a="teamzone">Pick another</button></div>';
   if(ch.id==='close')return h+closeHTML(ch);
-  LANES.forEach(function(k){h+=laneHTML(ch,k)});
+  ['mom','st'].forEach(function(k){h+=laneHTML(ch,k)});
   return h;
 }
 function closeHTML(ch){
@@ -777,6 +777,7 @@ function tocHTML(){
   else if(d.gentle===false)h+='<div class="banner"><b>Full day</b>You switched back to the full plan. <button class="btn" data-a="gentle" data-v="1">Go gentle instead</button></div>';
   h+=calCardHTML();
   h+=fuelCardHTML();
+  h+=jrCardHTML();
   h+=tvCardHTML();
   var bd=st.filter(function(x){return d.done[x.id]}).length;
   h+='<div class="card big mom"><h3>'+(st.length===3?'Your Big 3':'Your must-dos')+'</h3><p class="sub">'+bd+' of '+st.length+' done. Do these first. Tap the star on any task to add or remove it.</p>';
@@ -793,7 +794,7 @@ function tocHTML(){
   h+='</div><h3 class="shh">Back of the book</h3><div class="toc" style="margin-top:6px">';
   var tn=tonight(),ud=ugcDue().length,evn=eventsOn(ymd()).length;
   function brow(p,tt,ttl,sub){return '<button class="trow" data-a="goto" data-p="'+p+'"><span class="tt">'+tt+'</span><span class="ttl">'+ttl+(sub?'<span class="sub">'+esc(sub)+'</span>':'')+'</span><span class="prog"></span></button>'}
-  h+=brow('cal','Plan','Calendar',evn?evn+' event'+(evn===1?'':'s')+' today':'Appointments and plans')+brow('meals','Dinner','Meals','Tonight: '+tn.n)+brow('nut','Fuel','Nutrition',nutTocSub())+brow('move','Move','Move',todayMove().n+(d.moved?' (done)':''))+brow('ugc','Work','UGC Desk',ud?ud+' follow-up'+(ud===1?'':'s')+' due':(S.ugc.length?S.ugc.length+' brand'+(S.ugc.length===1?'':'s'):'Brands and contacts'))+brow('recap','Week','Recap and journal','')+brow('sched','TV','Fights and football','Every UFC card and NFL Sunday, in Central time')+brow('setup','App','Set up','Save to your phone and back up')+'</div>';
+  h+=brow('cal','Plan','Calendar',evn?evn+' event'+(evn===1?'':'s')+' today':'Appointments and plans')+brow('meals','Dinner','Meals','Tonight: '+tn.n)+brow('nut','Fuel','Nutrition',nutTocSub())+brow('jr','Jr','Jr schedule',jrTocSub())+brow('move','Move','Move',todayMove().n+(d.moved?' (done)':''))+brow('ugc','Work','UGC Desk',ud?ud+' follow-up'+(ud===1?'':'s')+' due':(S.ugc.length?S.ugc.length+' brand'+(S.ugc.length===1?'':'s'):'Brands and contacts'))+brow('recap','Week','Recap and journal','')+brow('sched','TV','Fights and football','Every UFC card and NFL Sunday, in Central time')+brow('setup','App','Set up','Save to your phone and back up')+'</div>';
   h+='<div class="seg" role="group" aria-label="Type of day"><button data-a="daytype" data-v="school" aria-pressed="'+ctxFor(ymd()).wd+'">School day</button><button data-a="daytype" data-v="weekend" aria-pressed="'+(!ctxFor(ymd()).wd)+'">Weekend</button></div>';
   return h;
 }
@@ -807,6 +808,7 @@ function recapHTML(){
   h+=walkCard(days);
   h+=moveCard(days);
   h+=nutCard(days);
+  h+=jrCard(days);
   h+=napCard();
   var notes=Object.keys(S.days).filter(function(k){return S.days[k].note}).sort().reverse().slice(0,7);
   h+='<h3 style="font-family:var(--serif);font-size:19px;margin:18px 0 4px">Journal</h3>';
@@ -1425,8 +1427,231 @@ function nutCard(days){
   days.forEach(function(x){var dd=S.days[x.k];if(!dd)return;var e=Object.keys(dd.eat||{}).length;if(e){eats+=e;ed++}if(dd.water){wc+=dd.water;wd++}if(dd.vit&&Object.keys(dd.vit).length)vd++});
   return '<div class="card"><h3>Fuel</h3><p class="sub">'+(ed?'Meals and snacks logged: about '+(Math.round(eats/ed*10)/10)+' a day (goal 6). ':'No meals logged yet this week. ')+(wd?'Water: about '+Math.round(wc/wd)+' cups a day (goal '+waterGoalCups()+'). ':'')+(vd?'Vitamins on '+vd+' of the last 7 days.':'')+'</p></div>'}
 
+/* ================= JR schedule ================= */
+var JR_TYPES=[['auto','Auto (follow the weekly plan)'],['home','Home Academic Day'],['trainer','Trainer Day'],['game','Game Day'],['sat','Development Day'],['sun','Recovery Day'],['sick','Sick Day'],['travel','Travel Day'],['special','Special Event Day']];
+var JR_MOVE={1:'Easy mile or aerobic conditioning.',2:'Mobility and core.',3:'Mobility.',5:'Mobility and recovery.'};
+var JR_ACC={1:'Decision making',2:'Honesty',3:'Leadership',4:'Game reflection',5:'Weekly self evaluation',6:'Life skills',0:'Goals'};
+var JR_CHORES=['Bedroom','Bathroom','Laundry','Kitchen','Dishes','Sweeping and mopping','Vacuuming','Organization','Trash','Helping Sterling','Helping Miss Devyn','Yard'];
+var JR_SUBJECTS=['Fast Math','Math','Writing','Science','Reading','Language','History'];
+var JR_GEAR=['Helmet','Guardian cover, if required','Shoulder pads','Game pants','Jersey','Cleats','Socks','Mouthpiece','Gloves','Water','Braces or supports','Anything else the team requires'];
+function jrDefaults(){return {trainerPaused:true,weak1:'Math',weak2:'Writing',resetStart:null,resetOn:true,gameTime:1050,gameBefore:60,gameDrive:35,trainTime:690,trainDur:90,trainDrive:35}}
+function jrDay(){return D()}
+function jrChoreSuggest(){return JR_CHORES[doy()%JR_CHORES.length]}
+function jrAutoType(dow){
+  if(dow===1||dow===2)return 'home';
+  if(dow===3||dow===5)return S.jr.trainerPaused?'home':'trainer';
+  if(dow===4)return 'game';
+  if(dow===6)return 'sat';
+  return 'sun'}
+function jrType(){var d=D();return d.jrType||jrAutoType(ctxFor(ymd()).dow)}
+function jrResetDays(){
+  if(!S.jr.resetOn||!S.jr.resetStart)return null;
+  var st=new Date(S.jr.resetStart+'T00:00:00'),now=new Date(ymd()+'T00:00:00');
+  var n=Math.floor((now-st)/86400000)+1;return n}
+function B(id,t,d,n,s,fixed){return {id:id,t:t,d:d,n:n,s:s||'',fixed:!!fixed}}
+function jrBlocks(){
+  var ctx=ctxFor(ymd()),dow=ctx.dow,type=jrType(),n=S.jr,L=[];
+  if(type==='sick')return [B('rest',420,660,'Sick day','Rest, fluids, light reading if he feels up to it. No training, no heavy academics. Call it early and protect sleep.')];
+  if(type==='travel')return [B('travel',420,660,'Travel day','Adjust freely around the trip. Protect meals and bedtime where you can.')];
+  if(type==='special')return [B('event',420,660,'Special event day','Today is built around the event. Protect sleep the night before and after.')];
+  if(type==='home'){
+    var mv=JR_MOVE[dow]||'Mobility or recovery, whatever the day calls for.';
+    L=[
+      B('wake',360,15,'Wake up','Bathroom, teeth, water, training clothes, make the bed.'),
+      B('move',375,30,'Morning movement',mv),
+      B('shower',405,30,'Shower and dress',''),
+      B('bfast',435,30,'Breakfast','Make it, eat it, clean it up.'),
+      B('prep',465,15,'School setup','Pencil, paper, notebook, calculator, book, water.'),
+      B('fastmath',480,25,'Fast Math','Fluency: addition, subtraction, multiplication, division facts.'),
+      B('math',505,60,'Math','Show the work. Fix mistakes before moving on.'),
+      B('break1',565,10,'Break','Bathroom, water, stretch. No electronics.'),
+      B('writing',575,60,'Writing','Sentences, paragraphs, essays as he improves.'),
+      B('break2',635,10,'Break',''),
+      B('science',645,50,'Science','What happened, how, and why.'),
+      B('lunch',695,45,'Lunch','Make it, eat it, clean it up.'),
+      B('reading',740,40,'Reading and comprehension','Close the book, then: main idea, three details, cause and effect, inference, evidence, summary in his own words.'),
+      B('break3',780,10,'Break',''),
+      B('language',790,40,'Language','Vocabulary, grammar, sentence structure.'),
+      B('history',830,40,'History and social studies','What happened, why, and why it matters today.'),
+      B('snack',870,20,'Snack and training prep','Eat, hydrate, change, get equipment ready.'),
+      B('football',890,100,"Football development","Dad's training program, at home."),
+      B('shower2',990,30,'Shower and recovery',''),
+      B('chore',1020,60,'Household responsibility',(D().jrChore||jrChoreSuggest())),
+      B('dinner',1080,45,'Dinner',''),
+      B('correction',1125,40,'Academic correction',"Fix today's weakest work first."),
+      B('account',1165,25,'Accountability',JR_ACC[dow]||'Reflection'),
+      B('indread',1190,30,'Independent reading','Book only, no phone.'),
+      B('tomorrow',1220,20,'Prepare for tomorrow','Clothes, shoes, school and training gear, water bottle, room reset.'),
+      B('night',1240,20,'Night routine','Teeth, face, bathroom, into bed.'),
+      B('lights',1260,0,'Lights out','',true)
+    ];
+    return L}
+  if(type==='trainer'){
+    var ts=n.trainTime,td=n.trainDur,dr=n.trainDrive,leave=ts-dr-5,home=ts+td+dr;
+    L=[
+      B('wake',360,15,'Wake up','Bathroom, teeth, water, training clothes, make the bed.'),
+      B('move',375,20,'Mobility and recovery','Light movement. Nothing that tires the legs before training.'),
+      B('shower',395,30,'Shower and dress',''),
+      B('bfast',425,30,'Breakfast',''),
+      B('fastmath',455,25,'Fast Math',''),
+      B('math',480,60,'Math',''),
+      B('break1',540,10,'Break',''),
+      B('writing',550,50,'Writing',''),
+      B('science',600,25,'Science','Finish after training if it runs long.'),
+      B('prep',625,leave-625,'Training prep and food','Eat something that agrees with him. Bathroom, clothes, shoes, water, gear, training phone.'),
+      B('leave',leave,ts-leave,'Leave for training','About '+dr+' minutes of drive time.',true),
+      B('trainer',ts,td,'Trainer session','Full effort, full attention. Not social hour.',true),
+      B('drive',ts+td,dr,'Drive home','',true),
+      B('lunch',home,50,'Lunch, shower, recovery',''),
+      B('reading',home+50,40,'Reading and comprehension',''),
+      B('language',home+90,40,'Language and history',''),
+      B('break2',home+130,10,'Break',''),
+      B('correction',home+140,45,'Academic correction and science','Finish whatever science did not get done this morning.'),
+      B('chore',home+185,60,'Household responsibility',(D().jrChore||jrChoreSuggest())),
+      B('dinner',home+245,45,'Dinner',''),
+      B('account',home+290,30,'Accountability',JR_ACC[dow]||'Reflection'),
+      B('indread',home+320,30,'Independent reading',''),
+      B('free',home+350,45,'Family time and overflow','This block can absorb a reasonable delay from earlier in the day.'),
+      B('tomorrow',home+395,30,'Prepare for tomorrow',''),
+      B('night',home+425,20,'Night routine',''),
+      B('lights',1260,0,'Lights out','',true)
+    ];
+    return L}
+  if(type==='game'){
+    var kt=n.gameTime,before=n.gameBefore,dr=n.gameDrive,arrive=kt-before,leave=arrive-dr,eq=leave-20;
+    L=[
+      B('wake',360,15,'Wake up','Bathroom, teeth, water, make the bed.'),
+      B('move',375,20,'Mobility only','No hard conditioning today.'),
+      B('shower',395,30,'Shower and dress',''),
+      B('bfast',425,30,'Breakfast',''),
+      B('fastmath',455,25,'Fast Math',''),
+      B('math',480,60,'Math',''),
+      B('break1',540,10,'Break',''),
+      B('writing',550,60,'Writing',''),
+      B('break2',610,10,'Break',''),
+      B('science',620,50,'Science',''),
+      B('language',670,40,'Language',''),
+      B('lunch',710,45,'Lunch',''),
+      B('reading',755,40,'Reading and comprehension',''),
+      B('history',795,40,'History',''),
+      B('recovery',835,35,'Quiet recovery','No electronics. Read, stretch, rest.'),
+      B('pregame',870,30,'Pregame meal','Something that agrees with him. Hydrate.'),
+      B('equip',eq,Math.max(10,leave-eq),'Equipment check','Physically touch each item: '+JR_GEAR.join(', ')+'. Do not discover something missing after leaving the house.'),
+      B('leave',leave,Math.max(5,arrive-leave),'Leave for the game','About '+dr+' minutes of drive time.',true),
+      B('kickoff',kt,0,'Kickoff','Compete, listen to the coaches, play disciplined football.',true),
+      B('after',kt+180,60,'After the game','Order: travel home, hydration, food, shower, equipment put away, sleep. No late night makeup work tonight.')
+    ];
+    return L}
+  if(type==='sat'){
+    L=[
+      B('wake',420,30,'Wake up','Bathroom, hygiene, make the bed, get dressed. One extra hour of sleep.'),
+      B('bfast',450,30,'Breakfast',''),
+      B('clean',480,60,'Room, laundry and deep clean','Start high and work down: dust, surfaces, floor, trash, laundry washed and put away.'),
+      B('weak1',540,60,'Weakest subject: '+(n.weak1||'Math'),'Whatever the week showed was weakest gets the attention, not what is easiest.'),
+      B('break1',600,15,'Break',''),
+      B('weak2',615,45,'Second weakest subject: '+(n.weak2||'Writing'),''),
+      B('reading',660,45,'Reading',''),
+      B('lunch',705,45,'Lunch',''),
+      B('life',750,45,'Life skills','Cooking, laundry, budgeting basics, organization, first aid, time management. Rotate topics week to week.'),
+      B('after',795,60,'Afternoon','Football development, recovery, volunteering, youth group, family activities, or a household project. No recreational electronics tonight during the reset.')
+    ];
+    return L}
+  L=[
+    B('wake',450,0,'Wake up','7:30, unless church or family plans need earlier.'),
+    B('morn',450,270,'Morning','Make the bed, hygiene, breakfast, church or youth activities if scheduled, family responsibilities, a quick check of his room and bathroom.'),
+    B('lunch',720,60,'Lunch',''),
+    B('reading',780,60,'Weekly reading and review','30 minutes reading, then 30 minutes review. Have him explain out loud what he read.'),
+    B('prep',840,60,'Week preparation','Look at the coming week: school, training, game, appointments, clothes, equipment, laundry, room, supplies.'),
+    B('rest',900,180,'Rest of the day','Recovery, family time, help with meal prep, stretching, approved activities. Get his mind and body ready for Monday.')
+  ];
+  return L}
+function jrStatus(id){var d=D();return (d.jrb&&d.jrb[id])||''}
+function jrDone(list){return list.filter(function(b){return jrStatus(b.id)==='done'}).length}
+function jrNow(list){
+  var m=nowMin(),cur=null;
+  for(var i=0;i<list.length;i++){var b=list[i],end=b.t+(b.d||10);if(m>=b.t&&m<end&&jrStatus(b.id)!=='done'){cur=b;break}}
+  return cur}
+function jrNext(list){
+  var m=nowMin();
+  for(var i=0;i<list.length;i++){var b=list[i];if(jrStatus(b.id)==='done')continue;if(b.t>=m)return b}
+  for(var j=0;j<list.length;j++)if(jrStatus(list[j].id)!=='done')return list[j];
+  return null}
+function jrTocSub(){
+  var L=jrBlocks(),now=jrNow(L),nx=jrNext(L),done=jrDone(L);
+  if(now)return 'Now: '+now.n;
+  if(nx)return 'Next: '+nx.n+' at '+fmt(nx.t);
+  return done+' of '+L.length+' done'}
+function jrCardHTML(){
+  var L=jrBlocks(),now=jrNow(L),nx=jrNext(L),done=jrDone(L);
+  var h='<div class="card"><h3>Jr today</h3><p class="sub" style="color:var(--ink)">'+done+' of '+L.length+' done · '+esc(JR_TYPES.filter(function(x){return x[0]===jrType()})[0][1])+'</p>';
+  if(now)h+='<p class="sub">Now: <b style="color:var(--ink)">'+esc(now.n)+'</b>'+(now.d?' until '+fmt(now.t+now.d):'')+'</p>';
+  else if(nx)h+='<p class="sub">Next: '+esc(nx.n)+' at '+fmt(nx.t)+'</p>';
+  h+='<div class="acts"><button class="btn" data-a="goto" data-p="jr">Open</button></div></div>';
+  return h}
+function jrStatusLabel(s){return s==='done'?'Done':s==='skip'?'Skipped':s==='excuse'?'Excused':'Tap to mark done'}
+function jrRow(b){
+  var s=jrStatus(b.id),late=(!s&&nowMin()>b.t+(b.d||10));
+  var cls='it mom'+(s==='done'?' done':'');
+  return '<div class="'+cls+'"><button class="chk" data-a="jrcyc" data-id="'+b.id+'" aria-pressed="'+(s==='done')+'"><span class="box"></span><span class="txt"><span class="tm">'+fmt(b.t)+(b.fixed?' <small style="color:var(--warn)">Fixed</small>':'')+'</span> '+esc(b.n)+(late?' <small style="color:var(--warn)">Running behind</small>':'')+(s&&s!=='done'?' <small style="color:var(--muted)">('+jrStatusLabel(s)+')</small>':'')+(b.s?'<span class="hint" style="color:var(--muted)">'+esc(b.s)+'</span>':'')+'</span></button></div>'}
+function jrResetHTML(){
+  var n=S.jr,days=jrResetDays(),h='<div class="card"><h3>14 day reset</h3>';
+  if(!n.resetOn){h+='<p class="sub">Reset is marked off. Toggle it back on if it restarts.</p><div class="acts"><button class="btn" data-a="jrresettog" data-v="1">Turn reset on</button></div></div>';return h}
+  h+='<p class="sub" style="color:var(--ink)">No recreational phone, tablet, gaming, social media or unsupervised internet. A training phone, if used, is equipment only: training app, timer, stopwatch, approved music, camera if training needs it.</p>';
+  h+='<label for="jr_reset_start">Reset started on</label><input id="jr_reset_start" type="date" value="'+(n.resetStart||'')+'">';
+  h+='<div class="acts"><button class="btn" data-a="jrresetsave">Save date</button><button class="btn" data-a="jrresettog" data-v="0">Reset is over</button></div>';
+  if(days)h+='<p class="sub" style="color:var(--ink)">Day '+days+' of 14'+(days>=14?'. The 14 days are up. Privileges become earnable based on a pattern, not one good day.':'.')+'</p>';
+  h+='<p class="rtip">Honesty rule: a mistake plus the truth, told before it is found, is different from a mistake plus a lie. Honesty does not erase consequences, but it matters.</p></div>';
+  return h}
+function jrHTML(){
+  var d=D(),n=S.jr,type=jrType(),L=jrBlocks(),done=jrDone(L),now=jrNow(L),nx=jrNext(L),dow=ctxFor(ymd()).dow;
+  var h='<div class="ptop"><span class="eyebrow">Back pages</span>'+babyToggle()+'</div><div class="ptitle"><div class="time">Jr</div><h2 class="title">Jr\'s Day</h2><p class="lede">His schedule, one day at a time. Tap a step to mark it done.</p></div>';
+  h+='<div class="card tonight"><h3>'+esc(JR_TYPES.filter(function(x){return x[0]===type})[0][1])+'</h3><p class="sub">'+done+' of '+L.length+' steps done</p>';
+  if(now)h+='<p class="sub" style="color:var(--ink)">Right now: <b>'+esc(now.n)+'</b>'+(now.s?' — '+esc(now.s):'')+'</p>';
+  else if(nx)h+='<p class="sub" style="color:var(--ink)">Next: <b>'+esc(nx.n)+'</b> at '+fmt(nx.t)+'</p>';
+  else h+='<p class="sub">Day is done, or nothing is scheduled.</p>';
+  h+='</div>';
+  h+='<label for="jr_type">Day type</label><select id="jr_type">'+JR_TYPES.map(function(t){return '<option value="'+t[0]+'"'+((d.jrType||'auto')===t[0]?' selected':'')+'>'+t[1]+'</option>'}).join('')+'</select>';
+  if((dow===3||dow===5)&&!d.jrType)h+='<p class="rtip">Wednesday and Friday are trainer days once trainer sessions resume. Trainer is currently '+(n.trainerPaused?'<b>paused</b>, so today runs as a Home Academic Day.':'<b>on</b>.')+' <button class="btn" style="margin-top:6px" data-a="jrpause" data-v="'+(n.trainerPaused?'0':'1')+'">'+(n.trainerPaused?'Turn trainer back on':'Pause trainer again')+'</button></p>';
+  if(type==='game'){
+    h+='<div class="card"><h3>Game details</h3><label for="jr_gt">Kickoff</label><input id="jr_gt" type="time" value="'+pad(Math.floor(n.gameTime/60))+':'+pad(n.gameTime%60)+'">'+
+      '<label for="jr_gb">Team arrival, minutes before kickoff</label><input id="jr_gb" type="number" inputmode="numeric" value="'+n.gameBefore+'">'+
+      '<label for="jr_gd">Drive time, minutes</label><input id="jr_gd" type="number" inputmode="numeric" value="'+n.gameDrive+'">'+
+      '<button class="btn primary full" style="margin-top:12px" data-a="jrgamesave">Save game details</button>'+
+      '<p class="rtip">Leave-by time is calculated from these. Adjust them for this week\'s location.</p></div>';
+  }
+  if(type==='trainer'){
+    h+='<details class="rec" data-k="jrtrain" id="rec_jrtrain"'+(recOpen.jrtrain?' open':'')+'><summary><span class="rn">Trainer details</span><span class="rm">Start time, length, drive</span></summary><div class="rbody form">'+
+      '<label for="jr_tt">Trainer start</label><input id="jr_tt" type="time" value="'+pad(Math.floor(n.trainTime/60))+':'+pad(n.trainTime%60)+'">'+
+      '<label for="jr_td">Length, minutes</label><input id="jr_td" type="number" inputmode="numeric" value="'+n.trainDur+'">'+
+      '<label for="jr_dr">Drive time, minutes</label><input id="jr_dr" type="number" inputmode="numeric" value="'+n.trainDrive+'">'+
+      '<button class="btn primary full" style="margin-top:12px" data-a="jrtrainsave">Save trainer details</button></div></details>';
+  }
+  h+='<h3 class="shh">Today\'s schedule</h3>';
+  h+=L.map(jrRow).join('');
+  if((d.jrCustom||[]).length)h+=d.jrCustom.map(function(c){var s=(d.jrb&&d.jrb['c'+c.id])||'';return '<div class="it mom"><button class="chk" data-a="jrcyc" data-id="c'+c.id+'" aria-pressed="'+(s==='done')+'"><span class="box"></span><span class="txt">'+esc(c.t)+(s&&s!=='done'?' <small style="color:var(--muted)">('+jrStatusLabel(s)+')</small>':'')+'</span></button><button class="pglink" data-a="jrdeltask" data-id="'+c.id+'">'+(delArm==='jrt'+c.id?'Tap again':'Remove')+'</button></div>'}).join('');
+  h+='<div class="add"><input id="jr_task" type="text" placeholder="Add a task for today" aria-label="Add a task for today"><button class="btn" data-a="jraddtask">Add</button></div>';
+  if(type==='home'||type==='trainer'){
+    h+='<details class="rec" data-k="jrchore" id="rec_jrchore"'+(recOpen.jrchore?' open':'')+'><summary><span class="rn">Assign the responsibility</span><span class="rm">'+esc(d.jrChore||jrChoreSuggest())+'</span></summary><div class="rbody form"><label for="jr_chore">Today\'s job</label><input id="jr_chore" type="text" value="'+esc(d.jrChore||'')+'" placeholder="'+esc(jrChoreSuggest())+'"><button class="btn primary full" style="margin-top:12px" data-a="jrchoresave">Save</button></div></details>';
+    h+='<details class="rec" data-k="jracc" id="rec_jracc"'+(recOpen.jracc?' open':'')+'><summary><span class="rn">Accountability: '+esc(JR_ACC[dow]||'Reflection')+'</span><span class="rm">His written answer, if he did it</span></summary><div class="rbody"><textarea id="jr_note" placeholder="What decision did he make, and what will he do differently?">'+esc(d.jrNote||'')+'</textarea><button class="btn full" style="margin-top:8px" data-a="jrnotesave">Save</button></div></details>';
+  }
+  if(type==='sat'){
+    h+='<details class="rec" data-k="jrweak" id="rec_jrweak"'+(recOpen.jrweak?' open':'')+'><summary><span class="rn">This week\'s weak subjects</span><span class="rm">'+esc(n.weak1)+', then '+esc(n.weak2)+'</span></summary><div class="rbody form">'+
+      '<label for="jr_w1">Weakest subject</label><select id="jr_w1">'+JR_SUBJECTS.map(function(s){return '<option'+(n.weak1===s?' selected':'')+'>'+s+'</option>'}).join('')+'</select>'+
+      '<label for="jr_w2">Second weakest subject</label><select id="jr_w2">'+JR_SUBJECTS.map(function(s){return '<option'+(n.weak2===s?' selected':'')+'>'+s+'</option>'}).join('')+'</select>'+
+      '<button class="btn primary full" style="margin-top:12px" data-a="jrweaksave">Save</button></div></details>';
+  }
+  h+=jrResetHTML();
+  h+='<p class="rtip" style="margin-top:16px">Fixed steps (trainer, drive, kickoff, lights out) hold their time. Everything else is a target, not a deadline. If the day runs behind, the family time or overflow block near the end absorbs it. Sleep does not get sacrificed for a slow afternoon.</p>';
+  return h}
+function jrCard(days){
+  var logged=0,goodDays=0;
+  days.forEach(function(x){var dd=S.days[x.k];if(!dd||!dd.jrb)return;var vals=Object.keys(dd.jrb).map(function(k){return dd.jrb[k]});if(!vals.length)return;logged++;var d=vals.filter(function(v){return v==='done'}).length;if(d>=Math.ceil(vals.length*0.8))goodDays++});
+  if(!logged)return '';
+  return '<div class="card"><h3>Jr</h3><p class="sub">Tracked '+logged+' of the last 7 days. Most steps done on '+goodDays+' of those days.</p></div>'}
+
 function pageHTML(key){
   if(key==='nut')return nutHTML();
+  if(key==='jr')return jrHTML();
   if(key==='toc')return tocHTML();
   if(key==='recap')return recapHTML();
   if(key==='sched')return schedHTML();
@@ -1468,7 +1693,7 @@ var open=false,busy=false,cur=0,freshStamp=null,DUR=880;
 var pinner=$('#pinner'),pageEl=$('#page'),pagesEl=$('#pages'),coverEl=$('#cover'),navEl=$('#nav');
 function drawNav(){
   var ord=order(),chs=getCH(),i=cur;
-  function nm(k){var BK={toc:'Contents',cal:'Calendar',meals:'Meals',nut:'Nutrition',move:'Move',ugc:'UGC Desk',recap:'Week recap',sched:'Fights and football',setup:'Set up'};if(BK[k])return BK[k];var c=chs.filter(function(x){return x.id===k})[0];return c?c.title:''}
+  function nm(k){var BK={toc:'Contents',cal:'Calendar',meals:'Meals',nut:'Nutrition',jr:'Jr',move:'Move',ugc:'UGC Desk',recap:'Week recap',sched:'Fights and football',setup:'Set up'};if(BK[k])return BK[k];var c=chs.filter(function(x){return x.id===k})[0];return c?c.title:''}
   var prevK=ord[i-1],nextK=ord[i+1];
   navEl.innerHTML='<button class="nbtn" data-a="prev"'+(prevK?'':' disabled')+'>‹ Back<small>'+esc(prevK?nm(prevK):'')+'</small></button>'+
     (i===0?'<button class="nbtn mid" data-a="close">Close</button>':'<button class="nbtn mid" data-a="toc">Contents</button>')+
@@ -1619,15 +1844,36 @@ Object.assign(A,{
   vadd:function(){var i=$('#vin'),nm=((i&&i.value)||'').trim().slice(0,60);if(!nm){toast('Type the name first');return}S.vits.push({id:'v'+Date.now(),name:nm});refresh();toast('Added')},
   vdel:function(t){var id=t.dataset.id;if(delArm==='v'+id){S.vits=S.vits.filter(function(v){return v.id!==id});delArm=null;refresh();toast('Removed')}else armDel('v'+id)}
 });
+
+Object.assign(A,{
+  jrcyc:function(t){var d=D(),id=t.dataset.id;d.jrb=d.jrb||{};var s=d.jrb[id]||'';d.jrb[id]=s===''?'done':s==='done'?'skip':s==='skip'?'excuse':'';refresh()},
+  jrtype:function(t){var d=D(),v=t.dataset.v;if(v==='auto')delete d.jrType;else d.jrType=v;refresh()},
+  jrpause:function(t){S.jr.trainerPaused=t.dataset.v==='1';refresh();toast(S.jr.trainerPaused?'Trainer paused':'Trainer back on')},
+  jrgamesave:function(){var tv=($('#jr_gt')||{}).value,b=parseInt(($('#jr_gb')||{}).value,10),dr=parseInt(($('#jr_gd')||{}).value,10);
+    if(tv){var p=tv.split(':');S.jr.gameTime=parseInt(p[0],10)*60+parseInt(p[1],10)}
+    if(b>=0)S.jr.gameBefore=b;if(dr>=0)S.jr.gameDrive=dr;refresh();toast('Saved')},
+  jrtrainsave:function(){var tv=($('#jr_tt')||{}).value,du=parseInt(($('#jr_td')||{}).value,10),dr=parseInt(($('#jr_dr')||{}).value,10);
+    if(tv){var p=tv.split(':');S.jr.trainTime=parseInt(p[0],10)*60+parseInt(p[1],10)}
+    if(du>0)S.jr.trainDur=du;if(dr>=0)S.jr.trainDrive=dr;recOpen.jrtrain=false;refresh();toast('Saved')},
+  jrchoresave:function(){var i=$('#jr_chore');D().jrChore=((i&&i.value)||'').trim().slice(0,80);recOpen.jrchore=false;refresh();toast('Saved')},
+  jrnotesave:function(){var i=$('#jr_note');D().jrNote=((i&&i.value)||'').trim().slice(0,2000);refresh();toast('Saved')},
+  jraddtask:function(){var i=$('#jr_task'),t=((i&&i.value)||'').trim().slice(0,80);if(!t){toast('Type the task first');return}var d=D();d.jrCustom=d.jrCustom||[];d.jrCustom.push({id:Date.now(),t:t});refresh();toast('Added')},
+  jrdeltask:function(t){var id=t.dataset.id,d=D();if(delArm==='jrt'+id){d.jrCustom=(d.jrCustom||[]).filter(function(x){return String(x.id)!==id});if(d.jrb)delete d.jrb['c'+id];delArm=null;refresh();toast('Removed')}else armDel('jrt'+id)},
+  jrweaksave:function(){var a=$('#jr_w1'),b=$('#jr_w2');if(a)S.jr.weak1=a.value;if(b)S.jr.weak2=b.value;recOpen.jrweak=false;refresh();toast('Saved')},
+  jrresetsave:function(){var i=$('#jr_reset_start');S.jr.resetStart=(i&&i.value)||null;refresh();toast('Saved')},
+  jrresettog:function(t){S.jr.resetOn=t.dataset.v==='1';refresh()}
+});
 function armDel(k){delArm=k;refresh();setTimeout(function(){if(delArm===k){delArm=null;if(open)draw(true)}},4000)}
 document.addEventListener('click',function(e){
   var t=e.target.closest('[data-a]');
   if(t){if(t.disabled)return;var f=A[t.dataset.a];if(f){e.stopPropagation();f(t)}return}
   if(!open&&e.target.closest('#front'))openBook();
 });
+document.addEventListener('change',function(e){if(e.target&&e.target.id==='jr_type'){A.jrtype({dataset:{v:e.target.value}})}});
 document.addEventListener('toggle',function(e){var el=e.target;if(el&&el.classList&&el.classList.contains('lane'))laneOpen[el.dataset.k]=el.open;else if(el&&el.classList&&el.classList.contains('rec'))recOpen[el.dataset.k]=el.open},true);
 document.addEventListener('keydown',function(e){
   if(e.key==='Enter'&&(e.target.id==='gin'||e.target.id==='steps_in')){var bb=$('[data-a='+(e.target.id==='gin'?'gadd':'stepsave')+']');if(bb)bb.click();return}
+  if(e.key==='Enter'&&e.target.id==='jr_task'){var jb=$('[data-a=jraddtask]');if(jb)jb.click();return}
   if(e.key==='Enter'&&e.target.id==='vin'){var vb=$('[data-a=vadd]');if(vb)vb.click();return}
   if(e.key==='Enter'&&e.target.id&&e.target.id.indexOf('add_')===0){var b=e.target.parentNode.querySelector('[data-a=addtask]');if(b)b.click();return}
   if(!open||/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))return;
