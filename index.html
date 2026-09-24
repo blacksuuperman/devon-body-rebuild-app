@@ -557,13 +557,13 @@ function chapters(c){
       jr:J(['|Watch football with the family','|Meal 4']).concat([{tm:'',t:'Finish any missing school assignments (only if there are any)',opt:true}]),
       st:J(['|Movement break: run, jump, hop between plays or at halftime','|Books, coloring, or quiet play','|Watch part of the game']),
       mom:[M('m_ugc_wk','Film in your best daylight (outside or by a bright window)',{mini:'Film one 15 second clip.',nap:true}),
-           M('m_dinner','Start dinner during the game (dinner is at 4:30)',{mini:'Reheat or assemble something simple: sheet pan, slow cooker, or leftovers.'}),
+           M('m_dinner','Start dinner during the game (start at 4:30, eat around 5:00)',{mini:'Reheat or assemble something simple: sheet pan, slow cooker, or leftovers.'}),
            M('m_prep','Sunday meal prep during the game: proteins, carbs, snacks',{mini:'Prep just the proteins.',opt:true,nap:true})],free:'Your window: the afternoon, while the game is on'});
     if(nf&&nf.intl)L[0].notes=[{b:'Morning game',t:nf.intl+', kickoff 8:30 AM Central. It is on while you make breakfast.'}];
   }else{
     var uf=UFC[c.date]||null,F=uf?(uf.ep||uf.p):null,hasUfc=!!(F&&F<990),morn=!!(F&&F<660);
     var ufTxt=uf?(uf.n+'. '+(uf.ep?'Early prelims '+fmt(uf.ep)+'. ':'')+(uf.p?'Prelims '+fmt(uf.p)+'. ':'')+(uf.mc?'Main card '+fmt(uf.mc)+' Central.':'Main card time not posted yet.')+(uf.chk?' Double-check UFC.com that week.':'')):'';
-    var dinnerItem=M('m_dinner',hasUfc?'Start dinner during the fights (dinner is at 4:30)':'Start dinner during the afternoon games (dinner is at 4:30)',{mini:'Reheat or assemble something simple: sheet pan, slow cooker, or leftovers.'});
+    var dinnerItem=M('m_dinner',hasUfc?'Start dinner during the fights (start at 4:30, eat around 5:00)':'Start dinner during the afternoon games (start at 4:30, eat around 5:00)',{mini:'Reheat or assemble something simple: sheet pan, slow cooker, or leftovers.'});
     var ugcItem=M('m_ugc_wk','Film in your best daylight (outside or by a bright window)',{mini:'Film one 15 second clip.',nap:true});
     var missing={tm:'',t:'Finish any missing school assignments (only if there are any)',opt:true};
     if(!morn){
@@ -608,13 +608,13 @@ function chapters(c){
     g:{jr:'Laundry, dishes, counters, sweep, mop, room.',st:'Toys, room, hamper, help wipe.',mom:'Cook dinner while they work.'},
     jr:J(chores),
     st:J(['3:45|Put toys away','|Clean bedroom','|Dirty clothes in the hamper','|Help wipe the eating area','|Put plate and cup away','|Help Junior with simple chores']),
-    mom:[M('m_dinner','Cook dinner while the boys do chores (dinner is at 4:30)',{mini:'Reheat or assemble something simple: sheet pan, slow cooker, or leftovers.'}),M(null,'Baby stays with you')]});
+    mom:[M('m_dinner','Cook dinner while the boys do chores (start at 4:30, eat around 5:00)',{mini:'Reheat or assemble something simple: sheet pan, slow cooker, or leftovers.'}),M(null,'Baby stays with you')]});
   }
   L.push({id:'dinner',title:'Dinner and Check',t:[990,1050],lede:wd?'Eat together, then a quick school check for Jr.':'Eat together, then reset one zone.',
     g:{jr:wd?'Meal 5, then XP and missing work check.':'Meal 5.',st:'Dinner, then creative play.',mom:'Family meal, then reset one zone.'},
-    jr:J(['4:30|Meal 5'].concat(wd?['5:00|Check school XP, missing assignments and unfinished work']:[])),
-    st:J(['4:30|Dinner','5:00|Creative play or independent activity']),
-    mom:[M(null,'Family meal at 4:30'),M('m_reset_zone','Reset one zone for 20 minutes: office, laundry room, or a bedroom',{mini:'Set a 10 minute timer and clear the worst corner.'})]});
+    jr:J(['5:00|Meal 5'].concat(wd?['5:30|Check school XP, missing assignments and unfinished work']:[])),
+    st:J(['5:00|Dinner','5:30|Creative play or independent activity']),
+    mom:[M(null,'Cooking starts at 4:30, family meal around 5:00'),M('m_reset_zone','Reset one zone for 20 minutes: office, laundry room, or a bedroom',{mini:'Set a 10 minute timer and clear the worst corner.'})]});
   L.push({id:'reading',title:'Reading Time',t:[1050,1080],lede:'Jr reads, then helps Sterling for about 15 minutes.',
     g:{jr:'Reading, then teach Sterling.',st:'Picture books with Junior.',mom:'A partial reset. About 30 minutes for you.'},
     jr:J(['5:30|Reading','|About 15 minutes helping Sterling with letters, numbers, reading, shapes or colors']),
@@ -1455,34 +1455,30 @@ function jrBlocks(){
   if(type==='travel')return [B('travel',420,660,'Travel day','Adjust freely around the trip. Protect meals and bedtime where you can.')];
   if(type==='special')return [B('event',420,660,'Special event day','Today is built around the event. Protect sleep the night before and after.')];
   if(type==='home'){
-    var mv=JR_MOVE[dow]||'Mobility or recovery, whatever the day calls for.';
     L=[
       B('wake',360,15,'Wake up','Bathroom, teeth, water, training clothes, make the bed.'),
-      B('move',375,30,'Morning movement',mv),
-      B('shower',405,30,'Shower and dress',''),
-      B('bfast',435,30,'Breakfast','Make it, eat it, clean it up.'),
-      B('prep',465,15,'School setup','Pencil, paper, notebook, calculator, book, water.'),
-      B('fastmath',480,25,'Fast Math','Fluency: addition, subtraction, multiplication, division facts.'),
-      B('math',505,60,'Math','Show the work. Fix mistakes before moving on.'),
-      B('break1',565,10,'Break','Bathroom, water, stretch. No electronics.'),
-      B('writing',575,60,'Writing','Sentences, paragraphs, essays as he improves.'),
-      B('break2',635,10,'Break',''),
-      B('science',645,50,'Science','What happened, how, and why.'),
-      B('lunch',695,45,'Lunch','Make it, eat it, clean it up.'),
-      B('reading',740,40,'Reading and comprehension','Close the book, then: main idea, three details, cause and effect, inference, evidence, summary in his own words.'),
-      B('break3',780,10,'Break',''),
-      B('language',790,40,'Language','Vocabulary, grammar, sentence structure.'),
-      B('history',830,40,'History and social studies','What happened, why, and why it matters today.'),
-      B('snack',870,20,'Snack and training prep','Eat, hydrate, change, get equipment ready.'),
-      B('football',890,100,"Football development","Dad's training program, at home."),
-      B('shower2',990,30,'Shower and recovery',''),
-      B('chore',1020,60,'Household responsibility',(D().jrChore||jrChoreSuggest())),
-      B('dinner',1080,45,'Dinner',''),
-      B('correction',1125,40,'Academic correction',"Fix today's weakest work first."),
-      B('account',1165,25,'Accountability',JR_ACC[dow]||'Reflection'),
-      B('indread',1190,30,'Independent reading','Book only, no phone.'),
-      B('tomorrow',1220,20,'Prepare for tomorrow','Clothes, shoes, school and training gear, water bottle, room reset.'),
-      B('night',1240,20,'Night routine','Teeth, face, bathroom, into bed.'),
+      B('football',375,100,'Football development',"Dad's training program, outside while it's coolest. Kept out of the hottest part of the day on purpose."),
+      B('shower',475,30,'Shower and dress',''),
+      B('bfast',505,30,'Breakfast','Make it, eat it, clean it up.'),
+      B('prep',535,15,'School setup','Pencil, paper, notebook, calculator, book, water.'),
+      B('fastmath',550,25,'Fast Math','Fluency: addition, subtraction, multiplication, division facts.'),
+      B('math',575,60,'Math','Show the work. Fix mistakes before moving on.'),
+      B('break1',635,10,'Break','Bathroom, water, stretch. No electronics.'),
+      B('writing',645,60,'Writing','Sentences, paragraphs, essays as he improves.'),
+      B('break2',705,10,'Break',''),
+      B('science',715,50,'Science','What happened, how, and why.'),
+      B('lunch',765,45,'Lunch','Make it, eat it, clean it up.'),
+      B('reading',810,40,'Reading and comprehension','Close the book, then: main idea, three details, cause and effect, inference, evidence, summary in his own words.'),
+      B('break3',850,10,'Break',''),
+      B('language',860,40,'Language','Vocabulary, grammar, sentence structure.'),
+      B('history',900,40,'History and social studies','What happened, why, and why it matters today.'),
+      B('chore',940,50,'Household responsibility',(D().jrChore||jrChoreSuggest())),
+      B('dinner',990,60,'Dinner','Cooking starts now. Eat with the family around 5:00, then clean up.'),
+      B('correction',1050,40,'Academic correction',"Fix today's weakest work first."),
+      B('account',1090,25,'Accountability',JR_ACC[dow]||'Reflection'),
+      B('indread',1115,30,'Independent reading','Book only, no phone.'),
+      B('tomorrow',1145,20,'Prepare for tomorrow','Clothes, shoes, school and training gear, water bottle, room reset.'),
+      B('night',1165,20,'Night routine','Teeth, face, bathroom, into bed.'),
       B('lights',1260,0,'Lights out','',true)
     ];
     return L}
