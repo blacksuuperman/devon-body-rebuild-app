@@ -485,12 +485,12 @@ function chapters(c){
       g:{jr:'Bed, teeth, dressed, room, dog.',st:'Up, dressed, toys, dog.',mom:'Baby first, then a calm start.'},
       jr:J(['|Wake up and make your bed','|Brush teeth','|Get dressed','|Clean and organize your room','|Feed the dog with Sterling']).concat([{tm:'',t:'Easy stretching or mobility (optional, rest day)',opt:true}]),
       st:J(['|Wake up and help make the bed','|Brush teeth','|Wash face','|Get dressed','|Put pajamas away','|Pick up toys','|Help Junior feed the dog']),
-      mom:[M('m_baby_am','Baby: diaper, feed, calm reset'),M('m_laundry1','Start one load of laundry',{mini:'Move clothes from the hamper to the washer. That counts.'})]});
+      mom:[M('m_baby_am','Baby: diaper, feed, calm reset'),M('m_coffee','Make your coffee, then wipe the counter and rinse your mug before you walk away',{mini:'Just wipe the counter. That counts.',opt:true}),M('m_laundry1','Start one load of laundry',{mini:'Move clothes from the hamper to the washer. That counts.'})]});
     Object.assign(L[1],{title:'Make Breakfast',t:[480,540],lede:'Make breakfast together, eat, and clean up.',
-      g:{jr:'Help make breakfast, Meal 1, clean up.',st:'Help with breakfast, then clean up.',mom:'Make breakfast, baby feed, eat something yourself.'},
+      g:{jr:'Help make breakfast, Meal 1, clean up.',st:'Help with breakfast, then clean up.',mom:'Make breakfast, baby feed, eat something yourself, clean your area.'},
       jr:J(['|Help make breakfast','|Meal 1, breakfast','|Clean the eating area']),
       st:J(['|Help with breakfast: stir, pour, or set out napkins','|Breakfast','|Clean up after breakfast']),
-      mom:[M(null,'Make breakfast with the family'),M('m_eat','Eat something with protein yourself'),M(null,'Baby breakfast or feed')]});
+      mom:[M(null,'Make breakfast with the family'),M('m_eat','Eat something with protein yourself'),M(null,'Baby breakfast or feed'),M('m_bfastclean','Wipe your counter and load your dishes before you leave the kitchen',{mini:'Just your own plate and mug in the sink counts.'})]});
   }
   if(sun){
     L[1].title='Breakfast and Quiet Time';
@@ -508,7 +508,7 @@ function chapters(c){
         g:{jr:'Wake, football, shower, breakfast.',st:'Up, dressed, toys, dog, movement, breakfast.',mom:'Baby first, laundry, family breakfast.'},
         jr:jrLane(360,535),
         st:J(['6:00|Wake up and help make the bed','6:05|Brush teeth','6:05|Wash face','6:20|Get dressed','6:20|Put pajamas away','6:20|Pick up toys','6:30|Help Junior feed the dog','6:40|Morning movement: jumping, hopping, running in place, balance, bear crawls, simple stretching','7:00|Breakfast','7:30|Clean up after breakfast']),
-        mom:[M('m_baby_am','Baby: diaper, feed, calm reset (baby may still be sleeping)'),M('m_laundry1','Start one load of laundry',{mini:'Move clothes from the hamper to the washer. That counts.'}),M(null,'Family breakfast at 7:00'),M('m_eat','Eat something with protein yourself')]});
+        mom:[M('m_baby_am','Baby: diaper, feed, calm reset (baby may still be sleeping)'),M('m_coffee','Make your coffee, then wipe the counter and rinse your mug before you walk away',{mini:'Just wipe the counter. That counts.',opt:true}),M('m_laundry1','Start one load of laundry',{mini:'Move clothes from the hamper to the washer. That counts.'}),M(null,'Family breakfast at 7:00'),M('m_eat','Eat something with protein yourself'),M('m_bfastclean','Wipe your counter and load your dishes before you leave the kitchen',{mini:'Just your own plate and mug in the sink counts.'})]});
       Object.assign(L[1],{title:'Morning Academics',t:[535,765],lede:'Fast Math, Math, Writing and Science. Sterling rotates through learning stations nearby.',
         g:{jr:'Fast Math, Math, Writing, Science.',st:'Four stations, about 25 minutes each.',mom:'Baby time, short check-ins, one tiny UGC step.'},
         jr:jrLane(535,765),
@@ -530,7 +530,7 @@ function chapters(c){
         g:{jr:'Wake, mobility, shower, breakfast.',st:'Up, dressed, toys, dog, movement, breakfast.',mom:'Baby first, laundry, family breakfast.'},
         jr:jrLane(360,455),
         st:J(['6:00|Wake up and help make the bed','6:05|Brush teeth','6:05|Wash face','6:20|Get dressed','6:20|Put pajamas away','6:20|Pick up toys','6:30|Help Junior feed the dog','6:40|Morning movement: jumping, hopping, running in place, balance, bear crawls, simple stretching','7:00|Breakfast','7:30|Clean up after breakfast']),
-        mom:[M('m_baby_am','Baby: diaper, feed, calm reset (baby may still be sleeping)'),M('m_laundry1','Start one load of laundry',{mini:'Move clothes from the hamper to the washer. That counts.'}),M(null,'Family breakfast at 7:00'),M('m_eat','Eat something with protein yourself')]});
+        mom:[M('m_baby_am','Baby: diaper, feed, calm reset (baby may still be sleeping)'),M('m_coffee','Make your coffee, then wipe the counter and rinse your mug before you walk away',{mini:'Just wipe the counter. That counts.',opt:true}),M('m_laundry1','Start one load of laundry',{mini:'Move clothes from the hamper to the washer. That counts.'}),M(null,'Family breakfast at 7:00'),M('m_eat','Eat something with protein yourself'),M('m_bfastclean','Wipe your counter and load your dishes before you leave the kitchen',{mini:'Just your own plate and mug in the sink counts.'})]});
       Object.assign(L[1],{title:'Academics Before Training',t:[455,625],lede:'Fast Math, Math, Writing and Science, fit in before he leaves for the trainer.',
         g:{jr:'Fast Math, Math, Writing, Science.',st:'Four stations, about 25 minutes each.',mom:'Baby time, short check-ins.'},
         jr:jrLane(455,625),
@@ -573,7 +573,7 @@ function chapters(c){
         g:{jr:'Wake, mobility, shower, breakfast.',st:'Up, dressed, toys, dog, movement, breakfast.',mom:'Baby first, laundry, family breakfast.'},
         jr:jrLane(360,455),
         st:J(['6:00|Wake up and help make the bed','6:05|Brush teeth','6:05|Wash face','6:20|Get dressed','6:20|Put pajamas away','6:20|Pick up toys','6:30|Help Junior feed the dog','6:40|Morning movement: jumping, hopping, running in place, balance, bear crawls, simple stretching','7:00|Breakfast','7:30|Clean up after breakfast']),
-        mom:[M('m_baby_am','Baby: diaper, feed, calm reset (baby may still be sleeping)'),M('m_laundry1','Start one load of laundry',{mini:'Move clothes from the hamper to the washer. That counts.'}),M(null,'Family breakfast at 7:00'),M('m_eat','Eat something with protein yourself')]});
+        mom:[M('m_baby_am','Baby: diaper, feed, calm reset (baby may still be sleeping)'),M('m_coffee','Make your coffee, then wipe the counter and rinse your mug before you walk away',{mini:'Just wipe the counter. That counts.',opt:true}),M('m_laundry1','Start one load of laundry',{mini:'Move clothes from the hamper to the washer. That counts.'}),M(null,'Family breakfast at 7:00'),M('m_eat','Eat something with protein yourself'),M('m_bfastclean','Wipe your counter and load your dishes before you leave the kitchen',{mini:'Just your own plate and mug in the sink counts.'})]});
       Object.assign(L[1],{title:'Academics',t:[455,670],lede:'Fast Math, Math, Writing and Science. Keep it calm, it is a game day.',
         g:{jr:'Fast Math, Math, Writing, Science.',st:'Four stations, about 25 minutes each.',mom:'Baby time, short check-ins.'},
         jr:jrLane(455,670),
@@ -708,6 +708,10 @@ function chapters(c){
     mom:[M('m_walk','Walk 20 to 30 minutes: outside with the baby, or the walking pad at home',{mini:'Ten minutes on the walking pad counts.'}),M(null,'Room inspection: a quick look at both rooms'),M(null,'Family activity, then confirm responsibilities before TV'),M(null,'8:00 Sterling bedtime'),M(null,'8:00 Baby bedtime routine'),M('m_walk_late','Missed your walk? 15 minutes on the walking pad after the bedtimes',{opt:true}),M('m_hair','Night hair protection: bonnet or loose braid',{opt:true})]});
   }
   L.push({id:'close',title:'Close the Day',t:[1260,1440],lede:'Two minutes. Tell the book how it went so tomorrow can adjust.',g:{},jr:[],st:[],mom:[]});
+  L.forEach(function(ch){
+    var di=-1;for(var mi=0;mi<ch.mom.length;mi++)if(ch.mom[mi].id==='m_dinner'){di=mi;break}
+    if(di>=0)ch.mom.splice(di+1,0,M('m_dinnerclean','Wipe the counters and load the dishwasher as you go, not after',{mini:'Wipe one counter. That counts.'}));
+  });
   if(jt==='sick'||jt==='travel'||jt==='special'){
     var soleLines=jrLane(0,1440);
     L.forEach(function(ch,i){
@@ -1594,7 +1598,7 @@ function jrBlocks(){
       B('wake',360,15,'Wake up','Bathroom, teeth, water, training clothes, make the bed.'),
       B('move',375,20,'Mobility and recovery','Light movement. Nothing that tires the legs before training.'),
       B('shower',395,30,'Shower and dress',''),
-      B('bfast',425,30,'Breakfast',''),
+      B('bfast',425,30,'Breakfast','Eat it, then wipe your spot and rinse your dish.'),
       B('fastmath',455,25,'Fast Math',''),
       B('math',480,60,'Math',''),
       B('break1',540,10,'Break',''),
@@ -1604,13 +1608,13 @@ function jrBlocks(){
       B('leave',leave,ts-leave,'Leave for training','About '+dr+' minutes of drive time.',true),
       B('trainer',ts,td,'Trainer session','Full effort, full attention. Not social hour.',true),
       B('drive',ts+td,dr,'Drive home','',true),
-      B('lunch',home,50,'Lunch, shower, recovery',''),
+      B('lunch',home,50,'Lunch, shower, recovery','Clean up your spot before you shower.'),
       B('reading',home+50,40,'Reading and comprehension',''),
       B('language',home+90,40,'Language and history',''),
       B('break2',home+130,10,'Break',''),
       B('correction',home+140,45,'Academic correction and science','Finish whatever science did not get done this morning.'),
       B('chore',home+185,60,'Household responsibility',(D().jrChore||jrChoreSuggest())),
-      B('dinner',home+245,45,'Dinner',''),
+      B('dinner',home+245,45,'Dinner','Eat it, then clear your plate and wipe your spot.'),
       B('account',home+290,30,'Accountability',JR_ACC[dow]||'Reflection'),
       B('indread',home+320,30,'Independent reading',''),
       B('free',home+350,45,'Family time and overflow','This block can absorb a reasonable delay from earlier in the day.'),
@@ -1625,7 +1629,7 @@ function jrBlocks(){
       B('wake',360,15,'Wake up','Bathroom, teeth, water, make the bed.'),
       B('move',375,20,'Mobility only','No hard conditioning today.'),
       B('shower',395,30,'Shower and dress',''),
-      B('bfast',425,30,'Breakfast',''),
+      B('bfast',425,30,'Breakfast','Eat it, then wipe your spot and rinse your dish.'),
       B('fastmath',455,25,'Fast Math',''),
       B('math',480,60,'Math',''),
       B('break1',540,10,'Break',''),
@@ -1633,7 +1637,7 @@ function jrBlocks(){
       B('break2',610,10,'Break',''),
       B('science',620,50,'Science',''),
       B('language',670,40,'Language',''),
-      B('lunch',710,45,'Lunch',''),
+      B('lunch',710,45,'Lunch','Eat it, then clear your plate and wipe your spot.'),
       B('reading',755,40,'Reading and comprehension',''),
       B('history',795,40,'History',''),
       B('recovery',835,35,'Quiet recovery','No electronics. Read, stretch, rest.'),
@@ -1647,13 +1651,13 @@ function jrBlocks(){
   if(type==='sat'){
     L=[
       B('wake',420,30,'Wake up','Bathroom, hygiene, make the bed, get dressed. One extra hour of sleep.'),
-      B('bfast',450,30,'Breakfast',''),
+      B('bfast',450,30,'Breakfast','Eat it, then wipe your spot and rinse your dish.'),
       B('clean',540,60,'Room, laundry and deep clean','Start high and work down: dust, surfaces, floor, trash, laundry washed and put away.'),
       B('weak1',600,60,'Weakest subject: '+(n.weak1||'Math'),'Whatever the week showed was weakest gets the attention, not what is easiest.'),
       B('break1',660,15,'Break',''),
       B('weak2',675,45,'Second weakest subject: '+(n.weak2||'Writing'),''),
       B('reading',720,45,'Reading',''),
-      B('lunch',765,45,'Lunch',''),
+      B('lunch',765,45,'Lunch','Eat it, then clear your plate and wipe your spot.'),
       B('life',810,45,'Life skills','Cooking, laundry, budgeting basics, organization, first aid, time management. Rotate topics week to week.'),
       B('after',855,60,'Afternoon','Football development, recovery, volunteering, youth group, family activities, or a household project. No recreational electronics tonight during the reset.')
     ];
