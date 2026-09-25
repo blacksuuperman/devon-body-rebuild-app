@@ -500,37 +500,106 @@ function chapters(c){
     L[1].st.push({tm:'',t:'Relax and pray with the family (a quiet story or coloring is fine)'});
     L[1].mom.push(M(null,'Relax and pray with the family before cleaning starts at 9:00'));
   }
+  var JB=jrBlocks(),jt=jrType(),jtStruct=(jt==='trainer'||jt==='game')?jt:'home';
+  function jrLane(t0,t1){return jbLines(JB,t0,t1)}
   if(wd){
-    L.push({id:'school',title:'School Block',t:[465,585],lede:'Jr does school. Sterling rotates through learning stations. You cover the baby.',
-      g:{jr:'2 full hours plus the XP goal.',st:'Four stations, about 25 minutes each.',mom:'Baby time, short check-ins, one tiny UGC step.'},
-      jr:J(['7:45|Start online school','|Finish 2 full hours of school','|Hit the required XP goal for the day']),
-      jrNote:'<b>Both must be done.</b> XP done early? Keep going with school, math, reading or missing assignments. Two hours done but XP not reached? Keep going until XP is reached. The computer stays in a common area.',
-      st:J(['7:45|Station 1: Movement learning','8:10|Station 2: Table learning','8:35|Station 3: Learning through play','9:00|Station 4: Independent learning','9:25|Repeat any favorite station']),stations:true,
-      mom:[M(null,'Handle the baby. At each station change, give Sterling a short check-in.'),
-           M('m_ugc_scrap','Tiny UGC step (10 minutes) if baby is settled',{mini:'Save one video idea or one brand to your list.',opt:true,nap:true})],free:'Your window: scraps of about 20 minutes'});
-    L.push({id:'math',title:'Snack and Math',t:[585,635],lede:'Fuel up, then a focused math block for both boys.',
-      g:{jr:'Meal 2 (liquid), then math block.',st:'Snack, then numbers and letters with movement.',mom:'Baby snack, supervise both boys.'},
-      jr:J(['9:45|Meal 2, liquid meal','10:00|Math improvement block (35 minutes)']),
-      st:J(['9:45|Snack','10:00|Learning block: numbers, counting, letters, letter sounds, shapes, colors, simple addition with toys']),
-      mom:[M(null,'9:45 Baby snack or feed'),M(null,'10:00 Supervise both boys while the baby plays')]});
-    L.push({id:'leave',title:'Out the Door',t:[635,660],lede:'Pack, eat the pre-training meal, leave at 11:00.',
-      g:{jr:'Pack gear and water, Meal 3.',st:'Clean up, bathroom, lunch.',mom:'Pack the bag, baby prep, leave at 11:00.'},
-      jr:J(['10:35|Pack training gear and water, get ready to leave','10:45|Meal 3, solid pre-training meal']),
-      st:J(['10:35|Clean up toys','10:35|Bathroom','10:45|Lunch']),
-      mom:[M(null,'Baby prep and a quick diaper check'),M('m_bag','Pack the bag: diaper bag, snacks, water, chargers, phone or laptop for UGC'),M(null,'11:00 Leave')]});
-    L.push({id:'train',title:'Training Window',t:[660,840],lede:'Jr trains about two hours. Sterling burns energy nearby. This is your UGC window.',
-      g:{jr:'Drive, train, come home.',st:'Run, jump, throw, then quiet play.',mom:'Phone UGC block while you supervise.'},
-      jr:J(['11:00|Leave for training','11:30|Athletic training (about 2 hours)','2:00|Home']),
-      st:J(['11:30|Activity time near training: running, skipping, jumping, hopping, throwing, catching, kicking, balance, playground, obstacle course','|After movement: books, coloring, puzzles, flash cards, snack, quiet play']),
-      stIdeas:'Mix learning in: count his jumps, call out colors while running, find letters on signs, count steps, throw the ball five times, hop to a number. He does not need to exercise the whole two hours.',
-      mom:[M('m_film_train','Film one clip in the best daylight if the setting works',{mini:'Film one 10 second clip.',opt:true,nap:true}),
-           M('m_ugc_train','Phone UGC block (45 to 60 minutes): brand research, outreach emails, script',{mini:'Send one outreach message.',nap:true}),
-           M(null,'Keep Sterling and the baby fed and watered')],free:'Your window: about 90 minutes, phone-based, in daylight'});
-    L.push({id:'home',title:'Home and Recovery',t:[840,870],lede:'Back home, shower, recovery shake, settle down.',
-      g:{jr:'Shower, Meal 4 recovery shake.',st:'Bathroom, settle, snack.',mom:'Baby sets the timing. Move the laundry.'},
-      jr:J(['2:00|Home, 10 minute shower','2:15|Meal 4, recovery shake']),
-      st:J(['2:00|Bathroom and settle down','2:15|Snack']),
-      mom:[M(null,'Baby needs set the timing here'),M('m_laundry2','Move the laundry: washer to dryer, or dryer to basket',{mini:'Just get the wet load into the dryer.'}),M(null,'If the baby seems sleepy, let the baby sleep and tap Asleep')]});
+    if(jtStruct==='home'){
+      Object.assign(L[0],{title:'Wake Up and Training',t:[360,535],lede:"Wake, football training outside while it's coolest, shower, breakfast, and school setup.",
+        g:{jr:'Wake, football, shower, breakfast.',st:'Up, dressed, toys, dog, movement, breakfast.',mom:'Baby first, laundry, family breakfast.'},
+        jr:jrLane(360,535),
+        st:J(['6:00|Wake up and help make the bed','6:05|Brush teeth','6:05|Wash face','6:20|Get dressed','6:20|Put pajamas away','6:20|Pick up toys','6:30|Help Junior feed the dog','6:40|Morning movement: jumping, hopping, running in place, balance, bear crawls, simple stretching','7:00|Breakfast','7:30|Clean up after breakfast']),
+        mom:[M('m_baby_am','Baby: diaper, feed, calm reset (baby may still be sleeping)'),M('m_laundry1','Start one load of laundry',{mini:'Move clothes from the hamper to the washer. That counts.'}),M(null,'Family breakfast at 7:00'),M('m_eat','Eat something with protein yourself')]});
+      Object.assign(L[1],{title:'Morning Academics',t:[535,765],lede:'Fast Math, Math, Writing and Science. Sterling rotates through learning stations nearby.',
+        g:{jr:'Fast Math, Math, Writing, Science.',st:'Four stations, about 25 minutes each.',mom:'Baby time, short check-ins, one tiny UGC step.'},
+        jr:jrLane(535,765),
+        st:J(['|Station 1: Movement learning','|Station 2: Table learning','|Station 3: Learning through play','|Station 4: Independent learning','|Repeat any favorite station']),stations:true,
+        mom:[M(null,'Handle the baby. At each station change, give Sterling a short check-in.'),M('m_ugc_scrap','Tiny UGC step (10 minutes) if baby is settled',{mini:'Save one video idea or one brand to your list.',opt:true,nap:true})],free:'Your window: scraps of about 20 minutes'});
+      L.push({id:'math',title:'Lunch and Afternoon Academics',t:[765,940],lede:'Lunch, then Reading, Language, History and the chore block.',
+        g:{jr:'Lunch, Reading, Language, History, chore.',st:'Lunch, then quiet learning.',mom:'Baby time, your UGC hour when the baby sleeps.'},
+        jr:jrLane(765,940),
+        st:J(['|Lunch','|Quiet learning: books, tracing, coloring, puzzles, blocks, flash cards, matching games, simple worksheets','|Baby awake: back to movement learning. Baby asleep: keep going with quiet learning']),
+        mom:[M('m_ugc_nap','UGC power hour: film near a bright window or outside, or edit and script',{mini:'Film one 15 second clip or edit one scene.',nap:true}),M(null,'Help the boys as you are available')],free:'Your window opens whenever the baby sleeps. Tap Asleep.'});
+      L.push({id:'chores',title:'Chores',t:[940,990],lede:'The boys run the chores while you cook.',
+        g:{jr:'Household responsibility.',st:'Toys, room, hamper, help wipe.',mom:'Cook dinner while they work.'},
+        jr:jrLane(940,990),
+        st:J(['|Put toys away','|Clean bedroom','|Dirty clothes in the hamper','|Help wipe the eating area','|Put plate and cup away','|Help Junior with simple chores']),
+        mom:[M('m_dinner','Cook dinner while the boys do chores (start at 4:30, eat around 5:00)',{mini:'Reheat or assemble something simple: sheet pan, slow cooker, or leftovers.'}),M(null,'Baby stays with you')]});
+    }else if(jtStruct==='trainer'){
+      var lv=jbAt(JB,'leave',650),tr=jbAt(JB,'trainer',690),hm=jbAt(JB,'lunch',815),chS=jbAt(JB,'chore',hm+185),acS=jbAt(JB,'account',hm+290),frS=jbAt(JB,'free',hm+350);
+      Object.assign(L[0],{title:'Wake Up and Ready',t:[360,455],lede:'Quick wake up, light mobility, shower, breakfast before school work starts.',
+        g:{jr:'Wake, mobility, shower, breakfast.',st:'Up, dressed, toys, dog, movement, breakfast.',mom:'Baby first, laundry, family breakfast.'},
+        jr:jrLane(360,455),
+        st:J(['6:00|Wake up and help make the bed','6:05|Brush teeth','6:05|Wash face','6:20|Get dressed','6:20|Put pajamas away','6:20|Pick up toys','6:30|Help Junior feed the dog','6:40|Morning movement: jumping, hopping, running in place, balance, bear crawls, simple stretching','7:00|Breakfast','7:30|Clean up after breakfast']),
+        mom:[M('m_baby_am','Baby: diaper, feed, calm reset (baby may still be sleeping)'),M('m_laundry1','Start one load of laundry',{mini:'Move clothes from the hamper to the washer. That counts.'}),M(null,'Family breakfast at 7:00'),M('m_eat','Eat something with protein yourself')]});
+      Object.assign(L[1],{title:'Academics Before Training',t:[455,625],lede:'Fast Math, Math, Writing and Science, fit in before he leaves for the trainer.',
+        g:{jr:'Fast Math, Math, Writing, Science.',st:'Four stations, about 25 minutes each.',mom:'Baby time, short check-ins.'},
+        jr:jrLane(455,625),
+        st:J(['|Station 1: Movement learning','|Station 2: Table learning','|Station 3: Learning through play','|Station 4: Independent learning']),stations:true,
+        mom:[M(null,'Handle the baby. At each station change, give Sterling a short check-in.'),M('m_ugc_scrap','Tiny UGC step (10 minutes) if baby is settled',{mini:'Save one video idea or one brand to your list.',opt:true,nap:true})],free:'Your window: scraps of about 20 minutes'});
+      L.push({id:'leave',title:'Out the Door',t:[625,tr],lede:'Pack, eat the pre-training meal, leave for the trainer.',
+        g:{jr:'Pack gear, pre-training food.',st:'Clean up, bathroom, lunch.',mom:'Pack the bag, baby prep, leave.'},
+        jr:jrLane(625,tr),
+        st:J(['|Clean up toys','|Bathroom','|Lunch']),
+        mom:[M(null,'Baby prep and a quick diaper check'),M('m_bag','Pack the bag: diaper bag, snacks, water, chargers, phone or laptop for UGC'),M(null,'Leave by '+fmt(lv))]});
+      L.push({id:'train',title:'Training Window',t:[tr,hm],lede:'Jr trains. Sterling burns energy nearby. This is your UGC window.',
+        g:{jr:'Train, drive home.',st:'Run, jump, throw, then quiet play.',mom:'Phone UGC block while you supervise.'},
+        jr:jrLane(tr,hm),
+        st:J(['|Activity time near training: running, skipping, jumping, hopping, throwing, catching, kicking, balance, playground, obstacle course','|After movement: books, coloring, puzzles, flash cards, snack, quiet play']),
+        stIdeas:'Mix learning in: count his jumps, call out colors while running, find letters on signs, count steps, throw the ball five times, hop to a number.',
+        mom:[M('m_film_train','Film one clip in the best daylight if the setting works',{mini:'Film one 10 second clip.',opt:true,nap:true}),M('m_ugc_train','Phone UGC block (45 to 60 minutes): brand research, outreach emails, script',{mini:'Send one outreach message.',nap:true}),M(null,'Keep Sterling and the baby fed and watered')],free:'Your window: phone-based, in daylight'});
+      L.push({id:'home',title:'Home and Academics',t:[hm,chS],lede:'Lunch and recovery, then Reading, Language and the correction block.',
+        g:{jr:'Lunch, Reading, Language, correction.',st:'Bathroom, settle, snack, quiet learning.',mom:'Baby sets the timing. Move the laundry.'},
+        jr:jrLane(hm,chS),
+        st:J(['|Bathroom and settle down','|Snack','|Quiet learning: books, tracing, coloring, puzzles, blocks, flash cards']),
+        mom:[M(null,'Baby needs set the timing here'),M('m_laundry2','Move the laundry: washer to dryer, or dryer to basket',{mini:'Just get the wet load into the dryer.'}),M(null,'If the baby seems sleepy, let the baby sleep and tap Asleep')]});
+      L.push({id:'chores',title:'Chores and Dinner',t:[chS,acS],lede:'The chore block, then dinner runs later tonight on a training day.',
+        g:{jr:'Household responsibility, then dinner.',st:'Toys, room, hamper, dinner.',mom:'Cook dinner while he finishes his chore.'},
+        jr:jrLane(chS,acS),
+        st:J(['|Put toys away','|Clean bedroom','|Dirty clothes in the hamper','|Help wipe the eating area','|Dinner','|Creative play or independent activity']),
+        mom:[M('m_dinner','Cook dinner while he finishes his chore',{mini:'Reheat or assemble something simple: sheet pan, slow cooker, or leftovers.'}),M(null,'Baby stays with you')]});
+      L.push({id:'reading',title:'Accountability and Reading',t:[acS,frS],lede:'His accountability reflection, then independent reading.',
+        g:{jr:'Accountability, independent reading.',st:'Wind down, quiet play.',mom:'A partial reset. About 30 minutes for you.'},
+        jr:jrLane(acS,frS),
+        st:J(['|Quiet play: books, blocks, coloring, puzzles']),
+        mom:[M('m_mom30','Your 30: edit a clip, plan tomorrow, or just rest.',{opt:true,nap:true})],free:'Your window: about 30 minutes'});
+      L.push({id:'reset',title:'Family Time and Bedtime',t:[frS,1261],lede:'Family time can absorb a reasonable delay from earlier in the day, then prep for tomorrow and bed.',
+        g:{jr:'Family time, prepare for tomorrow, bedtime.',st:'Family time, bedtime.',mom:'Your walk if not done, two bedtimes.'},
+        jr:jrLane(frS,1261),
+        st:J(['|Family activity or family TV if responsibilities are done','|Bedtime']),
+        mom:[M('m_walk','Walk 20 to 30 minutes if you have not already: outside with the baby, or the walking pad at home',{mini:'Ten minutes on the walking pad counts.',opt:true}),M(null,'Sterling bedtime'),M(null,'Baby bedtime routine'),M('m_hair','Night hair protection: bonnet or loose braid',{opt:true})]});
+    }else{
+      var eq=jbAt(JB,'equip',935),arr=jbAt(JB,'leave',955)+(S.jr.gameDrive||35),ko=jbAt(JB,'kickoff',1050);
+      Object.assign(L[0],{title:'Wake Up and Ready',t:[360,455],lede:'Quick wake up, light mobility only today, shower, breakfast.',
+        g:{jr:'Wake, mobility, shower, breakfast.',st:'Up, dressed, toys, dog, movement, breakfast.',mom:'Baby first, laundry, family breakfast.'},
+        jr:jrLane(360,455),
+        st:J(['6:00|Wake up and help make the bed','6:05|Brush teeth','6:05|Wash face','6:20|Get dressed','6:20|Put pajamas away','6:20|Pick up toys','6:30|Help Junior feed the dog','6:40|Morning movement: jumping, hopping, running in place, balance, bear crawls, simple stretching','7:00|Breakfast','7:30|Clean up after breakfast']),
+        mom:[M('m_baby_am','Baby: diaper, feed, calm reset (baby may still be sleeping)'),M('m_laundry1','Start one load of laundry',{mini:'Move clothes from the hamper to the washer. That counts.'}),M(null,'Family breakfast at 7:00'),M('m_eat','Eat something with protein yourself')]});
+      Object.assign(L[1],{title:'Academics',t:[455,670],lede:'Fast Math, Math, Writing and Science. Keep it calm, it is a game day.',
+        g:{jr:'Fast Math, Math, Writing, Science.',st:'Four stations, about 25 minutes each.',mom:'Baby time, short check-ins.'},
+        jr:jrLane(455,670),
+        st:J(['|Station 1: Movement learning','|Station 2: Table learning','|Station 3: Learning through play','|Station 4: Independent learning']),stations:true,
+        mom:[M(null,'Handle the baby. At each station change, give Sterling a short check-in.'),M('m_ugc_scrap','Tiny UGC step (10 minutes) if baby is settled',{mini:'Save one video idea or one brand to your list.',opt:true,nap:true})],free:'Your window: scraps of about 20 minutes'});
+      L.push({id:'math',title:'Lunch, Reading and Recovery',t:[670,eq],lede:'Language, lunch, reading, history, then quiet recovery and the pregame meal. No electronics during recovery.',
+        g:{jr:'Language, lunch, reading, history, recovery, pregame meal.',st:'Lunch, then quiet play.',mom:'Baby time, keep the house calm before the game.'},
+        jr:jrLane(670,eq),
+        st:J(['|Lunch','|Quiet play: books, blocks, coloring, puzzles','|Movement break']),
+        mom:[M(null,'Handle the baby, keep lunch simple'),M('m_ugc_nap','UGC power hour if the baby sleeps',{mini:'Film one 15 second clip.',opt:true,nap:true})]});
+      L.push({id:'leave',title:'Equipment and Leave',t:[eq,arr],lede:'Touch every piece of gear before it leaves the house, then drive to the game.',
+        g:{jr:'Equipment check, leave for the game.',st:'Come along or stay with a sitter.',mom:'Double-check the gear, pack snacks and water.'},
+        jr:jrLane(eq,arr),
+        st:J(['|Get ready to go','|Bathroom before the drive']),
+        mom:[M(null,'Double-check equipment before you leave the house'),M('m_bag','Pack snacks, water, chargers, phone for filming')]});
+      L.push({id:'train',title:'Kickoff',t:[arr,ko+180],lede:'At the game. Cheer, film if you can, and let him play.',
+        g:{jr:'Play the game.',st:'Watch and stay busy on the sideline.',mom:'Film if you can, cheer loud.'},
+        jr:jrLane(arr,ko+180),
+        st:J(['|Watch the game','|Quiet activity between plays if he needs it']),
+        mom:[M('m_film_game','Film a clip or two if you get the chance',{opt:true})]});
+      L.push({id:'home',title:'After the Game',t:[ko+180,1261],lede:'Home, hydrate, eat, shower, gear away, and straight to sleep. No late makeup work tonight.',
+        g:{jr:'Travel home, food, shower, sleep.',st:'Wind down, bedtime.',mom:'Get everyone fed and down.'},
+        jr:jrLane(ko+180,1261),
+        st:J(['|Wind down','|Bedtime']),
+        mom:[M(null,'Get everyone fed, showered, and down for the night'),M(null,'Equipment put away so tomorrow is not a scramble')]});
+    }
   }else if(sun){
     var nf=NFLS[c.date]||null;
     var nfNotes=[{b:'Football today',t:'Early games 12:00 PM Central. Late games 3:05 and 3:25 PM. Sunday night 7:20 PM'+(nf&&nf.snf?' ('+nf.snf+')':'')+'.'}];
@@ -553,8 +622,8 @@ function chapters(c){
       st:J(['|Check your room: bed made, toys in the bins','|Check the upstairs living room: toys and blankets put away']).concat([{tm:'',t:'Bonus if everyone finishes early: help with '+tz,opt:true}]),
       mom:[M('m_team','Walk through: beds, rooms, bathrooms, kitchen and living room'),M(null,'Thank everyone before kickoff')]});
     L.push({id:'football',title:'Football Time',t:[720,990],lede:'The house is clean. Kickoff at 12:00 PM Central, relaxed afternoon, meals on time.',notes:nfNotes,
-      g:{jr:'Rest. Watch football. Meal 4.',st:'Movement breaks, quiet play, some football.',mom:'Film in daylight, start dinner, or rest.'},
-      jr:J(['|Watch football with the family','|Meal 4']).concat([{tm:'',t:'Finish any missing school assignments (only if there are any)',opt:true}]),
+      g:{jr:'Lunch, weekly reading and review, week prep, rest of the day.',st:'Movement breaks, quiet play, some football.',mom:'Film in daylight, start dinner, or rest.'},
+      jr:jrLane(720,990),
       st:J(['|Movement break: run, jump, hop between plays or at halftime','|Books, coloring, or quiet play','|Watch part of the game']),
       mom:[M('m_ugc_wk','Film in your best daylight (outside or by a bright window)',{mini:'Film one 15 second clip.',nap:true}),
            M('m_dinner','Start dinner during the game (start at 4:30, eat around 5:00)',{mini:'Reheat or assemble something simple: sheet pan, slow cooker, or leftovers.'}),
@@ -568,53 +637,42 @@ function chapters(c){
     var missing={tm:'',t:'Finish any missing school assignments (only if there are any)',opt:true};
     if(!morn){
       L.push({id:'satchores',title:'Saturday Chores',t:[540,600],lede:'Knock out the chores for the day before the games start.',
-        g:{jr:'Laundry, dishes, counters, floors, lawn.',st:'Toys, room, hamper, help wipe.',mom:'Laundry and whatever the day needs.'},
-        jr:J(['|Laundry as assigned','|Dishes','|Clean kitchen counters','|Sweep and mop the kitchen','|Sweep and mop the dining room','|Mow the lawn','|Meal 2 when it is time']),
+        g:{jr:'Room, laundry, cleaning, weakest subject.',st:'Toys, room, hamper, help wipe.',mom:'Laundry and whatever the day needs.'},
+        jr:jrLane(540,600),
         st:J(['|Put toys away','|Clean bedroom','|Dirty clothes in the hamper','|Help wipe the eating area','|Help Junior with simple chores']),
         mom:[M('m_laundry_sat','Move the laundry along: wash, dry, fold one basket',{mini:'Just get one load moving.'}),M(null,'Any other chore the day needs (use the add box below)'),M(null,'Baby stays with you')]});
-      L.push({id:'games',title:'Games and Cleaning',t:[600,660],lede:'Family games, plus a quick clean-up before kickoff at 11:00.',
-        g:{jr:'Family games, then reset the space.',st:'Play the game, pick up toys.',mom:'Join in, finish any chore left.'},
-        jr:J(['|Family games: board games, card games, puzzles','|Quick clean-up: everything off the floor before kickoff']),
+      L.push({id:'games',title:'Games and Cleaning',t:[600,660],lede:'Weakest subject and a break, plus a quick clean-up before kickoff at 11:00.',
+        g:{jr:'Weakest subject, break.',st:'Play the game, pick up toys.',mom:'Join in, finish any chore left.'},
+        jr:jrLane(600,660),
         st:J(['|Play the family game (with help)','|Pick up toys before kickoff']),
         mom:[M(null,'Join the family games'),M(null,'Finish any chore left before 11:00')]});
       L.push({id:'kickoff',title:'Football Time',t:[660,hasUfc?F:990],lede:hasUfc?'Kickoff at 11:00. Football until the UFC prelims start.':'Kickoff at 11:00. Settle in, meals on time, movement breaks.',
-        g:{jr:hasUfc?'Rest. Watch football. Meal 3.':'Rest. Watch football. Meals 3 and 4.',st:'Movement breaks, quiet play, some football.',mom:'Film in your best daylight, or rest.'},
-        jr:J(['|Watch football with the family','|Meal 3']).concat(hasUfc?[]:J(['|Meal 4']),[missing]),
+        g:{jr:'Second weakest subject, reading, lunch, life skills, afternoon.',st:'Movement breaks, quiet play, some football.',mom:'Film in your best daylight, or rest.'},
+        jr:jrLane(660,hasUfc?F:990),
         st:J(['|Movement break: run, jump, hop between plays or at halftime','|Books, coloring, or quiet play','|Watch part of the game']),
         mom:[ugcItem].concat(hasUfc?[]:[dinnerItem],[M(null,'Baby feeds and naps set the pace')]),free:'Your window: late morning into early afternoon, best light'});
     }
     if(hasUfc){
       L.push(morn?{id:'ufc',title:'UFC Morning Card',t:[F,990],lede:ufTxt+' Football kicks off at 11:00 too, so pick what is on.',
-        g:{jr:'Fights, chores between fights, meals.',st:'Quiet play, movement breaks.',mom:'Daylight filming, dinner, laundry.'},
-        jr:J(['|Watch the fights with the family','|Chores between fights: laundry, dishes, counters, sweep and mop, mow the lawn','|Meal 2','|Meal 3','|Meal 4']).concat([missing]),
+        g:{jr:'Fights, chores and study between fights.',st:'Quiet play, movement breaks.',mom:'Daylight filming, dinner, laundry.'},
+        jr:jrLane(F,990),
         st:J(['|Put toys away, clean bedroom, dirty clothes in the hamper','|Movement break between fights','|Books, coloring, or quiet play']),
         mom:[ugcItem,dinnerItem,M('m_laundry_sat','Move the laundry along: wash, dry, fold one basket',{mini:'Just get one load moving.'}),M(null,'Baby feeds and naps set the pace')]}
       :{id:'ufc',title:'UFC Time',t:[F,990],lede:ufTxt,
-        g:{jr:'Meal 4, then UFC or quiet time.',st:'Quiet play and movement breaks.',mom:'Start dinner during the fights.'},
-        jr:J(['|Meal 4','|UFC prelims with the family, or reading and puzzles if you would rather']),
+        g:{jr:'Whatever is left of the day, then UFC or quiet time.',st:'Quiet play and movement breaks.',mom:'Start dinner during the fights.'},
+        jr:jrLane(F,990),
         st:J(['|Quiet play: books, blocks, coloring, puzzles','|Movement break between fights']),
         mom:[dinnerItem,M(null,'Baby needs set the pace')]});
     }
   }
-  if(wd){
-  L.push({id:'quiet',title:'Quiet Learning',t:[870,945],lede:'A quiet learning block. Whenever the baby sleeps, the whole house goes quiet.',
-    g:{jr:wd?'Essay block, then reading or math.':'Reading or catch-up.',st:'Quiet learning, movement if baby wakes.',mom:'Your UGC hour, whenever the baby sleeps.'},
-    jr:J(wd?['2:30|Essay block: '+(ESSAY[c.dow]||'Pick up where the week left off'),'3:15|Reading or additional math']:['2:30|Reading or catch-up work','3:15|Reading or additional math']),
-    st:J(['2:30|Quiet learning: books, tracing, coloring, puzzles, blocks, flash cards, matching games, simple worksheets','3:15|Baby awake: back to movement learning. Baby asleep: keep going with quiet learning']),
-    mom:[M('m_ugc_nap','UGC power hour: film near a bright window or outside, or edit and script',{mini:'Film one 15 second clip or edit one scene.',nap:true}),M(null,'Help the boys as you are available')],free:'Your window opens whenever the baby sleeps. Tap Asleep.'});
-  var chores=['3:45|Laundry as assigned','|Dishes','|Clean kitchen counters','|Sweep kitchen','|Mop kitchen','|Sweep dining room','|Mop dining room','|Clean and organize your bedroom'];
-  if(sat)chores.push('|Mow the lawn');
-  L.push({id:'chores',title:'Chores',t:[945,990],lede:'The boys run the chores while you cook.',
-    g:{jr:'Laundry, dishes, counters, sweep, mop, room.',st:'Toys, room, hamper, help wipe.',mom:'Cook dinner while they work.'},
-    jr:J(chores),
-    st:J(['3:45|Put toys away','|Clean bedroom','|Dirty clothes in the hamper','|Help wipe the eating area','|Put plate and cup away','|Help Junior with simple chores']),
-    mom:[M('m_dinner','Cook dinner while the boys do chores (start at 4:30, eat around 5:00)',{mini:'Reheat or assemble something simple: sheet pan, slow cooker, or leftovers.'}),M(null,'Baby stays with you')]});
+  if(!wd||jtStruct==='home'){
+    L.push({id:'dinner',title:'Dinner and Check',t:[990,1050],lede:wd?'Eat together, cooking starts now.':'Eat together, then reset one zone.',
+      g:{jr:'Dinner.',st:'Dinner, then creative play.',mom:'Family meal, then reset one zone.'},
+      jr:wd?jrLane(990,1050):J(['5:00|Meal 5']),
+      st:J(['5:00|Dinner','5:30|Creative play or independent activity']),
+      mom:[M(null,'Cooking starts at 4:30, family meal around 5:00'),M('m_reset_zone','Reset one zone for 20 minutes: office, laundry room, or a bedroom',{mini:'Set a 10 minute timer and clear the worst corner.'})]});
   }
-  L.push({id:'dinner',title:'Dinner and Check',t:[990,1050],lede:wd?'Eat together, then a quick school check for Jr.':'Eat together, then reset one zone.',
-    g:{jr:wd?'Meal 5, then XP and missing work check.':'Meal 5.',st:'Dinner, then creative play.',mom:'Family meal, then reset one zone.'},
-    jr:J(['5:00|Meal 5'].concat(wd?['5:30|Check school XP, missing assignments and unfinished work']:[])),
-    st:J(['5:00|Dinner','5:30|Creative play or independent activity']),
-    mom:[M(null,'Cooking starts at 4:30, family meal around 5:00'),M('m_reset_zone','Reset one zone for 20 minutes: office, laundry room, or a bedroom',{mini:'Set a 10 minute timer and clear the worst corner.'})]});
+  if(!wd){
   L.push({id:'reading',title:'Reading Time',t:[1050,1080],lede:'Jr reads, then helps Sterling for about 15 minutes.',
     g:{jr:'Reading, then teach Sterling.',st:'Picture books with Junior.',mom:'A partial reset. About 30 minutes for you.'},
     jr:J(['5:30|Reading','|About 15 minutes helping Sterling with letters, numbers, reading, shapes or colors']),
@@ -636,7 +694,29 @@ function chapters(c){
     jr:J(['8:00|Quiet time: reading only, no personal electronics','8:30|Brush teeth','8:30|Prepare clothes'].concat(trainTom?['8:30|Prepare training equipment']:[],['8:30|Final room check','9:00|Lights out'])),
     st:J(['8:00|Bedtime']),
     mom:[M(null,'8:00 Sterling bedtime'),M(null,'8:00 Baby bedtime routine'),M('m_walk_late','Missed your walk? 15 minutes on the walking pad after the bedtimes',{opt:true}),M('m_hair','Night hair protection: bonnet or loose braid',{opt:true}),M(null,'9:00 Jr lights out check')]});
+  }else if(jtStruct==='home'){
+  L.push({id:'reading',title:'Academic Correction and Reading',t:[1050,1145],lede:'Fix the weakest work first, then the accountability reflection and independent reading.',
+    g:{jr:'Correction, accountability, reading.',st:'Reading with Junior, then creative play.',mom:'A partial reset. About 30 minutes for you.'},
+    jr:jrLane(1050,1145),
+    st:J(['5:30|Reading: picture books with Junior (about 15 minutes)','|Creative play or independent activity']),
+    mom:[M('m_mom30','Your 30: edit a clip, plan tomorrow, or just rest. Or start your walk early on the walking pad.',{opt:true,nap:true}),M('m_reset_zone2','Reset one more zone for 20 minutes if the first is already done',{opt:true})],free:'Your window: about 30 minutes'});
+  L.push({id:'reset',title:'Room Reset, Walk and Bedtime',t:[1145,1260],lede:'Room reset, the walk window, family time, and bedtime, compressed into one stretch tonight.',
+    notes:[{b:'Walk',t:'Aim for 20 to 30 minutes, outside with the baby or on the walking pad at home. Dad can join. Any time before 9:00 works.'}],
+    g:{jr:'Room, gear, dog, prepare for tomorrow, bedtime.',st:'Toys, clothes, bed, dog, family time, bedtime.',mom:'Your walk, family time, two bedtimes.'},
+    jr:jrLane(1145,1261),
+    st:J(['6:00|Room reset: toys put away','|Clothes picked up','|Bedroom clean','|Bed ready','6:30|Help Junior feed the dog','7:00|Family activity or family TV if responsibilities are done','8:00|Bedtime']),
+    mom:[M('m_walk','Walk 20 to 30 minutes: outside with the baby, or the walking pad at home',{mini:'Ten minutes on the walking pad counts.'}),M(null,'Room inspection: a quick look at both rooms'),M(null,'Family activity, then confirm responsibilities before TV'),M(null,'8:00 Sterling bedtime'),M(null,'8:00 Baby bedtime routine'),M('m_walk_late','Missed your walk? 15 minutes on the walking pad after the bedtimes',{opt:true}),M('m_hair','Night hair protection: bonnet or loose braid',{opt:true})]});
+  }
   L.push({id:'close',title:'Close the Day',t:[1260,1440],lede:'Two minutes. Tell the book how it went so tomorrow can adjust.',g:{},jr:[],st:[],mom:[]});
+  if(jt==='sick'||jt==='travel'||jt==='special'){
+    var soleLines=jrLane(0,1440);
+    L.forEach(function(ch,i){
+      if(ch.id==='close')return;
+      ch.jr=i===0?soleLines:[];
+      ch.jrNote=null;
+      if(ch.g)ch.g.jr=i===0&&soleLines[0]?soleLines[0].t:'';
+    });
+  }
   if(!wd&&!sun&&typeof uf!=='undefined'&&uf){
     var shows=[['Early prelims',uf.ep],['Prelims',uf.p],['Main card',uf.mc]];
     L.forEach(function(ch){
@@ -748,7 +828,7 @@ function chapterHTML(ch){
     h+='<div class="note"><b>Time to eat:</b> '+esc(x.n)+', about '+x.kcal+' calories. '+esc(x.ex)+' <button class="pglink" data-a="eat" data-k="'+x.k+'">Ate it</button> <button class="pglink" data-a="goto" data-p="nut">Nutrition</button></div>'})}
   if(ch.teamPicker)h+='<div class="note"><b>Bonus shared area if everyone finishes early:</b> '+esc(TEAM[teamIndex()])+' <button class="btn primary" style="margin-left:6px;min-height:40px" data-a="teamzone">Pick another</button></div>';
   if(ch.id==='close')return h+closeHTML(ch);
-  ['mom','st'].forEach(function(k){h+=laneHTML(ch,k)});
+  LANES.forEach(function(k){h+=laneHTML(ch,k)});
   return h;
 }
 function closeHTML(ch){
@@ -777,7 +857,6 @@ function tocHTML(){
   else if(d.gentle===false)h+='<div class="banner"><b>Full day</b>You switched back to the full plan. <button class="btn" data-a="gentle" data-v="1">Go gentle instead</button></div>';
   h+=calCardHTML();
   h+=fuelCardHTML();
-  h+=jrCardHTML();
   h+=tvCardHTML();
   var bd=st.filter(function(x){return d.done[x.id]}).length;
   h+='<div class="card big mom"><h3>'+(st.length===3?'Your Big 3':'Your must-dos')+'</h3><p class="sub">'+bd+' of '+st.length+' done. Do these first. Tap the star on any task to add or remove it.</p>';
@@ -794,7 +873,7 @@ function tocHTML(){
   h+='</div><h3 class="shh">Back of the book</h3><div class="toc" style="margin-top:6px">';
   var tn=tonight(),ud=ugcDue().length,evn=eventsOn(ymd()).length;
   function brow(p,tt,ttl,sub){return '<button class="trow" data-a="goto" data-p="'+p+'"><span class="tt">'+tt+'</span><span class="ttl">'+ttl+(sub?'<span class="sub">'+esc(sub)+'</span>':'')+'</span><span class="prog"></span></button>'}
-  h+=brow('cal','Plan','Calendar',evn?evn+' event'+(evn===1?'':'s')+' today':'Appointments and plans')+brow('meals','Dinner','Meals','Tonight: '+tn.n)+brow('nut','Fuel','Nutrition',nutTocSub())+brow('jr','Jr','Jr schedule',jrTocSub())+brow('move','Move','Move',todayMove().n+(d.moved?' (done)':''))+brow('ugc','Work','UGC Desk',ud?ud+' follow-up'+(ud===1?'':'s')+' due':(S.ugc.length?S.ugc.length+' brand'+(S.ugc.length===1?'':'s'):'Brands and contacts'))+brow('recap','Week','Recap and journal','')+brow('sched','TV','Fights and football','Every UFC card and NFL Sunday, in Central time')+brow('setup','App','Set up','Save to your phone and back up')+'</div>';
+  h+=brow('cal','Plan','Calendar',evn?evn+' event'+(evn===1?'':'s')+' today':'Appointments and plans')+brow('meals','Dinner','Meals','Tonight: '+tn.n)+brow('nut','Fuel','Nutrition',nutTocSub())+brow('jr','Jr','Jr settings','Day type, trainer, and the 14-day reset')+brow('move','Move','Move',todayMove().n+(d.moved?' (done)':''))+brow('ugc','Work','UGC Desk',ud?ud+' follow-up'+(ud===1?'':'s')+' due':(S.ugc.length?S.ugc.length+' brand'+(S.ugc.length===1?'':'s'):'Brands and contacts'))+brow('recap','Week','Recap and journal','')+brow('sched','TV','Fights and football','Every UFC card and NFL Sunday, in Central time')+brow('setup','App','Set up','Save to your phone and back up')+'</div>';
   h+='<div class="seg" role="group" aria-label="Type of day"><button data-a="daytype" data-v="school" aria-pressed="'+ctxFor(ymd()).wd+'">School day</button><button data-a="daytype" data-v="weekend" aria-pressed="'+(!ctxFor(ymd()).wd)+'">Weekend</button></div>';
   return h;
 }
@@ -808,7 +887,6 @@ function recapHTML(){
   h+=walkCard(days);
   h+=moveCard(days);
   h+=nutCard(days);
-  h+=jrCard(days);
   h+=napCard();
   var notes=Object.keys(S.days).filter(function(k){return S.days[k].note}).sort().reverse().slice(0,7);
   h+='<h3 style="font-family:var(--serif);font-size:19px;margin:18px 0 4px">Journal</h3>';
@@ -1188,11 +1266,34 @@ var UST=[['idea','Want to pitch'],['reached','Reached out'],['talks','In talks']
 var UORD={deal:0,talks:1,reached:2,idea:3,done:4,pass:5};
 var ugcF='all',ugcEdit=null;
 function ustLabel(k){for(var i=0;i<UST.length;i++)if(UST[i][0]===k)return UST[i][1];return k}
+/* ================= UGC brand and platform leads (reference directory) ================= */
+var LEAD_CATS=[['all','All'],['match','Marketplaces that match you to campaigns'],['profile','You build a profile, brands book you'],['platform','Built into an app you already use'],['family','Family and lifestyle focused']];
+var UGC_LEADS=[
+  {name:'Billo',cat:'match',url:'billo.app',desc:'Short-form product videos for ecommerce brands.',note:'Free to join, no follower minimum. Brands pick submissions and pay per video.'},
+  {name:'JoinBrands',cat:'match',url:'joinbrands.com',desc:'High-volume marketplace for product photos, videos and social posts.',note:'Free to join. About a 20% platform fee on earnings. Certifications unlock more jobs.'},
+  {name:'Trend',cat:'match',url:'trend.io',desc:'Curated network producing ad-ready videos, photos and product demos.',note:'Free to join, pay-per-video or photo, no subscription. Full licensing rights go to the brand.'},
+  {name:'Insense',cat:'match',url:'insense.pro',desc:'UGC, influencer, product seeding and affiliate campaigns for ecommerce brands.',note:'Free for creators. Portfolio review required, rates are negotiable.'},
+  {name:'Aspire',cat:'match',url:'aspire.io',desc:'Connects creators with 800+ brands for sponsored content, UGC, seeding and affiliate offers.',note:'Free, no creator commission. Browse open opportunities or get invited directly.'},
+  {name:'Cohley',cat:'match',url:'cohley.com',desc:'Vetted network doing UGC photos, videos, reviews and product seeding.',note:'Portfolio review required, then apply to individual briefs. About a 2.9% payment processing fee.'},
+  {name:'Social Cat',cat:'match',url:'social-cat.com',desc:'Matches Instagram and TikTok creators with smaller, local brands.',note:'Requires roughly 3,000+ followers and 100 posts. Collaborations can be gifted, affiliate, or paid.'},
+  {name:'Minisocial',cat:'match',url:'minisocial.io',desc:'Invites qualified creators to campaigns that match their profile.',note:'Free to join, no job-board applying. You get sent the product and a creative brief.'},
+  {name:'#paid',cat:'match',url:'letspaid.com',desc:'Open opportunities and profile matching for sponsored content and UGC.',note:'Free to join, you set your own rate. The platform handles contracts and payment.'},
+  {name:'Collabstr',cat:'profile',url:'collabstr.com',desc:'Build a creator profile, set your own package prices, brands book you directly.',note:'Free to list, about a 15% fee on payouts. Profile needs approval before it is visible.'},
+  {name:'Fiverr',cat:'profile',url:'fiverr.com',desc:'General freelance marketplace where you list UGC video packages at your own prices.',note:'Free to join, Fiverr takes about 20% of earnings.'},
+  {name:'Upwork',cat:'profile',url:'upwork.com',desc:'Freelance platform for one-off UGC projects or longer brand contracts.',note:'Free to join, service fees roughly 0 to 15% depending on the contract.'},
+  {name:'Statusphere',cat:'family',url:'joinstatus.com',desc:'Micro-influencer and UGC platform that matches everyday creators with product-for-content deals.',note:'Free to join. A strong fit for family, home, and lifestyle content, not just huge followings.'},
+  {name:'TikTok One',cat:'platform',url:'tiktok.com',desc:"TikTok's own brand-deal hub, reachable from TikTok Studio (replaced the old TikTok Creator Marketplace).",note:'Must be 18+. No follower minimum. Browse open campaigns and apply; brands can also invite you.'},
+  {name:'Amazon Influencer Program',cat:'platform',url:'amazon.com/influencer',desc:'Build a shoppable storefront on Amazon and earn commission on products you feature.',note:'Typically wants an engaged following (roughly 1,000+) on one social account, plus a few review videos to unlock full commission.'}
+];
+var ugcLeadF='all';
 function ugcDue(){var t=ymd();return S.ugc.filter(function(u){return u.follow&&u.follow<=t&&u.st!=='pass'})}
 function ugcRowHTML(u){
   var t=ymd(),due=u.follow&&u.follow<=t&&u.st!=='pass',armed=delArm==='u'+u.id;
   var line=[u.contact,u.deal].filter(Boolean).map(esc).join(' · ');
   return '<div class="evrow"><div class="evt"><b>'+esc(u.name)+'</b><span><span class="pill">'+esc(ustLabel(u.st))+'</span>'+(due?' <span class="pill due">Follow up now</span>':'')+'</span>'+(line?'<span>'+line+'</span>':'')+(u.follow?'<span>Follow up: '+esc(lbl(u.follow))+'</span>':'')+(u.notes?'<em>'+esc(u.notes)+'</em>':'')+'</div><div class="acts"><button class="btn" data-a="ugcfu" data-id="'+u.id+'">Followed up</button><button class="btn" data-a="ugcedit" data-id="'+u.id+'">Edit</button><button class="btn" data-a="ugcdel" data-id="'+u.id+'">'+(armed?'Tap again to delete':'Delete')+'</button></div></div>'}
+function leadRowHTML(u){
+  var already=S.ugc.some(function(x){return x.name.toLowerCase()===u.name.toLowerCase()});
+  return '<div class="evrow"><div class="evt"><b>'+esc(u.name)+'</b><span><span class="pill">'+esc((LEAD_CATS.filter(function(c){return c[0]===u.cat})[0]||['',''])[1])+'</span></span><span>'+esc(u.desc)+'</span><em>'+esc(u.note)+'</em></div><div class="acts"><a class="btn" href="https://'+esc(u.url)+'" target="_blank" rel="noopener">Visit '+esc(u.url)+'</a><button class="btn'+(already?'':' primary')+'" data-a="leadadd" data-name="'+esc(u.name)+'">'+(already?'On your list':'Add to my list')+'</button></div></div>'}
 function ugcHTML(){
   var t=ymd(),due=ugcDue(),ed=null;
   if(ugcEdit)for(var i=0;i<S.ugc.length;i++)if(S.ugc[i].id===ugcEdit)ed=S.ugc[i];
@@ -1213,6 +1314,9 @@ function ugcHTML(){
     '<label for="u_notes">Notes</label><input id="u_notes" type="text" value="'+esc(v.notes)+'" placeholder="Products, ideas, deadlines">'+
     '<button class="btn primary full" style="margin-top:12px" data-a="ugcsave">'+(ed?'Save changes':'Save brand')+'</button>'+(ed?'<button class="btn full" style="margin-top:8px" data-a="ugccancel">Cancel</button>':'')+'</div></details>';
   h+='<details class="rec" data-k="ugctmpl" id="rec_ugctmpl"'+(recOpen.ugctmpl?' open':'')+'><summary><span class="rn">Message starters</span><span class="rm">For reaching out and following up</span></summary><div class="rbody"><h4>First message</h4><p class="rtip" style="color:var(--ink)">Hi [name], I am Devon, a UGC creator. I have used [product] and would love to make a short video for [brand]. I can send a few ideas and my rates. Would you be open to that?</p><h4>Follow-up, 3 to 5 days later</h4><p class="rtip" style="color:var(--ink)">Hi [name], just checking in on my note about [product]. I would be happy to send a sample video or a quick idea list.</p><h4>After a yes</h4><p class="rtip" style="color:var(--ink)">Thank you. To get started, can you confirm the deliverables, the deadline and the usage terms?</p></div></details>';
+  h+='<h3 class="shh">Brand and platform leads</h3><p class="lede">Real companies and platforms that work with UGC creators, to browse whenever you want more pipeline. Programs and terms change, so double-check details on their site before you apply.</p>';
+  h+='<div class="fchips" role="group" aria-label="Filter leads">'+LEAD_CATS.map(function(c){return '<button class="fchip" data-a="leadf" data-v="'+c[0]+'" aria-pressed="'+(ugcLeadF===c[0])+'">'+c[1]+'</button>'}).join('')+'</div>';
+  h+=UGC_LEADS.filter(function(u){return ugcLeadF==='all'||u.cat===ugcLeadF}).map(leadRowHTML).join('');
   return h}
 
 /* ================= install ================= */
@@ -1449,6 +1553,8 @@ function jrResetDays(){
   var st=new Date(S.jr.resetStart+'T00:00:00'),now=new Date(ymd()+'T00:00:00');
   var n=Math.floor((now-st)/86400000)+1;return n}
 function B(id,t,d,n,s,fixed){return {id:id,t:t,d:d,n:n,s:s||'',fixed:!!fixed}}
+function jbAt(JB,id,fb){for(var i=0;i<JB.length;i++)if(JB[i].id===id)return JB[i].t;return fb}
+function jbLines(JB,t0,t1){return JB.filter(function(b){return b.t>=t0&&b.t<t1}).map(function(b){return {tm:fmt(b.t),t:b.n+(b.s?': '+b.s:'')}})}
 function jrBlocks(){
   var ctx=ctxFor(ymd()),dow=ctx.dow,type=jrType(),n=S.jr,L=[];
   if(type==='sick')return [B('rest',420,660,'Sick day','Rest, fluids, light reading if he feels up to it. No training, no heavy academics. Call it early and protect sleep.')];
@@ -1542,14 +1648,14 @@ function jrBlocks(){
     L=[
       B('wake',420,30,'Wake up','Bathroom, hygiene, make the bed, get dressed. One extra hour of sleep.'),
       B('bfast',450,30,'Breakfast',''),
-      B('clean',480,60,'Room, laundry and deep clean','Start high and work down: dust, surfaces, floor, trash, laundry washed and put away.'),
-      B('weak1',540,60,'Weakest subject: '+(n.weak1||'Math'),'Whatever the week showed was weakest gets the attention, not what is easiest.'),
-      B('break1',600,15,'Break',''),
-      B('weak2',615,45,'Second weakest subject: '+(n.weak2||'Writing'),''),
-      B('reading',660,45,'Reading',''),
-      B('lunch',705,45,'Lunch',''),
-      B('life',750,45,'Life skills','Cooking, laundry, budgeting basics, organization, first aid, time management. Rotate topics week to week.'),
-      B('after',795,60,'Afternoon','Football development, recovery, volunteering, youth group, family activities, or a household project. No recreational electronics tonight during the reset.')
+      B('clean',540,60,'Room, laundry and deep clean','Start high and work down: dust, surfaces, floor, trash, laundry washed and put away.'),
+      B('weak1',600,60,'Weakest subject: '+(n.weak1||'Math'),'Whatever the week showed was weakest gets the attention, not what is easiest.'),
+      B('break1',660,15,'Break',''),
+      B('weak2',675,45,'Second weakest subject: '+(n.weak2||'Writing'),''),
+      B('reading',720,45,'Reading',''),
+      B('lunch',765,45,'Lunch',''),
+      B('life',810,45,'Life skills','Cooking, laundry, budgeting basics, organization, first aid, time management. Rotate topics week to week.'),
+      B('after',855,60,'Afternoon','Football development, recovery, volunteering, youth group, family activities, or a household project. No recreational electronics tonight during the reset.')
     ];
     return L}
   L=[
@@ -1599,9 +1705,9 @@ function jrResetHTML(){
   h+='<p class="rtip">Honesty rule: a mistake plus the truth, told before it is found, is different from a mistake plus a lie. Honesty does not erase consequences, but it matters.</p></div>';
   return h}
 function jrHTML(){
-  var d=D(),n=S.jr,type=jrType(),L=jrBlocks(),done=jrDone(L),now=jrNow(L),nx=jrNext(L),dow=ctxFor(ymd()).dow;
-  var h='<div class="ptop"><span class="eyebrow">Back pages</span>'+babyToggle()+'</div><div class="ptitle"><div class="time">Jr</div><h2 class="title">Jr\'s Day</h2><p class="lede">His schedule, one day at a time. Tap a step to mark it done.</p></div>';
-  h+='<div class="card tonight"><h3>'+esc(JR_TYPES.filter(function(x){return x[0]===type})[0][1])+'</h3><p class="sub">'+done+' of '+L.length+' steps done</p>';
+  var d=D(),n=S.jr,type=jrType(),L=jrBlocks(),now=jrNow(L),nx=jrNext(L),dow=ctxFor(ymd()).dow;
+  var h='<div class="ptop"><span class="eyebrow">Back pages</span>'+babyToggle()+'</div><div class="ptitle"><div class="time">Jr</div><h2 class="title">Jr\'s Settings</h2><p class="lede">Day type, trainer, game timing, and the 14-day reset. His tasks show up in the book itself, right alongside Mom\'s and Sterling\'s.</p></div>';
+  h+='<div class="card tonight"><h3>'+esc(JR_TYPES.filter(function(x){return x[0]===type})[0][1])+'</h3>';
   if(now)h+='<p class="sub" style="color:var(--ink)">Right now: <b>'+esc(now.n)+'</b>'+(now.s?' — '+esc(now.s):'')+'</p>';
   else if(nx)h+='<p class="sub" style="color:var(--ink)">Next: <b>'+esc(nx.n)+'</b> at '+fmt(nx.t)+'</p>';
   else h+='<p class="sub">Day is done, or nothing is scheduled.</p>';
@@ -1622,10 +1728,6 @@ function jrHTML(){
       '<label for="jr_dr">Drive time, minutes</label><input id="jr_dr" type="number" inputmode="numeric" value="'+n.trainDrive+'">'+
       '<button class="btn primary full" style="margin-top:12px" data-a="jrtrainsave">Save trainer details</button></div></details>';
   }
-  h+='<h3 class="shh">Today\'s schedule</h3>';
-  h+=L.map(jrRow).join('');
-  if((d.jrCustom||[]).length)h+=d.jrCustom.map(function(c){var s=(d.jrb&&d.jrb['c'+c.id])||'';return '<div class="it mom"><button class="chk" data-a="jrcyc" data-id="c'+c.id+'" aria-pressed="'+(s==='done')+'"><span class="box"></span><span class="txt">'+esc(c.t)+(s&&s!=='done'?' <small style="color:var(--muted)">('+jrStatusLabel(s)+')</small>':'')+'</span></button><button class="pglink" data-a="jrdeltask" data-id="'+c.id+'">'+(delArm==='jrt'+c.id?'Tap again':'Remove')+'</button></div>'}).join('');
-  h+='<div class="add"><input id="jr_task" type="text" placeholder="Add a task for today" aria-label="Add a task for today"><button class="btn" data-a="jraddtask">Add</button></div>';
   if(type==='home'||type==='trainer'){
     h+='<details class="rec" data-k="jrchore" id="rec_jrchore"'+(recOpen.jrchore?' open':'')+'><summary><span class="rn">Assign the responsibility</span><span class="rm">'+esc(d.jrChore||jrChoreSuggest())+'</span></summary><div class="rbody form"><label for="jr_chore">Today\'s job</label><input id="jr_chore" type="text" value="'+esc(d.jrChore||'')+'" placeholder="'+esc(jrChoreSuggest())+'"><button class="btn primary full" style="margin-top:12px" data-a="jrchoresave">Save</button></div></details>';
     h+='<details class="rec" data-k="jracc" id="rec_jracc"'+(recOpen.jracc?' open':'')+'><summary><span class="rn">Accountability: '+esc(JR_ACC[dow]||'Reflection')+'</span><span class="rm">His written answer, if he did it</span></summary><div class="rbody"><textarea id="jr_note" placeholder="What decision did he make, and what will he do differently?">'+esc(d.jrNote||'')+'</textarea><button class="btn full" style="margin-top:8px" data-a="jrnotesave">Save</button></div></details>';
@@ -1807,6 +1909,13 @@ Object.assign(A,{
   ugccancel:function(){ugcEdit=null;recOpen.ugcform=false;refresh()},
   ugcfu:function(t){S.ugc.forEach(function(u){if(u.id===t.dataset.id)u.follow=addD(ymd(),7)});CH=null;refresh();toast('Next follow-up in a week')},
   ugcdel:function(t){var id=t.dataset.id;if(delArm==='u'+id){S.ugc=S.ugc.filter(function(u){return u.id!==id});delArm=null;CH=null;refresh();toast('Deleted')}else{armDel('u'+id)}},
+  leadf:function(t){ugcLeadF=t.dataset.v;refresh()},
+  leadadd:function(t){
+    var name=t.dataset.name;if(!name)return;
+    if(S.ugc.some(function(u){return u.name.toLowerCase()===name.toLowerCase()})){toast('Already on your list');return}
+    var lead=UGC_LEADS.filter(function(u){return u.name===name})[0];
+    S.ugc.push({id:uid(),name:name,st:'idea',contact:'',deal:'',follow:'',notes:lead?lead.note:''});
+    CH=null;refresh();toast('Added to your UGC Desk')},
   /* setup */
   bkcopy:function(){var b=$('#bk');if(!b)return;b.value=backupText();b.focus();b.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}toast(ok?'Copied. Paste it somewhere safe.':'Selected. Press and hold, then tap Copy.')},
   bkrestore:function(){var el=$('#bk_in'),v=el?el.value.trim():'';

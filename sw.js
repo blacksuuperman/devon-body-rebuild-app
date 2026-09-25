@@ -1,7 +1,7 @@
 /* Devon's Day Book service worker.
    Pages and images: network first, so a new version shows up the next time the app opens online.
    Offline: falls back to the last saved copy. Bump VERSION to force a clean cache. */
-var VERSION = "daybook-v4";
+var VERSION = "daybook-v5";
 var CORE = ["./", "./index.html", "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png", "./icons/apple-touch-icon.png"];
 
 self.addEventListener("install", function (e) {
