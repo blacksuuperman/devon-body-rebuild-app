@@ -235,6 +235,29 @@ textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:1
 .entry small{display:block;color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
 .toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);border-radius:999px;padding:10px 16px;font-size:14px;font-weight:500;z-index:50;opacity:0;pointer-events:none;transition:opacity .2s;max-width:88vw;text-align:center}
 .toast.show{opacity:1}
+.alertbar{position:fixed;left:10px;right:10px;top:calc(10px + env(safe-area-inset-top,0px));z-index:60;background:var(--accent);color:var(--paper);border-radius:16px;padding:12px 14px;box-shadow:0 8px 28px rgba(0,0,0,.35);max-width:520px;margin:0 auto}
+.alertbar[hidden]{display:none}
+.alertbar.nudge{background:#b3361d;color:#fff}
+.alertbar .alt b{display:block;font-family:var(--serif);font-size:18px;line-height:1.2}
+.alertbar .alt span{display:block;font-size:14px;margin-top:3px;opacity:.95;text-wrap:pretty}
+.alertbar .alb{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.alertbar .btn{min-height:42px;background:rgba(255,255,255,.22);color:inherit}
+.alertbar .btn.primary{background:#fff;color:#7a1238}
+.banner.behind{background:#fde8d4;border:1px solid #f0b987;color:#4a2300}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .banner.behind{background:#4a2c18;border-color:#8a5a2e;color:#ffe6cf}}
+:root[data-theme="dark"] .banner.behind{background:#4a2c18;border-color:#8a5a2e;color:#ffe6cf}
+.alrow{display:flex;justify-content:space-between;align-items:center;width:100%;min-height:46px;margin:6px 0;padding:0 14px;border:1px solid var(--line);border-radius:12px;background:transparent;color:var(--ink);font-size:15px;cursor:pointer;text-align:left}
+.alrow[aria-pressed="true"]{background:var(--soft);border-color:var(--accent)}
+.alrow b{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.alrow[aria-pressed="true"] b{color:var(--accent)}
+.alvl{display:block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:12px 0 4px}
+.card input[readonly],.card input[type=tel]{width:100%;min-height:44px;border:1px solid var(--line);border-radius:10px;padding:0 12px;font-size:15px;background:transparent;color:var(--ink)}
+.scorepre{white-space:pre-wrap;font-family:var(--sans);font-size:14px;background:var(--soft);border-radius:10px;padding:10px 12px;margin:8px 0;text-wrap:pretty}
+.alsch{margin:6px 0 18px}
+.alr{display:flex;gap:12px;padding:7px 2px;border-bottom:1px solid var(--line);font-size:14px}
+.alr span{min-width:74px;color:var(--muted)}
+.alr.past{opacity:.55}
+.alr.done b::after{content:" ✓";color:var(--accent)}
 
 /* ---------- back of the book ---------- */
 .fchips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
@@ -315,6 +338,7 @@ textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:1
   </div>
   <nav class="nav" id="nav" hidden aria-label="Page navigation"></nav>
 </div>
+<div class="alertbar" id="alertbar" role="alert" hidden></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <div class="sheet" id="sheet" hidden role="dialog" aria-label="Save to your phone"></div>
 
@@ -341,7 +365,7 @@ var MOTION=!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').m
 var KEY='daybook.v1',S;
 function load(){try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);if(o&&o.v===1&&o.days)return o}}catch(e){}return {v:1,days:{}}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
-function norm(){S.events=S.events||[];S.ugc=S.ugc||[];S.groc=S.groc||[];S.fav=S.fav||{};S.rf=S.rf||{};S.stepGoal=S.stepGoal||5000;S.nut=Object.assign(nutDefaults(),S.nut||{});S.jr=Object.assign(jrDefaults(),S.jr||{});if(!S.vits)S.vits=[{id:'v_pre',name:'Prenatal vitamin or multivitamin'},{id:'v_dha',name:'Omega-3 DHA, if you do not eat fish 2 to 3 times a week'}]}
+function norm(){S.events=S.events||[];S.ugc=S.ugc||[];S.groc=S.groc||[];S.fav=S.fav||{};S.rf=S.rf||{};S.stepGoal=S.stepGoal||5000;S.nut=Object.assign(nutDefaults(),S.nut||{});S.jr=Object.assign(jrDefaults(),S.jr||{});S.al=Object.assign(alDefaults(),S.al||{});if(!S.al.topic)S.al.topic='daybook-'+alRand(14);if(!S.al.rtopic)S.al.rtopic='daybook-rico-'+alRand(14);if(S.jr.schedVer!==2){if(S.jr.gameDrive===35)S.jr.gameDrive=55;S.jr.trainerPaused=false;S.jr.schedVer=2}if(!S.vits)S.vits=[{id:'v_pre',name:'Prenatal vitamin or multivitamin'},{id:'v_dha',name:'Omega-3 DHA, if you do not eat fish 2 to 3 times a week'}]}
 S=load();norm();
 
 /* ================= words ================= */
@@ -468,6 +492,9 @@ function J(a){return a.map(function(s){var i=s.indexOf('|');return i<0?{tm:'',t:
 function M(id,t,o){var r={id:id,t:t};if(o)for(var k in o)r[k]=o[k];return r}
 function chapters(c){
   var wd=c.wd,sat=c.dow===6,sun=c.dow===0,trainTom=(c.dow!==5&&c.dow!==6),day0=S.days[c.date],tz=TEAM[((day0&&day0.teamIdx!=null)?day0.teamIdx:Math.floor(doy()/7))%TEAM.length],L=[];
+  var jt=jrType(),shell=wd?(['home','homedev','trainer','practice','game'].indexOf(jt)>=0?jt:'home'):(sun?'sun':'sat'),JB=jrBlocks(shell);
+  function jrLane(t0,t1){return jbLines(JB,t0,t1)}
+  var ds=jbAt(JB,'dinner',990),cookAt=fmt(ds-45),eatAt=fmt(ds),bedB=jbAt(JB,'bedtime',null),lastB=JB.length?JB[JB.length-1]:null,closeT=bedB!=null?bedB:Math.max(1260,lastB?lastB.t+(lastB.d||0):1260);
   L.push({id:'wake',title:'Wake Up',t:[360,420],lede:'Everybody up, beds made, dog fed, bodies moving.',
     g:{jr:'Bed, shower, room, dog, stretch.',st:'Up, dressed, toys, dog, movement.',mom:'Baby first, laundry started, join the circuit.'},
     jr:J(['6:00|Wake up and make your bed','6:05|10 minute shower','6:05|Brush teeth','6:20|Get dressed','6:20|Clean and organize your room','6:30|Feed the dog with Sterling','6:40|Morning stretching, mobility, warm up and athletic activation']),
@@ -483,12 +510,12 @@ function chapters(c){
   if(!wd){
     Object.assign(L[0],{title:'Slow Wake Up',t:[420,480],lede:sun?'Cleaning day, but a gentle start. Up between 7 and 8, beds made, dog fed.':'Relaxed Saturday. Up between 7 and 8, beds made, dog fed.',
       g:{jr:'Bed, teeth, dressed, room, dog.',st:'Up, dressed, toys, dog.',mom:'Baby first, then a calm start.'},
-      jr:J(['|Wake up and make your bed','|Brush teeth','|Get dressed','|Clean and organize your room','|Feed the dog with Sterling']).concat([{tm:'',t:'Easy stretching or mobility (optional, rest day)',opt:true}]),
+      jr:jrLane(420,480),
       st:J(['|Wake up and help make the bed','|Brush teeth','|Wash face','|Get dressed','|Put pajamas away','|Pick up toys','|Help Junior feed the dog']),
       mom:[M('m_baby_am','Baby: diaper, feed, calm reset'),M('m_coffee','Make your coffee, then wipe the counter and rinse your mug before you walk away',{mini:'Just wipe the counter. That counts.',opt:true}),M('m_laundry1','Start one load of laundry',{mini:'Move clothes from the hamper to the washer. That counts.'})]});
     Object.assign(L[1],{title:'Make Breakfast',t:[480,540],lede:'Make breakfast together, eat, and clean up.',
       g:{jr:'Help make breakfast, Meal 1, clean up.',st:'Help with breakfast, then clean up.',mom:'Make breakfast, baby feed, eat something yourself, clean your area.'},
-      jr:J(['|Help make breakfast','|Meal 1, breakfast','|Clean the eating area']),
+      jr:jrLane(480,540),
       st:J(['|Help with breakfast: stir, pour, or set out napkins','|Breakfast','|Clean up after breakfast']),
       mom:[M(null,'Make breakfast with the family'),M('m_eat','Eat something with protein yourself'),M(null,'Baby breakfast or feed'),M('m_bfastclean','Wipe your counter and load your dishes before you leave the kitchen',{mini:'Just your own plate and mug in the sink counts.'})]});
   }
@@ -496,129 +523,105 @@ function chapters(c){
     L[1].title='Breakfast and Quiet Time';
     L[1].lede='Make a good breakfast, eat together, then a calm moment to relax and pray before cleaning starts.';
     L[1].g={jr:'Help make breakfast, Meal 1, then relax and pray.',st:'Help with breakfast, then a quiet moment.',mom:'Make breakfast, baby feed, then relax and pray.'};
-    L[1].jr.push({tm:'',t:'Relax and pray with the family'});
     L[1].st.push({tm:'',t:'Relax and pray with the family (a quiet story or coloring is fine)'});
     L[1].mom.push(M(null,'Relax and pray with the family before cleaning starts at 9:00'));
   }
-  var JB=jrBlocks(),jt=jrType(),jtStruct=(jt==='trainer'||jt==='game')?jt:'home';
-  function jrLane(t0,t1){return jbLines(JB,t0,t1)}
   if(wd){
-    if(jtStruct==='home'){
-      Object.assign(L[0],{title:'Wake Up and Training',t:[360,535],lede:"Wake, football training outside while it's coolest, shower, breakfast, and school setup.",
-        g:{jr:'Wake, football, shower, breakfast.',st:'Up, dressed, toys, dog, movement, breakfast.',mom:'Baby first, laundry, family breakfast.'},
-        jr:jrLane(360,535),
-        st:J(['6:00|Wake up and help make the bed','6:05|Brush teeth','6:05|Wash face','6:20|Get dressed','6:20|Put pajamas away','6:20|Pick up toys','6:30|Help Junior feed the dog','6:40|Morning movement: jumping, hopping, running in place, balance, bear crawls, simple stretching','7:00|Breakfast','7:30|Clean up after breakfast']),
-        mom:[M('m_baby_am','Baby: diaper, feed, calm reset (baby may still be sleeping)'),M('m_coffee','Make your coffee, then wipe the counter and rinse your mug before you walk away',{mini:'Just wipe the counter. That counts.',opt:true}),M('m_laundry1','Start one load of laundry',{mini:'Move clothes from the hamper to the washer. That counts.'}),M(null,'Family breakfast at 7:00'),M('m_eat','Eat something with protein yourself'),M('m_bfastclean','Wipe your counter and load your dishes before you leave the kitchen',{mini:'Just your own plate and mug in the sink counts.'})]});
-      Object.assign(L[1],{title:'Morning Academics',t:[535,765],lede:'Fast Math, Math, Writing and Science. Sterling rotates through learning stations nearby.',
-        g:{jr:'Fast Math, Math, Writing, Science.',st:'Four stations, about 25 minutes each.',mom:'Baby time, short check-ins, one tiny UGC step.'},
-        jr:jrLane(535,765),
-        st:J(['|Station 1: Movement learning','|Station 2: Table learning','|Station 3: Learning through play','|Station 4: Independent learning','|Repeat any favorite station']),stations:true,
-        mom:[M(null,'Handle the baby. At each station change, give Sterling a short check-in.'),M('m_ugc_scrap','Tiny UGC step (10 minutes) if baby is settled',{mini:'Save one video idea or one brand to your list.',opt:true,nap:true})],free:'Your window: scraps of about 20 minutes'});
-      L.push({id:'math',title:'Lunch and Afternoon Academics',t:[765,940],lede:'Lunch, then Reading, Language, History and the chore block.',
-        g:{jr:'Lunch, Reading, Language, History, chore.',st:'Lunch, then quiet learning.',mom:'Baby time, your UGC hour when the baby sleeps.'},
-        jr:jrLane(765,940),
-        st:J(['|Lunch','|Quiet learning: books, tracing, coloring, puzzles, blocks, flash cards, matching games, simple worksheets','|Baby awake: back to movement learning. Baby asleep: keep going with quiet learning']),
-        mom:[M('m_ugc_nap','UGC power hour: film near a bright window or outside, or edit and script',{mini:'Film one 15 second clip or edit one scene.',nap:true}),M(null,'Help the boys as you are available')],free:'Your window opens whenever the baby sleeps. Tap Asleep.'});
-      L.push({id:'chores',title:'Chores',t:[940,990],lede:'The boys run the chores while you cook.',
-        g:{jr:'Household responsibility.',st:'Toys, room, hamper, help wipe.',mom:'Cook dinner while they work.'},
-        jr:jrLane(940,990),
-        st:J(['|Put toys away','|Clean bedroom','|Dirty clothes in the hamper','|Help wipe the eating area','|Put plate and cup away','|Help Junior with simple chores']),
-        mom:[M('m_dinner','Cook dinner while the boys do chores (start at 4:30, eat around 5:00)',{mini:'Reheat or assemble something simple: sheet pan, slow cooker, or leftovers.'}),M(null,'Baby stays with you')]});
-    }else if(jtStruct==='trainer'){
-      var lv=jbAt(JB,'leave',650),tr=jbAt(JB,'trainer',690),hm=jbAt(JB,'lunch',815),chS=jbAt(JB,'chore',hm+185),acS=jbAt(JB,'account',hm+290),frS=jbAt(JB,'free',hm+350);
-      Object.assign(L[0],{title:'Wake Up and Ready',t:[360,455],lede:'Quick wake up, light mobility, shower, breakfast before school work starts.',
-        g:{jr:'Wake, mobility, shower, breakfast.',st:'Up, dressed, toys, dog, movement, breakfast.',mom:'Baby first, laundry, family breakfast.'},
-        jr:jrLane(360,455),
-        st:J(['6:00|Wake up and help make the bed','6:05|Brush teeth','6:05|Wash face','6:20|Get dressed','6:20|Put pajamas away','6:20|Pick up toys','6:30|Help Junior feed the dog','6:40|Morning movement: jumping, hopping, running in place, balance, bear crawls, simple stretching','7:00|Breakfast','7:30|Clean up after breakfast']),
-        mom:[M('m_baby_am','Baby: diaper, feed, calm reset (baby may still be sleeping)'),M('m_coffee','Make your coffee, then wipe the counter and rinse your mug before you walk away',{mini:'Just wipe the counter. That counts.',opt:true}),M('m_laundry1','Start one load of laundry',{mini:'Move clothes from the hamper to the washer. That counts.'}),M(null,'Family breakfast at 7:00'),M('m_eat','Eat something with protein yourself'),M('m_bfastclean','Wipe your counter and load your dishes before you leave the kitchen',{mini:'Just your own plate and mug in the sink counts.'})]});
-      Object.assign(L[1],{title:'Academics Before Training',t:[455,625],lede:'Fast Math, Math, Writing and Science, fit in before he leaves for the trainer.',
-        g:{jr:'Fast Math, Math, Writing, Science.',st:'Four stations, about 25 minutes each.',mom:'Baby time, short check-ins.'},
-        jr:jrLane(455,625),
-        st:J(['|Station 1: Movement learning','|Station 2: Table learning','|Station 3: Learning through play','|Station 4: Independent learning']),stations:true,
-        mom:[M(null,'Handle the baby. At each station change, give Sterling a short check-in.'),M('m_ugc_scrap','Tiny UGC step (10 minutes) if baby is settled',{mini:'Save one video idea or one brand to your list.',opt:true,nap:true})],free:'Your window: scraps of about 20 minutes'});
-      L.push({id:'leave',title:'Out the Door',t:[625,tr],lede:'Pack, eat the pre-training meal, leave for the trainer.',
-        g:{jr:'Pack gear, pre-training food.',st:'Clean up, bathroom, lunch.',mom:'Pack the bag, baby prep, leave.'},
-        jr:jrLane(625,tr),
-        st:J(['|Clean up toys','|Bathroom','|Lunch']),
-        mom:[M(null,'Baby prep and a quick diaper check'),M('m_bag','Pack the bag: diaper bag, snacks, water, chargers, phone or laptop for UGC'),M(null,'Leave by '+fmt(lv))]});
-      L.push({id:'train',title:'Training Window',t:[tr,hm],lede:'Jr trains. Sterling burns energy nearby. This is your UGC window.',
-        g:{jr:'Train, drive home.',st:'Run, jump, throw, then quiet play.',mom:'Phone UGC block while you supervise.'},
-        jr:jrLane(tr,hm),
-        st:J(['|Activity time near training: running, skipping, jumping, hopping, throwing, catching, kicking, balance, playground, obstacle course','|After movement: books, coloring, puzzles, flash cards, snack, quiet play']),
-        stIdeas:'Mix learning in: count his jumps, call out colors while running, find letters on signs, count steps, throw the ball five times, hop to a number.',
-        mom:[M('m_film_train','Film one clip in the best daylight if the setting works',{mini:'Film one 10 second clip.',opt:true,nap:true}),M('m_ugc_train','Phone UGC block (45 to 60 minutes): brand research, outreach emails, script',{mini:'Send one outreach message.',nap:true}),M(null,'Keep Sterling and the baby fed and watered')],free:'Your window: phone-based, in daylight'});
-      L.push({id:'home',title:'Home and Academics',t:[hm,chS],lede:'Lunch and recovery, then Reading, Language and the correction block.',
-        g:{jr:'Lunch, Reading, Language, correction.',st:'Bathroom, settle, snack, quiet learning.',mom:'Baby sets the timing. Move the laundry.'},
-        jr:jrLane(hm,chS),
-        st:J(['|Bathroom and settle down','|Snack','|Quiet learning: books, tracing, coloring, puzzles, blocks, flash cards']),
-        mom:[M(null,'Baby needs set the timing here'),M('m_laundry2','Move the laundry: washer to dryer, or dryer to basket',{mini:'Just get the wet load into the dryer.'}),M(null,'If the baby seems sleepy, let the baby sleep and tap Asleep')]});
-      L.push({id:'chores',title:'Chores and Dinner',t:[chS,acS],lede:'The chore block, then dinner runs later tonight on a training day.',
-        g:{jr:'Household responsibility, then dinner.',st:'Toys, room, hamper, dinner.',mom:'Cook dinner while he finishes his chore.'},
-        jr:jrLane(chS,acS),
-        st:J(['|Put toys away','|Clean bedroom','|Dirty clothes in the hamper','|Help wipe the eating area','|Dinner','|Creative play or independent activity']),
-        mom:[M('m_dinner','Cook dinner while he finishes his chore',{mini:'Reheat or assemble something simple: sheet pan, slow cooker, or leftovers.'}),M(null,'Baby stays with you')]});
-      L.push({id:'reading',title:'Accountability and Reading',t:[acS,frS],lede:'His accountability reflection, then independent reading.',
-        g:{jr:'Accountability, independent reading.',st:'Wind down, quiet play.',mom:'A partial reset. About 30 minutes for you.'},
-        jr:jrLane(acS,frS),
-        st:J(['|Quiet play: books, blocks, coloring, puzzles']),
-        mom:[M('m_mom30','Your 30: edit a clip, plan tomorrow, or just rest.',{opt:true,nap:true})],free:'Your window: about 30 minutes'});
-      L.push({id:'reset',title:'Family Time and Bedtime',t:[frS,1261],lede:'Family time can absorb a reasonable delay from earlier in the day, then prep for tomorrow and bed.',
-        g:{jr:'Family time, prepare for tomorrow, bedtime.',st:'Family time, bedtime.',mom:'Your walk if not done, two bedtimes.'},
-        jr:jrLane(frS,1261),
-        st:J(['|Family activity or family TV if responsibilities are done','|Bedtime']),
-        mom:[M('m_walk','Walk 20 to 30 minutes if you have not already: outside with the baby, or the walking pad at home',{mini:'Ten minutes on the walking pad counts.',opt:true}),M(null,'Sterling bedtime'),M(null,'Baby bedtime routine'),M('m_hair','Night hair protection: bonnet or loose braid',{opt:true})]});
+    var T=function(id,fb){return jbAt(JB,id,fb)};
+    var bf=T('breakfast',420),lvT=T('leaveHome',null),specs=[];
+    L.length=0;
+    function sp(id,title,from,lede,o){var s={id:id,title:title,from:from,lede:lede};if(o)for(var k in o)s[k]=o[k];specs.push(s)}
+    var stMorn=function(){return J(['6:00|Wake up and help make the bed','6:05|Brush teeth','6:05|Wash face','6:20|Get dressed','6:20|Put pajamas away','6:20|Pick up toys','6:30|Help Junior feed the dog','6:40|Morning movement: jumping, hopping, running in place, balance, bear crawls, simple stretching'])};
+    var stBf=function(){return J([fmt(bf)+'|Breakfast',fmt(bf+30)+'|Clean up after breakfast'])};
+    var stStn=function(){return J(['|Station 1: Movement learning','|Station 2: Table learning','|Station 3: Learning through play','|Station 4: Independent learning'])};
+    var stLunch=function(){return J(['|Lunch','|Quiet learning: books, tracing, coloring, puzzles, blocks, flash cards','|Baby awake: back to movement learning. Baby asleep: keep going with quiet learning'])};
+    var stQuiet=function(){return J(['|Quiet learning: books, tracing, coloring, puzzles, blocks, flash cards','|Movement break'])};
+    var stChores=function(){return J(['|Snack','|Put toys away','|Clean bedroom','|Dirty clothes in the hamper','|Help wipe the eating area'])};
+    var stDinner=function(){return J([fmt(ds)+'|Dinner','|Creative play or independent activity','|Help Junior with simple chores'])};
+    var stRead=function(){return J(['|Reading: picture books with Junior (about 15 minutes)','|Creative play or independent activity'])};
+    var stReset=function(){return J(['6:00|Room reset: toys put away','|Clothes picked up','|Bedroom clean','|Bed ready','6:30|Help Junior feed the dog','7:00|Family activity or family TV if responsibilities are done','8:00|Bedtime'])};
+    var mBaby=function(){return M('m_baby_am','Baby: diaper, feed, calm reset (baby may still be sleeping)')};
+    var mCoffee=function(){return M('m_coffee','Make your coffee, then wipe the counter and rinse your mug before you walk away',{mini:'Just wipe the counter. That counts.',opt:true})};
+    var mLaundry1=function(){return M('m_laundry1','Start one load of laundry',{mini:'Move clothes from the hamper to the washer. That counts.'})};
+    var mMove=function(){return M('m_move','Join the 6:40 movement circuit next to the boys (counts as your workout)',{mini:'Two minutes of stretching beside them counts.',opt:true})};
+    var mBf=function(){return [M(null,'Family breakfast at '+fmt(bf)),M('m_eat','Eat something with protein yourself'),M('m_bfastclean','Wipe your counter and load your dishes before you leave the kitchen',{mini:'Just your own plate and mug in the sink counts.'})]};
+    var mSchool=function(){return [M(null,'Handle the baby. At each station change, give Sterling a short check-in.'),M('m_ugc_scrap','Tiny UGC step (10 minutes) if baby is settled',{mini:'Save one video idea or one brand to your list.',opt:true,nap:true})]};
+    var mLunch=function(){return [M(null,'Lunch with the boys. Keep it simple.'),M('m_lunchclean','Wipe the table and counter and put your dishes in the dishwasher before you leave the kitchen',{mini:'Put your own plate in the dishwasher. That counts.'})]};
+    var mDinner=function(txt){return M('m_dinner',txt,{mini:'Reheat or assemble something simple: sheet pan, slow cooker, or leftovers.'})};
+    var mP30=function(){return M('m_mom30','Your 30: edit a clip, plan tomorrow, or just rest. Or start your walk early on the walking pad.',{opt:true,nap:true})};
+    var mWalk=function(o){return M('m_walk','Walk 20 to 30 minutes: outside with the baby, or the walking pad at home',{mini:'Ten minutes on the walking pad counts.',opt:!!o})};
+    var mPcheck=function(){return M('m_pcheck',"Check the blocks Jr marks done and approve them in Jr's app",{opt:true})};
+    var mGrade=function(){return M('m_grade',"Give tonight's grade in Jr's app: 1 to 5 stars in 5 areas",{opt:true})};
+    var mBeds=function(){return [M(null,'Sterling bedtime'),M(null,'Baby bedtime routine'),M('m_walk_late','Missed your walk? 15 minutes on the walking pad after the bedtimes',{opt:true}),M('m_hair','Night hair protection: bonnet or loose braid',{opt:true})]};
+    var gW={st:'Up, dressed, toys, dog, movement.',mom:'Baby first, laundry, join the circuit.'};
+    if(shell==='home'||shell==='homedev'){
+      sp('wake','Wake Up and Training','wake','Wake up and morning footwork training while it is coolest.',{g:gW,st:stMorn(),mom:[mBaby(),mCoffee(),mLaundry1(),mMove()]});
+      sp('bfast','Breakfast and School Setup','breakfast','Eat, wash the dishes, get school ready.',{g:{st:'Breakfast and cleanup.',mom:'Family breakfast, baby feed, eat something yourself.'},st:stBf(),mom:mBf()});
+      sp('school','Morning Academics','fastMath','Fast Math, Math, Writing and Science. Sterling rotates through learning stations nearby.',{g:{st:'Four stations, about 25 minutes each.',mom:'Baby time, short check-ins, one tiny UGC step.'},st:stStn(),stations:true,mom:mSchool(),free:'Your window: scraps of about 20 minutes'});
+      sp('lunch','Lunch and Kitchen','lunch','Lunch, then the kitchen gets cleaned in order.',{g:{st:'Lunch, then quiet learning.',mom:'Lunch, clean your area.'},st:stLunch(),mom:mLunch()});
+      sp('afternoon','Afternoon Academics','reading','Reading, Language, History and Film Study.',{g:{st:'Quiet learning, movement break.',mom:'Your UGC hour when the baby sleeps.'},st:stQuiet(),mom:[M('m_ugc_nap','UGC power hour: film near a bright window or outside, or edit and script',{mini:'Film one 15 second clip or edit one scene.',nap:true}),M(null,'Help the boys as you are available')],free:'Your window opens whenever the baby sleeps. Tap Asleep.'});
+      sp('train','Training and Dinner Prep','snackPrep','Snack, then the workout. Dinner gets started while he trains.',{g:{st:'Snack, toys, room, hamper.',mom:'Start dinner, move the laundry.'},st:stChores(),mom:[mDinner('Start dinner at '+cookAt+' so it is ready at '+eatAt),M('m_laundry2','Move the laundry: washer to dryer, or dryer to basket',{mini:'Just get the wet load into the dryer.'}),M(null,'Baby stays with you')]});
+      sp('dinner','Dinner and Responsibility','dinner','Eat together, then the Responsibility block and the house walk-through.',{g:{st:'Dinner, then creative play.',mom:'Family meal, reset one zone, check his blocks.'},st:stDinner(),mom:[M(null,'Family dinner at '+eatAt),M('m_reset_zone','Reset one zone for 20 minutes: office, laundry room, or a bedroom',{mini:'Set a 10 minute timer and clear the worst corner.'}),mPcheck()]});
+      sp('reading','Correction, Accountability and Reading','correction','Fix the weakest work first, then the accountability reflection and independent reading.',{g:{st:'Reading with Junior, then creative play.',mom:'A partial reset. About 30 minutes for you.'},st:stRead(),mom:[mP30(),M('m_reset_zone2','Reset one more zone for 20 minutes if the first is already done',{opt:true})],free:'Your window: about 30 minutes'});
+      sp('reset','Wind Down and Bedtime','tomorrowPrep','Prep for tomorrow, night routine, grades, TV time, and lights out.',{notes:[{b:'Walk',t:'Aim for 20 to 30 minutes, outside with the baby or on the walking pad at home. Dad can join. Any time before 9:00 works.'}],g:{st:'Toys, clothes, bed, dog, family time, bedtime.',mom:'Your walk, grades, two bedtimes.'},st:stReset(),mom:[mWalk(),M(null,'Room inspection: a quick look at both rooms'),mGrade()].concat(mBeds())});
+    }else if(shell==='trainer'){
+      sp('wake','Wake Up and Breakfast','wake','Wake up, light mobility, breakfast before school work starts.',{g:gW,st:stMorn().concat(stBf()),mom:[mBaby(),mCoffee(),mLaundry1(),mMove()].concat(mBf())});
+      sp('school','Academics Before Training','washDishesBreakfast','Fast Math, Math, Writing and Science, fit in before he leaves for the trainer.',{g:{st:'Four stations, about 25 minutes each.',mom:'Baby time, short check-ins.'},st:stStn(),stations:true,mom:mSchool(),free:'Your window: scraps of about 20 minutes'});
+      sp('leave','Out the Door','trainPrep','Snack, pack, and leave for the trainer.',{g:{st:'Clean up, bathroom, lunch.',mom:'Pack the bag, baby prep, leave.'},st:J(['|Clean up toys','|Bathroom','|Lunch']),mom:[M(null,'Baby prep and a quick diaper check'),M('m_bag','Pack the bag: diaper bag, snacks, water, chargers, phone or laptop for UGC'),M(null,'Leave by '+fmt(lvT))]});
+      sp('train','Training Window','trainer','Jr trains. Sterling burns energy nearby. This is your UGC window.',{g:{st:'Run, jump, throw, then quiet play.',mom:'Phone UGC block while you supervise.'},st:J(['|Activity time near training: running, skipping, jumping, hopping, throwing, catching, kicking, balance, playground, obstacle course','|After movement: books, coloring, puzzles, flash cards, snack, quiet play']),stIdeas:'Mix learning in: count his jumps, call out colors while running, find letters on signs, count steps, throw the ball five times, hop to a number.',mom:[M('m_film_train','Film one clip in the best daylight if the setting works',{mini:'Film one 10 second clip.',opt:true,nap:true}),M('m_ugc_train','Phone UGC block (45 to 60 minutes): brand research, outreach emails, script',{mini:'Send one outreach message.',nap:true}),M(null,'Keep Sterling and the baby fed and watered')],free:'Your window: phone-based, in daylight'});
+      sp('lunch','Lunch and Kitchen','lunch','Lunch and recovery, then the kitchen gets cleaned in order.',{g:{st:'Bathroom, settle, lunch, quiet learning.',mom:'Baby sets the timing. Move the laundry.'},st:stLunch(),mom:mLunch().concat([M('m_laundry2','Move the laundry: washer to dryer, or dryer to basket',{mini:'Just get the wet load into the dryer.'})])});
+      sp('afternoon','Afternoon Academics','reading','Reading, Language or History, Film Study.',{g:{st:'Quiet learning, movement break.',mom:'Start dinner, then a short rest.'},st:stQuiet(),mom:[mDinner('Start dinner at '+cookAt+' so it is ready at '+eatAt),mP30(),M(null,'If the baby seems sleepy, let the baby sleep and tap Asleep')]});
+      sp('dinner','Correction and Dinner','correction','Fix the weakest work first, then dinner.',{g:{st:'Toys, room, hamper, dinner.',mom:'Family meal, reset one zone.'},st:stDinner(),mom:[M(null,'Family dinner at '+eatAt),M('m_reset_zone','Reset one zone for 20 minutes: office, laundry room, or a bedroom',{mini:'Set a 10 minute timer and clear the worst corner.'})]});
+      sp('resp','Responsibility and Inspection','responsibility','The Responsibility block, then the house walk-through.',{g:{st:'Toys, room, hamper.',mom:'Check his blocks.'},st:J(['|Put toys away','|Clean bedroom','|Dirty clothes in the hamper','|Help wipe the eating area']),mom:[mPcheck(),M(null,'Baby stays with you')]});
+      sp('reading','Accountability and Reading','accountability','His accountability reflection, then independent reading.',{g:{st:'Wind down, quiet play.',mom:'A partial reset. About 30 minutes for you.'},st:J(['|Quiet play: books, blocks, coloring, puzzles']),mom:[M('m_mom30','Your 30: edit a clip, plan tomorrow, or just rest.',{opt:true,nap:true})],free:'Your window: about 30 minutes'});
+      sp('reset','Wind Down and Bedtime','tomorrowPrep','Prep for tomorrow and room reset, night routine, grades, TV time, and lights out.',{g:{st:'Family time, bedtime.',mom:'Your walk if not done, grades, two bedtimes.'},st:J(['|Family activity or family TV if responsibilities are done','8:00|Bedtime']),mom:[mWalk(true),mGrade()].concat(mBeds())});
+    }else if(shell==='practice'){
+      sp('wake','Wake Up and Breakfast','wake','Wake up, light mobility, breakfast before school work starts.',{g:gW,st:stMorn().concat(stBf()),mom:[mBaby(),mCoffee(),mLaundry1(),mMove()].concat(mBf())});
+      sp('school','Morning Academics','washDishesBreakfast','Wash dishes, then Fast Math, Math, Writing and Science. Practice is tonight.',{g:{st:'Four stations, about 25 minutes each.',mom:'Baby time, short check-ins.'},st:stStn(),stations:true,mom:mSchool(),free:'Your window: scraps of about 20 minutes'});
+      sp('lunch','Lunch and Kitchen','lunch','Lunch, then the kitchen gets cleaned in order.',{g:{st:'Lunch, then quiet learning.',mom:'Lunch, clean your area.'},st:stLunch(),mom:mLunch()});
+      sp('afternoon','Afternoon Academics','reading','Reading, Language, History and Film Study. Dinner is early today.',{g:{st:'Quiet learning, movement break.',mom:'Start the early dinner, UGC hour if the baby sleeps.'},st:stQuiet(),mom:[mDinner('Start dinner at '+cookAt+' so it is ready at '+eatAt),M('m_ugc_nap','UGC power hour: film near a bright window or outside, or edit and script',{mini:'Film one 15 second clip or edit one scene.',nap:true}),M(null,'Help the boys as you are available')],free:'Your window opens whenever the baby sleeps. Tap Asleep.'});
+      sp('dinner','Correction and Early Dinner','correction','Fix the weakest work first, then an early dinner before practice.',{g:{st:'Toys, room, hamper, dinner.',mom:'Family meal, reset one zone.'},st:stDinner(),mom:[M(null,'Family dinner at '+eatAt),M('m_reset_zone','Reset one zone for 20 minutes: office, laundry room, or a bedroom',{mini:'Set a 10 minute timer and clear the worst corner.'})]});
+      sp('resp','Responsibility and Inspection','responsibility','The Responsibility block, then the house walk-through.',{g:{st:'Toys, room, hamper.',mom:'Check his blocks.'},st:J(['|Put toys away','|Clean bedroom','|Dirty clothes in the hamper','|Help wipe the eating area']),mom:[mPcheck(),M(null,'Baby stays with you')]});
+      sp('reading','Accountability, Reading and Screen Time','accountability','Accountability reflection, independent reading, tomorrow prep, then TV time.',{g:{st:'Wind down, quiet play.',mom:'A partial reset. About 30 minutes for you.'},st:J(['|Quiet play: books, blocks, coloring, puzzles']),mom:[mP30()],free:'Your window: about 30 minutes'});
+      sp('leave','Out the Door for Practice','snackPrep','Snack, pack the gear, and leave for team practice.',{g:{st:'Bathroom, shoes, come along or stay home.',mom:'Pack the bag, baby prep, leave.'},st:J(['|Get ready to go','|Bathroom before the drive']),mom:[M(null,'Baby prep and a quick diaper check'),M('m_bag','Pack snacks, water, chargers, phone for filming'),M(null,'Leave by '+fmt(lvT))]});
+      sp('prac','Practice','practice','Jr is at team practice. Sterling and the baby wind down at home.',{g:{st:'Quiet play, then bedtime at 8:00.',mom:'Two bedtimes at 8:00, your walk.'},st:J(['|Quiet play: books, blocks, coloring, puzzles','8:00 PM|Bedtime']),mom:[M(null,'8:00 Sterling bedtime'),M(null,'8:00 Baby bedtime routine'),mWalk(true),M('m_film_game','Film a clip at practice if you are there',{opt:true})]});
+      sp('reset','Recovery Snack and Bedtime','postSnack','Jr is home. Recovery snack, night routine, grades, lights out.',{g:{st:'Asleep.',mom:'Grades, final check.'},st:[],mom:[mGrade(),M('m_walk_late','Missed your walk? 15 minutes on the walking pad',{opt:true}),M('m_hair','Night hair protection: bonnet or loose braid',{opt:true})]});
     }else{
-      var eq=jbAt(JB,'equip',935),arr=jbAt(JB,'leave',955)+(S.jr.gameDrive||35),ko=jbAt(JB,'kickoff',1050);
-      Object.assign(L[0],{title:'Wake Up and Ready',t:[360,455],lede:'Quick wake up, light mobility only today, shower, breakfast.',
-        g:{jr:'Wake, mobility, shower, breakfast.',st:'Up, dressed, toys, dog, movement, breakfast.',mom:'Baby first, laundry, family breakfast.'},
-        jr:jrLane(360,455),
-        st:J(['6:00|Wake up and help make the bed','6:05|Brush teeth','6:05|Wash face','6:20|Get dressed','6:20|Put pajamas away','6:20|Pick up toys','6:30|Help Junior feed the dog','6:40|Morning movement: jumping, hopping, running in place, balance, bear crawls, simple stretching','7:00|Breakfast','7:30|Clean up after breakfast']),
-        mom:[M('m_baby_am','Baby: diaper, feed, calm reset (baby may still be sleeping)'),M('m_coffee','Make your coffee, then wipe the counter and rinse your mug before you walk away',{mini:'Just wipe the counter. That counts.',opt:true}),M('m_laundry1','Start one load of laundry',{mini:'Move clothes from the hamper to the washer. That counts.'}),M(null,'Family breakfast at 7:00'),M('m_eat','Eat something with protein yourself'),M('m_bfastclean','Wipe your counter and load your dishes before you leave the kitchen',{mini:'Just your own plate and mug in the sink counts.'})]});
-      Object.assign(L[1],{title:'Academics',t:[455,670],lede:'Fast Math, Math, Writing and Science. Keep it calm, it is a game day.',
-        g:{jr:'Fast Math, Math, Writing, Science.',st:'Four stations, about 25 minutes each.',mom:'Baby time, short check-ins.'},
-        jr:jrLane(455,670),
-        st:J(['|Station 1: Movement learning','|Station 2: Table learning','|Station 3: Learning through play','|Station 4: Independent learning']),stations:true,
-        mom:[M(null,'Handle the baby. At each station change, give Sterling a short check-in.'),M('m_ugc_scrap','Tiny UGC step (10 minutes) if baby is settled',{mini:'Save one video idea or one brand to your list.',opt:true,nap:true})],free:'Your window: scraps of about 20 minutes'});
-      L.push({id:'math',title:'Lunch, Reading and Recovery',t:[670,eq],lede:'Language, lunch, reading, history, then quiet recovery and the pregame meal. No electronics during recovery.',
-        g:{jr:'Language, lunch, reading, history, recovery, pregame meal.',st:'Lunch, then quiet play.',mom:'Baby time, keep the house calm before the game.'},
-        jr:jrLane(670,eq),
-        st:J(['|Lunch','|Quiet play: books, blocks, coloring, puzzles','|Movement break']),
-        mom:[M(null,'Handle the baby, keep lunch simple'),M('m_ugc_nap','UGC power hour if the baby sleeps',{mini:'Film one 15 second clip.',opt:true,nap:true})]});
-      L.push({id:'leave',title:'Equipment and Leave',t:[eq,arr],lede:'Touch every piece of gear before it leaves the house, then drive to the game.',
-        g:{jr:'Equipment check, leave for the game.',st:'Come along or stay with a sitter.',mom:'Double-check the gear, pack snacks and water.'},
-        jr:jrLane(eq,arr),
-        st:J(['|Get ready to go','|Bathroom before the drive']),
-        mom:[M(null,'Double-check equipment before you leave the house'),M('m_bag','Pack snacks, water, chargers, phone for filming')]});
-      L.push({id:'train',title:'Kickoff',t:[arr,ko+180],lede:'At the game. Cheer, film if you can, and let him play.',
-        g:{jr:'Play the game.',st:'Watch and stay busy on the sideline.',mom:'Film if you can, cheer loud.'},
-        jr:jrLane(arr,ko+180),
-        st:J(['|Watch the game','|Quiet activity between plays if he needs it']),
-        mom:[M('m_film_game','Film a clip or two if you get the chance',{opt:true})]});
-      L.push({id:'home',title:'After the Game',t:[ko+180,1261],lede:'Home, hydrate, eat, shower, gear away, and straight to sleep. No late makeup work tonight.',
-        g:{jr:'Travel home, food, shower, sleep.',st:'Wind down, bedtime.',mom:'Get everyone fed and down.'},
-        jr:jrLane(ko+180,1261),
-        st:J(['|Wind down','|Bedtime']),
-        mom:[M(null,'Get everyone fed, showered, and down for the night'),M(null,'Equipment put away so tomorrow is not a scramble')]});
+      sp('wake','Wake Up and Breakfast','wake','Quick wake up, mobility only today, breakfast.',{g:gW,st:stMorn().concat(stBf()),mom:[mBaby(),mCoffee(),mLaundry1(),mMove()].concat(mBf())});
+      sp('school','Academics','washDishesBreakfast','Wash dishes, then Fast Math, Math, Writing, Science and Language. Keep it calm, it is a game day.',{g:{st:'Four stations, about 25 minutes each.',mom:'Baby time, short check-ins.'},st:stStn(),stations:true,mom:mSchool(),free:'Your window: scraps of about 20 minutes'});
+      sp('lunch','Lunch and Kitchen','lunch','Lunch, then the kitchen gets cleaned in order.',{g:{st:'Lunch, then quiet play.',mom:'Baby time, keep the house calm before the game.'},st:J(['|Lunch','|Quiet play: books, blocks, coloring, puzzles']),mom:mLunch().concat([M('m_ugc_nap','UGC power hour if the baby sleeps',{mini:'Film one 15 second clip.',opt:true,nap:true})])});
+      sp('afternoon','Afternoon Academics','reading','Reading, History, Film Study, and Academic Correction.',{g:{st:'Quiet play, movement break.',mom:'Baby time, keep it calm.'},st:J(['|Quiet play: books, blocks, coloring, puzzles','|Movement break']),mom:[mPcheck(),M(null,'Handle the baby, keep the house calm')]});
+      sp('rec','Quiet Recovery and Pregame Meal','quietRecovery','Quiet recovery and the pregame meal. No electronics during recovery.',{g:{st:'Quiet play.',mom:'Pregame meal ready, keep it calm.'},st:J(['|Quiet play: books, blocks, coloring, puzzles']),mom:[M(null,'Have the pregame meal ready'),M(null,'Keep the house calm before the game')]});
+      sp('leave','Game Prep and Leave','gamePrep','Touch every piece of gear before it leaves the house, then drive to the game.',{g:{st:'Come along or stay with a sitter.',mom:'Double-check the gear, pack snacks and water.'},st:J(['|Get ready to go','|Bathroom before the drive']),mom:[M(null,'Double-check equipment before you leave the house'),M('m_bag','Pack snacks, water, chargers, phone for filming')]});
+      sp('game','Game','kickoff','At the game. Cheer, film if you can, and let him play.',{g:{st:'Watch and stay busy on the sideline.',mom:'Film if you can, cheer loud.'},st:J(['|Watch the game','|Quiet activity between plays if he needs it']),mom:[M('m_film_game','Film a clip or two if you get the chance',{opt:true})]});
+      sp('after','After the Game','afterGame','Home, hydrate, eat, gear away, grades, and TV time. No late makeup work tonight.',{g:{st:'Wind down, bedtime.',mom:'Get everyone fed and down.'},st:J(['|Wind down','|Bedtime']),mom:[M(null,'Get everyone fed and down for the night'),M(null,'Equipment put away so tomorrow is not a scramble'),mGrade(),M('m_hair','Night hair protection: bonnet or loose braid',{opt:true})]});
     }
+    specs.forEach(function(s,i){s.t0=i===0?360:T(s.from,specs[i-1].t0+1)});
+    specs.forEach(function(s,i){
+      var last=i+1>=specs.length,t1=last?closeT:specs[i+1].t0;
+      var ch={id:s.id,title:s.title,t:[s.t0,t1],lede:s.lede,g:Object.assign({jr:''},s.g),jr:jrLane(s.t0,last?closeT+1:t1),st:s.st||[],mom:s.mom||[]};
+      ['free','stations','stIdeas','notes'].forEach(function(k){if(s[k]!==undefined)ch[k]=s[k]});
+      L.push(ch);
+    });
   }else if(sun){
     var nf=NFLS[c.date]||null;
     var nfNotes=[{b:'Football today',t:'Early games 12:00 PM Central. Late games 3:05 and 3:25 PM. Sunday night 7:20 PM'+(nf&&nf.snf?' ('+nf.snf+')':'')+'.'}];
     if(nf&&nf.tx&&nf.tx.length)nfNotes.push({b:'Cowboys and Texans',t:nf.tx.join('. ')+'.'});
-    L.push({id:'zones',title:'Zone Cleaning',t:[540,630],lede:'Sunday is cleaning day. Everyone cleans their own zone: Jr his room, Sterling his room and the upstairs living room, Mom and Dad their bedroom, the kitchen and the living room.',
-      g:{jr:'Your room.',st:'Your room and the upstairs living room.',mom:'Bedroom, kitchen and living room.'},
-      jr:J(['|Make your bed','|Everything off the floor','|Dirty clothes in the hamper','|Dust the surfaces: desk, shelves, dresser','|Sweep or vacuum the floor','|Empty the trash','|Meal 2 when it is time']),
+    L.push({id:'zones',title:'Zone Cleaning',t:[540,630],lede:'Sunday is cleaning day. Mom and Dad take their bedroom, the kitchen and the living room; Sterling his room and the upstairs living room. Jr is at family, church, or recovery this morning.',
+      g:{jr:'Family, church, or recovery.',st:'Your room and the upstairs living room.',mom:'Bedroom, kitchen and living room.'},
+      jr:jrCarry(JB,540),
       st:J(['|Make your bed (with help)','|Pick up toys and put them in the bins','|Dirty clothes in the hamper','|Upstairs living room: put toys, books and blankets back where they belong','|Upstairs living room: help wipe low spots with a damp cloth']),
       momNote:'Baby fell asleep? Do the quiet cleaning first: dusting, wiping, sorting. Save vacuuming, mopping and other loud chores for when the baby wakes. The bedroom, kitchen and living room are shared with Dad, so split the jobs.',
       mom:[M('m_zone_room','Your bedroom: bed, floor, dust, trash'),M('m_zone_kit','Kitchen: dishes, counters, stovetop, floor',{mini:'Kitchen: dishes and counters only.'}),M('m_zone_liv','Living room: pick up, clear surfaces, wipe, floor',{mini:'Living room: pick up and clear the surfaces.'}),M(null,'Give Sterling one job at a time, and check in every few minutes')]});
     L.push({id:'baths',title:'Bathroom Turns',t:[630,690],lede:'Three bathrooms. Everyone cleans their own, taking turns with the cleaning supplies.',
       g:{jr:'Clean your upstairs bathroom.',st:'Be the helper.',mom:'Clean your bathroom, then the third.'},
-      jr:J(['|Upstairs bathroom: sink and counter','|Mirror','|Toilet','|Shower or tub','|Floor','|Empty the trash','|Put the supplies back']),
+      jr:[],
       st:J(['|Wipe the sink with a damp cloth (with help)','|Put the toothbrush and cup back','|Put the towels in the hamper','|Be the helper: hand supplies to whoever is cleaning']),
       stIdeas:'Keep cleaning sprays and chemicals out of his reach. A damp cloth and water is his job.',
       mom:[M('m_bath_mom','Clean your bathroom: sink, mirror, toilet, shower or tub, floor, trash',{mini:'Toilet and sink only.'}),M(null,'Third bathroom: split it with Dad, with Sterling helping')]});
     L.push({id:'team',title:'Final Look',t:[690,720],lede:'Walk through the house together before the 12:00 kickoff. Beds made, rooms and bathrooms done, kitchen and living room clear.',teamPicker:true,
       g:{jr:'Check your room and bathroom. Meal 3.',st:'Check your room and the upstairs living room.',mom:'Walk through the whole house with everyone.'},
-      jr:J(['|Check your room: bed made, floor clear, trash out','|Check your upstairs bathroom','|Meal 3 when it is time']).concat([{tm:'',t:'Bonus if everyone finishes early: '+tz,opt:true}]),
+      jr:[],
       st:J(['|Check your room: bed made, toys in the bins','|Check the upstairs living room: toys and blankets put away']).concat([{tm:'',t:'Bonus if everyone finishes early: help with '+tz,opt:true}]),
       mom:[M('m_team','Walk through: beds, rooms, bathrooms, kitchen and living room'),M(null,'Thank everyone before kickoff')]});
     L.push({id:'football',title:'Football Time',t:[720,990],lede:'The house is clean. Kickoff at 12:00 PM Central, relaxed afternoon, meals on time.',notes:nfNotes,
@@ -626,13 +629,13 @@ function chapters(c){
       jr:jrLane(720,990),
       st:J(['|Movement break: run, jump, hop between plays or at halftime','|Books, coloring, or quiet play','|Watch part of the game']),
       mom:[M('m_ugc_wk','Film in your best daylight (outside or by a bright window)',{mini:'Film one 15 second clip.',nap:true}),
-           M('m_dinner','Start dinner during the game (start at 4:30, eat around 5:00)',{mini:'Reheat or assemble something simple: sheet pan, slow cooker, or leftovers.'}),
+           M('m_dinner','Start dinner during the game (start at '+cookAt+', eat around '+eatAt+')',{mini:'Reheat or assemble something simple: sheet pan, slow cooker, or leftovers.'}),
            M('m_prep','Sunday meal prep during the game: proteins, carbs, snacks',{mini:'Prep just the proteins.',opt:true,nap:true})],free:'Your window: the afternoon, while the game is on'});
     if(nf&&nf.intl)L[0].notes=[{b:'Morning game',t:nf.intl+', kickoff 8:30 AM Central. It is on while you make breakfast.'}];
   }else{
     var uf=UFC[c.date]||null,F=uf?(uf.ep||uf.p):null,hasUfc=!!(F&&F<990),morn=!!(F&&F<660);
     var ufTxt=uf?(uf.n+'. '+(uf.ep?'Early prelims '+fmt(uf.ep)+'. ':'')+(uf.p?'Prelims '+fmt(uf.p)+'. ':'')+(uf.mc?'Main card '+fmt(uf.mc)+' Central.':'Main card time not posted yet.')+(uf.chk?' Double-check UFC.com that week.':'')):'';
-    var dinnerItem=M('m_dinner',hasUfc?'Start dinner during the fights (start at 4:30, eat around 5:00)':'Start dinner during the afternoon games (start at 4:30, eat around 5:00)',{mini:'Reheat or assemble something simple: sheet pan, slow cooker, or leftovers.'});
+    var dinnerItem=M('m_dinner',hasUfc?'Start dinner during the fights (start at '+cookAt+', eat around '+eatAt+')':'Start dinner during the afternoon games (start at '+cookAt+', eat around '+eatAt+')',{mini:'Reheat or assemble something simple: sheet pan, slow cooker, or leftovers.'});
     var ugcItem=M('m_ugc_wk','Film in your best daylight (outside or by a bright window)',{mini:'Film one 15 second clip.',nap:true});
     var missing={tm:'',t:'Finish any missing school assignments (only if there are any)',opt:true};
     if(!morn){
@@ -653,9 +656,9 @@ function chapters(c){
         mom:[ugcItem].concat(hasUfc?[]:[dinnerItem],[M(null,'Baby feeds and naps set the pace')]),free:'Your window: late morning into early afternoon, best light'});
     }
     if(hasUfc){
-      L.push(morn?{id:'ufc',title:'UFC Morning Card',t:[F,990],lede:ufTxt+' Football kicks off at 11:00 too, so pick what is on.',
+      L.push(morn?{id:'ufc',title:'UFC Morning Card',t:[540,990],lede:ufTxt+' Football kicks off at 11:00 too, so pick what is on.',
         g:{jr:'Fights, chores and study between fights.',st:'Quiet play, movement breaks.',mom:'Daylight filming, dinner, laundry.'},
-        jr:jrLane(F,990),
+        jr:jrLane(540,990),
         st:J(['|Put toys away, clean bedroom, dirty clothes in the hamper','|Movement break between fights','|Books, coloring, or quiet play']),
         mom:[ugcItem,dinnerItem,M('m_laundry_sat','Move the laundry along: wash, dry, fold one basket',{mini:'Just get one load moving.'}),M(null,'Baby feeds and naps set the pace')]}
       :{id:'ufc',title:'UFC Time',t:[F,990],lede:ufTxt,
@@ -665,55 +668,43 @@ function chapters(c){
         mom:[dinnerItem,M(null,'Baby needs set the pace')]});
     }
   }
-  if(!wd||jtStruct==='home'){
+  if(!wd){
     L.push({id:'dinner',title:'Dinner and Check',t:[990,1050],lede:wd?'Eat together, cooking starts now.':'Eat together, then reset one zone.',
       g:{jr:'Dinner.',st:'Dinner, then creative play.',mom:'Family meal, then reset one zone.'},
-      jr:wd?jrLane(990,1050):J(['5:00|Meal 5']),
-      st:J(['5:00|Dinner','5:30|Creative play or independent activity']),
-      mom:[M(null,'Cooking starts at 4:30, family meal around 5:00'),M('m_reset_zone','Reset one zone for 20 minutes: office, laundry room, or a bedroom',{mini:'Set a 10 minute timer and clear the worst corner.'})]});
+      jr:jrLane(990,1050),
+      st:J([fmt(ds)+'|Dinner',fmt(ds+30)+'|Creative play or independent activity']),
+      mom:[M(null,'Cooking starts at '+cookAt+', family meal around '+eatAt),M('m_reset_zone','Reset one zone for 20 minutes: office, laundry room, or a bedroom',{mini:'Set a 10 minute timer and clear the worst corner.'})]});
   }
   if(!wd){
-  L.push({id:'reading',title:'Reading Time',t:[1050,1080],lede:'Jr reads, then helps Sterling for about 15 minutes.',
+  L.push({id:'reading',title:'Reading Time',t:[1050,1080],lede:'Quiet time. Reading, and a partial reset for you.',
     g:{jr:'Reading, then teach Sterling.',st:'Picture books with Junior.',mom:'A partial reset. About 30 minutes for you.'},
-    jr:J(['5:30|Reading','|About 15 minutes helping Sterling with letters, numbers, reading, shapes or colors']),
+    jr:jrLane(1050,1080),
     st:J(['5:30|Reading: picture books with Junior (about 15 minutes)']),
     mom:[M('m_mom30','Your 30: edit a clip, plan tomorrow, or just rest. Or start your walk early on the walking pad.',{opt:true,nap:true})],free:'Your window: about 30 minutes'});
   L.push({id:'reset',title:'Room Reset and Walk',t:[1080,1140],lede:'The boys reset their rooms, feed the dog and stretch. This is your walk window.',
     notes:[{b:'Walk',t:'Aim for 20 to 30 minutes, outside with the baby or on the walking pad at home while the boys reset their rooms. Dad can join. Not happening at 6:00? Later is fine: after dinner, or on the walking pad any time before 9:00.'}],
     g:{jr:'Room, gear, dog, stretch.',st:'Toys, clothes, bed, dog, stretch.',mom:'Your walk, then a quick room check.'},
-    jr:J(['6:00|Room reset: everything off the floor','|Clothes put away','|Bed and room organized'].concat(trainTom?['|Training items ready for tomorrow']:[],['6:30|Feed the dog with Sterling','6:40|Stretching and recovery'])),
+    jr:jrLane(1080,1140),
     st:J(['6:00|Room reset: toys put away','|Clothes picked up','|Bedroom clean','|Bed ready','6:30|Help Junior feed the dog','6:40|Simple stretching and movement']),
     mom:[M('m_walk','Walk 20 to 30 minutes: outside with the baby, or the walking pad at home',{mini:'Ten minutes on the walking pad counts.'}),M(null,'Room inspection: a quick look at both rooms'),M(null,'6:40 Baby joins the floor activity')]});
   L.push({id:'family',title:'Family Time',t:[1140,1200],lede:'Together time. TV is earned when responsibilities are done.',
     g:{jr:'Family activity, then TV if done.',st:'Family activity, then TV if done.',mom:'Be part of it.'},
-    jr:J(['7:00|Family activity: board games, reading, puzzles, crosswords, conversation','7:30|Family TV, if responsibilities are completed']),
+    jr:jrLane(1140,1200),
     st:J(['7:00|Family activity','7:30|Family TV, if responsibilities are completed']),
     mom:[M(null,'Family activity'),M(null,'Before TV, confirm everyone finished their responsibilities')]});
-  L.push({id:'wind',title:'Bedtime',t:[1200,1260],lede:'Sterling and the baby down at 8:00. Jr lights out at 9:00.',
+  L.push({id:'wind',title:'Bedtime',t:[1200,closeT],lede:'Sterling and the baby down at 8:00. Jr lights out at '+fmt(closeT)+'.',
     g:{jr:'Reading, hygiene, prep, lights out.',st:'Bedtime at 8:00.',mom:'Two bedtimes, one final check.'},
-    jr:J(['8:00|Quiet time: reading only, no personal electronics','8:30|Brush teeth','8:30|Prepare clothes'].concat(trainTom?['8:30|Prepare training equipment']:[],['8:30|Final room check','9:00|Lights out'])),
+    jr:jrLane(1200,closeT+1),
     st:J(['8:00|Bedtime']),
-    mom:[M(null,'8:00 Sterling bedtime'),M(null,'8:00 Baby bedtime routine'),M('m_walk_late','Missed your walk? 15 minutes on the walking pad after the bedtimes',{opt:true}),M('m_hair','Night hair protection: bonnet or loose braid',{opt:true}),M(null,'9:00 Jr lights out check')]});
-  }else if(jtStruct==='home'){
-  L.push({id:'reading',title:'Academic Correction and Reading',t:[1050,1145],lede:'Fix the weakest work first, then the accountability reflection and independent reading.',
-    g:{jr:'Correction, accountability, reading.',st:'Reading with Junior, then creative play.',mom:'A partial reset. About 30 minutes for you.'},
-    jr:jrLane(1050,1145),
-    st:J(['5:30|Reading: picture books with Junior (about 15 minutes)','|Creative play or independent activity']),
-    mom:[M('m_mom30','Your 30: edit a clip, plan tomorrow, or just rest. Or start your walk early on the walking pad.',{opt:true,nap:true}),M('m_reset_zone2','Reset one more zone for 20 minutes if the first is already done',{opt:true})],free:'Your window: about 30 minutes'});
-  L.push({id:'reset',title:'Room Reset, Walk and Bedtime',t:[1145,1260],lede:'Room reset, the walk window, family time, and bedtime, compressed into one stretch tonight.',
-    notes:[{b:'Walk',t:'Aim for 20 to 30 minutes, outside with the baby or on the walking pad at home. Dad can join. Any time before 9:00 works.'}],
-    g:{jr:'Room, gear, dog, prepare for tomorrow, bedtime.',st:'Toys, clothes, bed, dog, family time, bedtime.',mom:'Your walk, family time, two bedtimes.'},
-    jr:jrLane(1145,1261),
-    st:J(['6:00|Room reset: toys put away','|Clothes picked up','|Bedroom clean','|Bed ready','6:30|Help Junior feed the dog','7:00|Family activity or family TV if responsibilities are done','8:00|Bedtime']),
-    mom:[M('m_walk','Walk 20 to 30 minutes: outside with the baby, or the walking pad at home',{mini:'Ten minutes on the walking pad counts.'}),M(null,'Room inspection: a quick look at both rooms'),M(null,'Family activity, then confirm responsibilities before TV'),M(null,'8:00 Sterling bedtime'),M(null,'8:00 Baby bedtime routine'),M('m_walk_late','Missed your walk? 15 minutes on the walking pad after the bedtimes',{opt:true}),M('m_hair','Night hair protection: bonnet or loose braid',{opt:true})]});
+    mom:[M(null,'8:00 Sterling bedtime'),M(null,'8:00 Baby bedtime routine'),M('m_walk_late','Missed your walk? 15 minutes on the walking pad after the bedtimes',{opt:true}),M('m_hair','Night hair protection: bonnet or loose braid',{opt:true}),M(null,fmt(closeT)+' Jr lights out check')]});
   }
-  L.push({id:'close',title:'Close the Day',t:[1260,1440],lede:'Two minutes. Tell the book how it went so tomorrow can adjust.',g:{},jr:[],st:[],mom:[]});
+  L.push({id:'close',title:'Close the Day',t:[closeT,1440],lede:'Two minutes. Tell the book how it went so tomorrow can adjust.',g:{},jr:[],st:[],mom:[]});
   L.forEach(function(ch){
     var di=-1;for(var mi=0;mi<ch.mom.length;mi++)if(ch.mom[mi].id==='m_dinner'){di=mi;break}
     if(di>=0)ch.mom.splice(di+1,0,M('m_dinnerclean','Wipe the counters and load the dishwasher as you go, not after',{mini:'Wipe one counter. That counts.'}));
   });
   if(jt==='sick'||jt==='travel'||jt==='special'){
-    var soleLines=jrLane(0,1440);
+    var soleLines=jbLines(jrBlocks(jt),0,1440);
     L.forEach(function(ch,i){
       if(ch.id==='close')return;
       ch.jr=i===0?soleLines:[];
@@ -721,6 +712,7 @@ function chapters(c){
       if(ch.g)ch.g.jr=i===0&&soleLines[0]?soleLines[0].t:'';
     });
   }
+  L.forEach(function(ch){if(ch.jr&&ch.jr.length&&ch.g&&ch.id!=='close')ch.g.jr=jrGist(ch.jr)});
   if(!wd&&!sun&&typeof uf!=='undefined'&&uf){
     var shows=[['Early prelims',uf.ep],['Prelims',uf.p],['Main card',uf.mc]];
     L.forEach(function(ch){
@@ -752,10 +744,11 @@ function chapters(c){
     var ch=null;for(var i=0;i<L.length;i++)if(L[i].id===cu.ch&&cu.ch!=='close'){ch=L[i];break}
     (ch||L[0]).mom.push({id:cu.id,t:cu.text,custom:true,carried:cu.carried});
   });
+  L.meta={JB:JB,closeT:closeT,ds:ds,cookAt:cookAt,eatAt:eatAt};
   return L;
 }
 function getCH(){var t=ymd();if(!CH||CHdate!==t){ensureToday();CH=chapters(ctxFor(t));CHdate=t}return CH}
-function order(){return ['toc'].concat(getCH().map(function(c){return c.id}),['cal','meals','nut','jr','move','ugc','recap','sched','setup'])}
+function order(){return ['toc'].concat(getCH().map(function(c){return c.id}),['cal','meals','nut','jr','al','move','ugc','recap','sched','setup'])}
 function curChapter(){var m=nowMin(),c=getCH();for(var i=0;i<c.length;i++)if(m>=c[i].t[0]&&m<c[i].t[1])return c[i];return m<c[0].t[0]?c[0]:c[c.length-1]}
 var LANES=['mom','jr','st'];
 function chProg(c){var d=D();if(c.id==='close')return {done:d.closed?1:0,tot:1};var done=0,tot=0;LANES.forEach(function(k){c[k].forEach(function(it){if(it.opt)return;tot++;if(d.done[it.id])done++})});return {done:done,tot:tot}}
@@ -766,7 +759,7 @@ function updateStats(){
     c.mom.forEach(function(it){ids.push(it.id);if((isStar(it.id)||it.custom)&&!it.opt&&!d.done[it.id])open.push({id:it.id,t:it.t,custom:!!it.custom,ch:c.id})})});
   d.pct=tot?Math.round(done/tot*100):0;
   var st=starred(chs);d.big={done:st.filter(function(x){return d.done[x.id]}).length,total:st.length};
-  d.open=open;d.ids=ids;
+  d.open=open;d.ids=ids;d.sc=scoreToday(chs,d);delete d.sc.missed;
 }
 function skips(id){var t=ymd(),days=Object.keys(S.days).filter(function(k){return k<t&&(S.days[k].pct>0||S.days[k].closed)}).sort().slice(-5),n=0,seen=0;
   days.forEach(function(k){var dd=S.days[k];if(dd.ids&&dd.ids.indexOf(id)>=0){seen++;if(!dd.done[id])n++}});return (seen>=3&&n>=3)?n:0}
@@ -792,6 +785,7 @@ function itemHTML(it,lane,ch){
     if(it.carried||(d.carried&&d.carried.indexOf(it.id)>=0))tag+='<span class="tag">From yesterday</span>';
     if(!on&&it.mini&&!it.custom){var n=skips(it.id);if(n)hint='<span class="hint">Skipped '+n+' of the last 5 days. Try the small version: '+esc(it.mini)+'</span>'}
   }
+  if(it.ap)tag+='<span class="tag">Parent check</span>';
   var s='<div class="it '+lane+'"><button class="chk" data-a="chk" data-id="'+esc(it.id)+'" aria-pressed="'+on+'"><span class="box"></span><span class="txt">'+(it.tm?'<span class="tm">'+esc(it.tm)+'</span> ':'')+esc(txt)+(it.opt?'<span class="opt">optional</span>':'')+tag+hint+'</span></button>';
   if(lane==='mom'&&!it.opt){var on2=isStar(it.id);s+='<button class="star" data-a="star" data-id="'+esc(it.id)+'" aria-pressed="'+on2+'" aria-label="'+(on2?'Remove from':'Add to')+' your must-dos">'+star()+'</button>'}
   return s+'</div>';
@@ -812,7 +806,7 @@ function laneHTML(ch,k){
   }
   items.forEach(function(it){h+=itemHTML(it,k,ch)});
   if(k==='st'&&ch.stations){
-    var m=nowMin(),nowI=(m>=465&&m<585)?Math.floor((m-465)/25)%4:-1;
+    var m=nowMin(),w0=ch.t[0],sl=Math.max(1,Math.ceil((ch.t[1]-ch.t[0])/4)),nowI=(m>=ch.t[0]&&m<ch.t[1])?Math.min(3,Math.floor((m-w0)/sl)):-1;
     h+='<div class="stations">'+STN.map(function(s,i){var ix=idea[s.k]||0;return '<div class="stn'+(i===nowI?' now':'')+'"><h3>'+s.n+(i===nowI?'<em>Now</em>':'')+'</h3><p>Try: '+esc(s.ex[ix%s.ex.length])+'</p><button data-a="idea" data-k="'+s.k+'">Another idea</button></div>'}).join('')+'</div>';
   }
   if(k==='st'&&ch.stIdeas)h+='<div class="note">'+esc(ch.stIdeas)+'</div>';
@@ -826,6 +820,7 @@ function chapterHTML(ch){
   h+='<div class="ptitle"><div class="time">'+range(ch.t)+'</div><h2 class="title">'+esc(ch.title)+'</h2><p class="lede">'+esc(ch.lede)+'</p>'+(full?'<div class="stamp'+(freshStamp===ch.id?' fresh':'')+'">Done</div>':'')+'</div>';
   if(d.baby==='asleep')h+=quietBanner();
   (ch.notes||[]).forEach(function(n){h+='<div class="note"><b>'+esc(n.b)+':</b> '+esc(n.t)+(n.link?' <button class="pglink" data-a="goto" data-p="'+n.link+'">'+esc(n.lk||'Open')+'</button>':'')+'</div>'});
+  h+=chBehindHTML(ch);
   if(ch.id!=='close'){var em=nowMin();eatList().forEach(function(x){
     if(d.eat&&d.eat[x.k])return;if(x.t>em+30||x.t<em-180)return;
     if(x.t<ch.t[0]||x.t>=ch.t[1])return;
@@ -850,6 +845,7 @@ function closeHTML(ch){
     var st=d.big||{done:0,total:0},carrying=d.open.filter(function(o){return d.carry[o.id]!==false}).length;
     h+='<div class="closed"><h3>Day closed</h3><p>'+d.pct+'% of today\'s checklist finished. Must-dos: '+st.done+' of '+st.total+'. '+(carrying?carrying+' carrying to tomorrow. ':'')+'Tomorrow opens as a '+(d.tomorrow==='gentle'?'gentle':'full')+' day.</p></div>';
   }
+  h+=scoreCardHTML();
   return h;
 }
 function tocHTML(){
@@ -860,6 +856,7 @@ function tocHTML(){
   if(gentle)h+='<div class="banner"><b>Gentle day</b>'+esc(gentleWhy())+' Two must-dos, small versions of the rest. Everything else is a bonus.<br><button class="btn" data-a="gentle" data-v="0">Switch to a full day</button></div>';
   else if(d.gentle===false)h+='<div class="banner"><b>Full day</b>You switched back to the full plan. <button class="btn" data-a="gentle" data-v="1">Go gentle instead</button></div>';
   h+=calCardHTML();
+  h+=accTocHTML();
   h+=fuelCardHTML();
   h+=tvCardHTML();
   var bd=st.filter(function(x){return d.done[x.id]}).length;
@@ -877,7 +874,7 @@ function tocHTML(){
   h+='</div><h3 class="shh">Back of the book</h3><div class="toc" style="margin-top:6px">';
   var tn=tonight(),ud=ugcDue().length,evn=eventsOn(ymd()).length;
   function brow(p,tt,ttl,sub){return '<button class="trow" data-a="goto" data-p="'+p+'"><span class="tt">'+tt+'</span><span class="ttl">'+ttl+(sub?'<span class="sub">'+esc(sub)+'</span>':'')+'</span><span class="prog"></span></button>'}
-  h+=brow('cal','Plan','Calendar',evn?evn+' event'+(evn===1?'':'s')+' today':'Appointments and plans')+brow('meals','Dinner','Meals','Tonight: '+tn.n)+brow('nut','Fuel','Nutrition',nutTocSub())+brow('jr','Jr','Jr settings','Day type, trainer, and the 14-day reset')+brow('move','Move','Move',todayMove().n+(d.moved?' (done)':''))+brow('ugc','Work','UGC Desk',ud?ud+' follow-up'+(ud===1?'':'s')+' due':(S.ugc.length?S.ugc.length+' brand'+(S.ugc.length===1?'':'s'):'Brands and contacts'))+brow('recap','Week','Recap and journal','')+brow('sched','TV','Fights and football','Every UFC card and NFL Sunday, in Central time')+brow('setup','App','Set up','Save to your phone and back up')+'</div>';
+  h+=brow('cal','Plan','Calendar',evn?evn+' event'+(evn===1?'':'s')+' today':'Appointments and plans')+brow('meals','Dinner','Meals','Tonight: '+tn.n)+brow('nut','Fuel','Nutrition',nutTocSub())+brow('jr','Jr','Jr settings','Day type, trainer, and the 14-day reset')+brow('al','Bell','Alerts',S.al.on?(S.al.ntfy?'Sound on, phone alerts on':'Sound on, phone alerts off'):'Alerts are off')+brow('move','Move','Move',todayMove().n+(d.moved?' (done)':''))+brow('ugc','Work','UGC Desk',ud?ud+' follow-up'+(ud===1?'':'s')+' due':(S.ugc.length?S.ugc.length+' brand'+(S.ugc.length===1?'':'s'):'Brands and contacts'))+brow('recap','Week','Recap and journal','')+brow('sched','TV','Fights and football','Every UFC card and NFL Sunday, in Central time')+brow('setup','App','Set up','Save to your phone and back up')+'</div>';
   h+='<div class="seg" role="group" aria-label="Type of day"><button data-a="daytype" data-v="school" aria-pressed="'+ctxFor(ymd()).wd+'">School day</button><button data-a="daytype" data-v="weekend" aria-pressed="'+(!ctxFor(ymd()).wd)+'">Weekend</button></div>';
   return h;
 }
@@ -888,6 +885,7 @@ function recapHTML(){
   h+='<div class="bars" role="img" aria-label="Checklist percent finished per day">'+days.map(function(x){var dd=S.days[x.k],p=dd&&dd.pct?dd.pct:0;return '<div class="bar'+(x.i===0?' today':'')+'"><b>'+(dd?p+'%':'')+'</b><i style="height:'+(p*0.95)+'px"></i><span>'+x.n+'</span></div>'}).join('')+'</div>';
   var bigDays=0,tot=0;days.forEach(function(x){var dd=S.days[x.k];if(dd&&dd.big&&dd.big.total){tot++;if(dd.big.done>=dd.big.total)bigDays++}});
   h+='<div class="card"><h3>Must-dos</h3><p class="sub">Every must-do finished on '+bigDays+' of '+tot+' recorded days.</p><div class="dots" aria-label="Day ratings">'+days.map(function(x){var dd=S.days[x.k];return '<span class="dot '+(dd&&dd.rating||'')+'" title="'+x.k+'"></span>'}).join('')+'</div><p class="sub" style="margin-top:6px">Dots: green good, amber okay, red rough, grey not recorded.</p></div>';
+  h+=accCardHTML(days);
   h+=walkCard(days);
   h+=moveCard(days);
   h+=nutCard(days);
@@ -1339,6 +1337,220 @@ function showSheet(){
 function hideSheet(){var s=$('#sheet');if(s)s.hidden=true}
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferred=e;showSheet();if(open&&order()[cur]==='setup')draw(true)});
 window.addEventListener('appinstalled',function(){deferred=null;hideSheet();toast('Installed. Find it on your home screen.',4000)});
+/* ================= alerts and accountability ================= */
+function alDefaults(){return {on:true,sound:true,speak:true,vib:true,vol:2,awake:false,nudge:true,tellRico:true,ntfy:true,topic:'',rtopic:'',rphone:''}}
+function alRand(n){var a='abcdefghijkmnpqrstuvwxyz23456789',s='';try{var u=new Uint8Array(n);crypto.getRandomValues(u);for(var i=0;i<n;i++)s+=a[u[i]%a.length]}catch(e){for(var j=0;j<n;j++)s+=a[Math.floor(Math.random()*a.length)]}return s}
+function alDay(){var d=D();d.al=d.al||{};['fired','n1','n2','snz','sent'].forEach(function(k){d.al[k]=d.al[k]||{}});return d.al}
+function alShort(t,n){t=String(t||'');return t.length>n?t.slice(0,n-1)+'…':t}
+var AL_JR={breakfast:'Breakfast time',lunch:'Lunch time',dinner:'Dinner time'};
+var AL_JRIDS=['breakfast','cleanKitchen','lunch','responsibility','houseInspection','dinner','leaveHome','leaveGame','trainer','practice','kickoff','training','accountability','nightRoutine','nightlyGrade'];
+function alList(){
+  var chs=getCH(),meta=chs.meta||{},JB=meta.JB||[],jt=jrType(),out=[],d=D();
+  var soloJr=(jt==='sick'||jt==='travel'||jt==='special');
+  chs.forEach(function(ch){
+    if(ch.id==='close'){out.push({id:'c:close',at:ch.t[0],kind:'chapter',title:'Close the day',say:'Time to close the day.',body:'Two minutes: tell the book how it went so tomorrow can adjust.',fam:false});return}
+    var moms=ch.mom.filter(function(it){return !it.opt}),jr=ch.jr[0];
+    var body=moms.slice(0,2).map(function(it){return alShort(it.t,70)}).join('; ')+(jr&&jr.n?(moms.length?' · ':'')+'Jr: '+jr.n.replace(TSA,''):'');
+    out.push({id:'c:'+ch.id,at:ch.t[0],kind:'chapter',ch:ch.id,title:ch.title,say:'Next page: '+ch.title+'.',body:body||ch.lede,fam:false});
+  });
+  if(!soloJr)JB.forEach(function(b){
+    if(AL_JRIDS.indexOf(b.id)<0)return;
+    var nm=b.n.replace(TSA,''),ttl=AL_JR[b.id]||('Jr: '+nm);
+    out.push({id:'j:'+b.id,at:b.t,kind:'family',title:ttl,say:AL_JR[b.id]?(AL_JR[b.id]+'.'):('Jr. '+nm+'.'),body:b.s||'',fam:true});
+  });
+  var hasD=false,dch=null;chs.forEach(function(ch){ch.mom.forEach(function(it){if(it.id==='m_dinner'){hasD=true;dch=ch.id}})});
+  if(hasD&&meta.ds)out.push({id:'m:dinner',at:meta.ds-45,kind:'mom',item:'m_dinner',ch:dch,title:'Start dinner now',say:'Time to start dinner.',body:'Dinner is at '+fmt(meta.ds)+'.',fam:true});
+  out.push({id:'f:bed',at:1200,kind:'family',title:'Bedtime for Sterling and the baby',say:'Bedtime for Sterling and the baby.',body:'',fam:true});
+  var bt=jbAt(JB,'bedtime',null);
+  if(!soloJr&&bt!=null)out.push({id:'f:lights',at:bt-15,kind:'family',title:'Jr: lights out in 15 minutes',say:'Jr. Lights out in fifteen minutes.',body:'',fam:true});
+  return out.sort(function(a,b){return a.at-b.at})}
+function alBehind(a,stage){
+  var d=D();
+  if(a.item)return !d.done[a.item];
+  if(!a.ch)return false;
+  var ch=getCH().filter(function(c){return c.id===a.ch})[0];if(!ch)return false;
+  var moms=ch.mom.filter(function(it){return !it.opt}),done=moms.filter(function(it){return d.done[it.id]}).length;
+  if(!moms.length)return false;
+  return stage===1?done===0:done<moms.length}
+function alOpenText(a){
+  var d=D(),ch=getCH().filter(function(c){return c.id===a.ch})[0];if(a.item&&!ch)return 'Not checked off yet.';
+  if(!ch)return '';var moms=ch.mom.filter(function(it){return !it.opt}),left=moms.filter(function(it){return !d.done[it.id]});
+  if(a.item)return 'Not checked off yet.';
+  return left.length===moms.length?'Nothing checked off yet.':left.length+' of '+moms.length+' still open.'}
+/* ---- sound ---- */
+var AC=null,wl=null,alBarT=null;
+function alUnlock(){try{if(!AC){var C=window.AudioContext||window.webkitAudioContext;if(C)AC=new C()}if(AC&&AC.state==='suspended')AC.resume()}catch(e){}}
+['pointerdown','touchend','keydown'].forEach(function(ev){document.addEventListener(ev,alUnlock,{passive:true})});
+function alChime(kind){
+  if(!S.al.sound||!AC)return;
+  try{
+    var v=[0,.12,.25,.45][S.al.vol]||.25,seq=kind==='nudge'?[[659,0],[523,.24],[659,.48],[523,.72]]:[[784,0],[988,.17],[1175,.34]],t0=AC.currentTime+.02;
+    seq.forEach(function(n){var o=AC.createOscillator(),g=AC.createGain();o.type=kind==='nudge'?'triangle':'sine';o.frequency.value=n[0];
+      g.gain.setValueAtTime(.0001,t0+n[1]);g.gain.exponentialRampToValueAtTime(v,t0+n[1]+.03);g.gain.exponentialRampToValueAtTime(.0001,t0+n[1]+.5);
+      o.connect(g);g.connect(AC.destination);o.start(t0+n[1]);o.stop(t0+n[1]+.55)});
+  }catch(e){}}
+function alSpeak(t){
+  if(!S.al.speak||!window.speechSynthesis||!window.SpeechSynthesisUtterance||!t)return;
+  setTimeout(function(){try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.rate=.95;u.volume=[0,.5,.8,1][S.al.vol]||.8;speechSynthesis.speak(u)}catch(e){}},S.al.sound?900:50)}
+function alWake(){
+  try{
+    if(S.al.on&&S.al.awake&&document.visibilityState==='visible'&&navigator.wakeLock){
+      if(!wl){navigator.wakeLock.request('screen').then(function(l){wl=l;l.addEventListener('release',function(){wl=null})}).catch(function(){})}
+    }else if(wl){wl.release();wl=null}
+  }catch(e){}}
+function alShow(o){
+  var el=$('#alertbar');if(!el)return;
+  var open_=o.ch&&o.ch!=='close'||o.item;
+  el.innerHTML='<div class="alt"><b>'+esc(o.title)+'</b><span>'+esc(o.body||'')+'</span></div><div class="alb">'+(o.ch?'<button class="btn primary" data-a="alopen" data-id="'+esc(o.id)+'">Open page</button>':'')+'<button class="btn" data-a="alsnooze" data-id="'+esc(o.id)+'">Snooze 10 min</button><button class="btn" data-a="aldismiss">Got it</button></div>';
+  el.hidden=false;el.classList.toggle('nudge',o.type==='n1'||o.type==='n2');
+  clearTimeout(alBarT);alBarT=setTimeout(function(){el.hidden=true},120000)}
+function alHide(){var el=$('#alertbar');if(el)el.hidden=true;clearTimeout(alBarT)}
+function alFire(a,type){
+  var st=alDay(),title,body=a.body,say=a.say;
+  if(type==='start'){st.fired[a.id]=Date.now()}
+  else if(type==='n1'){st.n1[a.id]=Date.now();title='Still on this? '+a.title;body=alOpenText(a);say='Still on '+a.title+'? '+body}
+  else if(type==='n2'){st.n2[a.id]=Date.now();title='Running behind: '+a.title;body=alOpenText(a)+' Check it off or tell the book what happened.';say='Running behind on '+a.title+'.'}
+  else if(type==='snz'){title='Reminder: '+a.title;say='Reminder. '+a.title+'.'}
+  var o={id:a.id,title:title||a.title,body:body,ch:a.ch,item:a.item,type:type};
+  save();
+  alChime(type==='start'?'start':'nudge');alSpeak(say);
+  if(S.al.vib&&navigator.vibrate)try{navigator.vibrate(type==='start'?[200,100,200]:[300,120,300,120,300])}catch(e){}
+  alShow(o);
+  if(type==='n2'&&S.al.tellRico&&S.al.ntfy&&S.al.rtopic)alSend(S.al.rtopic,{title:'Running behind: '+a.title,message:alOpenText(a),priority:3,tags:['warning']}).catch(function(){});
+}
+function alTick(){
+  if(!S.al||!S.al.on)return;
+  var st=alDay(),m=nowMin(),now=Date.now(),list=alList(),todo=null;
+  for(var i=0;i<list.length&&!todo;i++){
+    var a=list[i],f=st.fired[a.id];
+    if(!f){if(m>=a.at){if(m<a.at+12)todo={a:a,t:'start'};else st.fired[a.id]=-1}continue}
+    if(f<0||!S.al.nudge||!(a.ch||a.item)||a.kind==='family')continue;
+    if(!st.n1[a.id]&&m>=a.at+10){if(m<a.at+45&&alBehind(a,1))todo={a:a,t:'n1'};else st.n1[a.id]=-1;if(todo)break}
+    if(!st.n2[a.id]&&m>=a.at+30){if(m<a.at+75&&alBehind(a,2))todo={a:a,t:'n2'};else st.n2[a.id]=-1}
+  }
+  if(!todo)Object.keys(st.snz).forEach(function(id){if(todo)return;if(now>=st.snz[id]){var a=list.filter(function(x){return x.id===id})[0];delete st.snz[id];if(a)todo={a:a,t:'snz'}}});
+  if(todo)alFire(todo.a,todo.t);
+}
+/* ---- phone alerts through ntfy.sh ---- */
+var alBusy=false;
+function alUrl(){return /^https?:/.test(location.protocol)?location.href.split('#')[0]:undefined}
+function alSend(topic,msg){
+  if(!topic||!window.fetch)return Promise.reject(new Error('no topic'));
+  var o={topic:topic,title:msg.title,message:msg.message||msg.title,priority:msg.priority||4,tags:msg.tags||['bell']},u=alUrl();
+  if(u)o.click=u;
+  if(msg.at)o.delay=String(Math.floor(msg.at/1000));
+  return fetch('https://ntfy.sh',{method:'POST',mode:'no-cors',body:JSON.stringify(o)})}
+function alDayStart(k){var p=k.split('-');return new Date(+p[0],+p[1]-1,+p[2],0,0,0).getTime()}
+function alPush(){
+  if(!S.al||!S.al.on||!S.al.ntfy||!S.al.topic||alBusy||(navigator.onLine===false))return;
+  var st=alDay(),jobs=[],now=Date.now(),t=ymd(),base=alDayStart(t);
+  alList().forEach(function(a){
+    var when=base+a.at*60000;if(when-now<30000)return;
+    var sig=a.at+'|'+a.title+'|'+a.body;
+    var msg={title:a.title,message:a.body||a.title,at:when,priority:a.kind==='chapter'?4:4};
+    if(st.sent['d:'+a.id]!==sig)jobs.push({k:'d:'+a.id,sig:sig,topic:S.al.topic,msg:msg});
+    if(a.fam&&S.al.rtopic&&st.sent['r:'+a.id]!==sig)jobs.push({k:'r:'+a.id,sig:sig,topic:S.al.rtopic,msg:msg});
+  });
+  var tm=addD(t,1),tdow=new Date(tm+'T12:00:00').getDay(),mk='d:morning:'+tm;
+  if(!st.sent[mk]){var mw=alDayStart(tm)+((tdow>=1&&tdow<=5)?390:450)*60000;
+    jobs.push({k:mk,sig:'1',topic:S.al.topic,msg:{title:'Good morning. Open the Day Book',message:"Open the book so today's alerts get lined up.",at:mw,priority:4,tags:['sunrise']}})}
+  jobs=jobs.slice(0,70);if(!jobs.length)return;
+  alBusy=true;var i=0;
+  (function next(){
+    if(i>=jobs.length){alBusy=false;save();return}
+    var j=jobs[i++];
+    alSend(j.topic,j.msg).then(function(){st.sent[j.k]=j.sig;setTimeout(next,350)},function(){alBusy=false;save()});
+  })();
+}
+/* ---- scorecard ---- */
+function scoreToday(chs,d){
+  var tot=0,done=0,on=0,late=0,m=nowMin(),missed=[],jrT=0,jrD=0,stT=0,stD=0;
+  chs.forEach(function(c){
+    if(c.id==='close')return;
+    c.mom.forEach(function(it){
+      if(it.opt)return;tot++;
+      if(d.done[it.id]){done++;var at=d.doneAt&&d.doneAt[it.id];if(at==null||at<=c.t[1]+15)on++;else late++}
+      else if(m>=c.t[1])missed.push(it.t);
+    });
+    c.jr.forEach(function(it){if(it.opt)return;jrT++;if(d.done[it.id])jrD++});
+    c.st.forEach(function(it){if(it.opt)return;stT++;if(d.done[it.id])stD++});
+  });
+  return {tot:tot,done:done,on:on,late:late,missed:missed,jrT:jrT,jrD:jrD,stT:stT,stD:stD}}
+function alStreak(){
+  var n=0,t=ymd(),dd=S.days[t],k=addD(t,-1);
+  function good(x){return x&&x.sc&&x.sc.tot&&x.sc.done/x.sc.tot>=.8}
+  if(dd&&dd.closed&&good(dd))n++;
+  for(var i=0;i<60;i++){if(!good(S.days[k]))break;n++;k=addD(k,-1)}
+  return n}
+function scoreText(){
+  var d=D(),chs=getCH(),s=scoreToday(chs,d),t=new Date(),pc=s.tot?Math.round(s.done/s.tot*100):0;
+  var L=["Devon's Day Book · "+DAYS[t.getDay()]+' '+MONTHS[t.getMonth()]+' '+t.getDate(),
+    'Must-dos done: '+s.done+' of '+s.tot+' ('+pc+'%)',
+    'On time: '+s.on+' · Late: '+s.late+' · Missed: '+s.missed.length];
+  if(s.missed.length)L.push('Missed: '+s.missed.slice(0,6).map(function(x){return alShort(x,48)}).join('; ')+(s.missed.length>6?' and '+(s.missed.length-6)+' more':''));
+  if(s.jrD||s.stD)L.push('Checked in the book: Jr '+s.jrD+' of '+s.jrT+' · Sterling '+s.stD+' of '+s.stT);
+  var sk=alStreak();if(sk)L.push('Streak: '+sk+' day'+(sk===1?'':'s')+' at 80% or better');
+  if(d.rating)L.push('How it felt: '+d.rating);
+  return L.join('\n')}
+function scoreCardHTML(){
+  var txt=scoreText(),num=(S.al&&S.al.rphone||'').replace(/[^\d+]/g,'');
+  var h='<div class="card"><h3>Scorecard for Rico</h3><p class="sub">Send it before you put the phone down.</p><pre class="scorepre">'+esc(txt)+'</pre><div class="acts"><a class="btn primary" href="sms:'+esc(num)+'?&body='+encodeURIComponent(txt)+'">Text it to Rico</a><button class="btn" data-a="sccopy">Copy</button>'+(navigator.share?'<button class="btn" data-a="scshare">Share</button>':'')+'</div>';
+  if(S.al.ntfy&&S.al.rtopic)h+='<p class="sub" style="margin-top:6px">It also goes to Rico\'s phone alerts when you close the day.</p>';
+  return h+'</div>'}
+function alScorePost(){
+  var st=alDay();if(st.scsent||!S.al.ntfy||!S.al.rtopic)return;
+  st.scsent=1;save();alSend(S.al.rtopic,{title:'Day closed: scorecard',message:scoreText(),priority:3,tags:['clipboard']}).catch(function(){st.scsent=0})}
+function behindList(){
+  var m=nowMin(),d=D(),r=[];
+  getCH().forEach(function(c){
+    if(c.id==='close'||c.t[1]>m-5)return;
+    var open=c.mom.filter(function(it){return !it.opt&&!d.done[it.id]});
+    if(open.length)r.push({ch:c,open:open})});
+  return r}
+function accTocHTML(){
+  var b=behindList(),sk=alStreak(),h='';
+  if(b.length){
+    var n=b.reduce(function(a,x){return a+x.open.length},0);
+    h+='<div class="banner behind"><b>Catch up: '+n+' thing'+(n===1?'':'s')+' still open</b>';
+    b.slice(0,4).forEach(function(x){h+='<div>'+esc(x.ch.title)+': '+x.open.length+' open <button class="pglink" data-a="goto" data-p="'+x.ch.id+'">Page</button></div>'});
+    h+=b.length>4?'<div>and '+(b.length-4)+' more pages.</div>':'';
+    h+='<small>Check off what is done. Whatever is left can carry to tomorrow when you close the day.</small></div>';
+  }
+  if(sk>=2)h+='<div class="banner"><b>Streak: '+sk+' days</b>At least 80% of your must-dos, day after day. Keep it going.</div>';
+  return h}
+function chBehindHTML(ch){
+  if(ch.id==='close')return '';
+  var m=nowMin(),d=D(),moms=ch.mom.filter(function(it){return !it.opt}),open=moms.filter(function(it){return !d.done[it.id]});
+  if(!open.length)return '';
+  if(ch.t[1]<=m-5)return '<div class="banner behind"><b>Behind on this page</b>'+open.length+' of '+moms.length+' still open. This page ended at '+fmt(ch.t[1])+'. Do it now, or let it carry to tomorrow.</div>';
+  if(ch.t[0]<=m-15&&m<ch.t[1]&&open.length===moms.length)return '<div class="banner behind"><b>Not started</b>This page began at '+fmt(ch.t[0])+'. Pick the first thing and do it now.</div>';
+  return ''}
+function accCardHTML(days){
+  var tot=0,done=0,on=0,n=0;
+  days.forEach(function(x){var s=S.days[x.k]&&S.days[x.k].sc;if(s&&s.tot){tot+=s.tot;done+=s.done;on+=s.on;n++}});
+  if(!n)return '<div class="card"><h3>On schedule</h3><p class="sub">Your on-time score shows up after a day or two of checking things off.</p></div>';
+  var sk=alStreak();
+  return '<div class="card"><h3>On schedule</h3><p class="sub" style="color:var(--ink)">Done at all: <b>'+Math.round(done/tot*100)+'%</b> · Done on time: <b>'+Math.round(on/tot*100)+'%</b> ('+on+' of '+tot+' must-dos over '+n+' day'+(n===1?'':'s')+').</p><p class="sub">'+(sk?'Streak: '+sk+' day'+(sk===1?'':'s')+' at 80% or better.':'Streak: a day at 80% or better starts one.')+'</p><div class="dots" aria-label="On-time by day">'+days.map(function(x){var s=S.days[x.k]&&S.days[x.k].sc,p=s&&s.tot?s.done/s.tot:null;return '<span class="dot '+(p==null?'':p>=.8?'good':p>=.5?'okay':'rough')+'" title="'+x.k+'"></span>'}).join('')+'</div></div>'}
+/* ---- alerts page ---- */
+function alRow(f,label){var on=!!S.al[f];return '<button class="alrow" data-a="altog" data-f="'+f+'" aria-pressed="'+on+'"><span>'+label+'</span><b>'+(on?'On':'Off')+'</b></button>'}
+function alHTML(){
+  var d=D(),st=alDay(),n=Object.keys(st.sent).length,list=alList(),m=nowMin();
+  var h='<div class="ptop"><span class="eyebrow">Back pages</span>'+babyToggle()+'</div><div class="ptitle"><div class="time">Alerts</div><h2 class="title">Sound and accountability</h2><p class="lede">The book chimes, says the next thing out loud, and nudges again if nothing gets checked off. Phone alerts keep working when the book is closed.</p></div>';
+  h+='<div class="card"><h3>In the book</h3>'+alRow('on','Alerts')+alRow('sound','Chime')+alRow('speak','Say it out loud')+alRow('vib','Vibrate')+alRow('nudge','Nudge again if nothing is checked off')+alRow('awake','Keep the screen on while the book is open')+
+    '<label class="alvl">Volume</label><div class="seg" role="group" aria-label="Volume">'+[['1','Low'],['2','Medium'],['3','High']].map(function(v){return '<button data-a="alvol" data-v="'+v[0]+'" aria-pressed="'+(String(S.al.vol)===v[0])+'">'+v[1]+'</button>'}).join('')+'</div>'+
+    '<div class="acts"><button class="btn primary" data-a="altest">Play a test</button></div><p class="rtip">The ringer switch must be on and the volume up. The first tap in the book turns sound on for the phone. Keeping the screen on uses more battery, so plug in while the family is home.</p></div>';
+  h+='<div class="card"><h3>Phone alerts when the book is closed</h3><p class="sub" style="color:var(--ink)">Uses the free ntfy app. Each time you open the book, today\'s alerts are lined up and sent to the ntfy service, which delivers them to the phones on time with a sound.</p>'+alRow('ntfy','Send phone alerts')+alRow('tellRico','Tell Rico when a second nudge fires')+
+    '<h4 class="sh4">Devon\'s phone</h4><label for="al_t1" class="alvl">Your topic name</label><input id="al_t1" type="text" readonly value="'+esc(S.al.topic)+'"><div class="acts"><button class="btn" data-a="alcopy" data-v="'+esc(S.al.topic)+'">Copy topic</button></div>'+
+    '<ol class="rsteps"><li>Open the App Store (iPhone) or Play Store (Android) and install the free app named ntfy.</li><li>Open ntfy and tap the plus button.</li><li>In Topic name, paste the topic name above exactly as written.</li><li>Leave the server on the default ntfy.sh.</li><li>Tap Subscribe.</li><li>When your phone asks to allow notifications, tap Allow. Then in your phone settings, make sure ntfy has sounds turned on.</li><li>Come back here, make sure Send phone alerts says On, and tap Send test alert below.</li></ol>'+
+    '<h4 class="sh4">Rico\'s phone</h4><label for="al_t2" class="alvl">Rico\'s topic name</label><input id="al_t2" type="text" readonly value="'+esc(S.al.rtopic)+'"><div class="acts"><button class="btn" data-a="alcopy" data-v="'+esc(S.al.rtopic)+'">Copy topic</button></div>'+
+    '<ol class="rsteps"><li>On Rico\'s phone, install the free ntfy app.</li><li>Open ntfy and tap the plus button.</li><li>In Topic name, enter the topic name above exactly as written.</li><li>Leave the server on the default ntfy.sh, then tap Subscribe and allow notifications.</li></ol>'+
+    '<p class="sub">Rico\'s phone gets the family moments (meals, leave times, bedtimes), a note if a second nudge fires, and the scorecard when the day is closed.</p>'+
+    '<div class="acts"><button class="btn primary" data-a="alpushtest">Send test alert to both phones</button></div>'+
+    '<p class="rtip">Anyone who knows a topic name can read its alerts, so keep these names to yourselves. Alerts for later today are lined up when you open the book ('+n+' lined up so far today). Open the book once each morning. If you change today\'s day type after that, an old alert may still ring, so ignore it.</p></div>';
+  h+='<div class="card"><h3>Scorecard texting</h3><label for="al_ph" class="alvl">Rico\'s mobile number (optional)</label><input id="al_ph" type="tel" inputmode="tel" placeholder="Fills in the To line when you text the scorecard" value="'+esc(S.al.rphone||'')+'"><div class="acts"><button class="btn" data-a="alphone">Save number</button></div></div>';
+  h+='<h3 class="shh">Today\'s alerts</h3><div class="alsch">'+list.map(function(a){var f=st.fired[a.id];return '<div class="alr'+(f>0?' done':a.at<m?' past':'')+'"><span>'+fmt(a.at)+'</span><b>'+esc(a.title)+'</b></div>'}).join('')+'</div>';
+  return h}
+
 /* ================= setup page ================= */
 function backupText(){try{return JSON.stringify(S)}catch(e){return ''}}
 function setupHTML(){
@@ -1536,18 +1748,19 @@ function nutCard(days){
   return '<div class="card"><h3>Fuel</h3><p class="sub">'+(ed?'Meals and snacks logged: about '+(Math.round(eats/ed*10)/10)+' a day (goal 6). ':'No meals logged yet this week. ')+(wd?'Water: about '+Math.round(wc/wd)+' cups a day (goal '+waterGoalCups()+'). ':'')+(vd?'Vitamins on '+vd+' of the last 7 days.':'')+'</p></div>'}
 
 /* ================= JR schedule ================= */
-var JR_TYPES=[['auto','Auto (follow the weekly plan)'],['home','Home Academic Day'],['trainer','Trainer Day'],['game','Game Day'],['sat','Development Day'],['sun','Recovery Day'],['sick','Sick Day'],['travel','Travel Day'],['special','Special Event Day']];
+var JR_TYPES=[['auto','Auto (follow the weekly plan)'],['home','Home Academic + Development Day'],['homedev','Home Development Day (trainer suspended)'],['trainer','Training Day (Trainer)'],['practice','Practice Day (Team)'],['game','Game Day'],['sat','Saturday Development Day'],['sun','Sunday Reset Day'],['sick','Sick Day'],['travel','Travel Day'],['special','Special Event Day']];
 var JR_MOVE={1:'Easy mile or aerobic conditioning.',2:'Mobility and core.',3:'Mobility.',5:'Mobility and recovery.'};
 var JR_ACC={1:'Decision making',2:'Honesty',3:'Leadership',4:'Game reflection',5:'Weekly self evaluation',6:'Life skills',0:'Goals'};
 var JR_CHORES=['Bedroom','Bathroom','Laundry','Kitchen','Dishes','Sweeping and mopping','Vacuuming','Organization','Trash','Helping Sterling','Helping Miss Devyn','Yard'];
 var JR_SUBJECTS=['Fast Math','Math','Writing','Science','Reading','Language','History'];
 var JR_GEAR=['Helmet','Guardian cover, if required','Shoulder pads','Game pants','Jersey','Cleats','Socks','Mouthpiece','Gloves','Water','Braces or supports','Anything else the team requires'];
-function jrDefaults(){return {trainerPaused:true,weak1:'Math',weak2:'Writing',resetStart:null,resetOn:true,gameTime:1050,gameBefore:60,gameDrive:35,trainTime:690,trainDur:90,trainDrive:35}}
+function jrDefaults(){return {trainerPaused:false,weak1:'Math',weak2:'Writing',resetStart:null,resetOn:true,gameTime:1050,gameBefore:60,gameDrive:55,trainTime:690,trainDur:90,trainDrive:35,practTime:1130,practDur:120,practDrive:35}}
 function jrDay(){return D()}
 function jrChoreSuggest(){return JR_CHORES[doy()%JR_CHORES.length]}
 function jrAutoType(dow){
-  if(dow===1||dow===2)return 'home';
-  if(dow===3||dow===5)return S.jr.trainerPaused?'home':'trainer';
+  if(dow===1)return 'practice';
+  if(dow===2)return 'home';
+  if(dow===3||dow===5)return S.jr.trainerPaused?'homedev':'trainer';
   if(dow===4)return 'game';
   if(dow===6)return 'sat';
   return 'sun'}
@@ -1557,119 +1770,82 @@ function jrResetDays(){
   var st=new Date(S.jr.resetStart+'T00:00:00'),now=new Date(ymd()+'T00:00:00');
   var n=Math.floor((now-st)/86400000)+1;return n}
 function B(id,t,d,n,s,fixed){return {id:id,t:t,d:d,n:n,s:s||'',fixed:!!fixed}}
+var TSA=' — Texas Sports Academy';
+var JR_SCHED={
+home:['wake|Wake Up|6:00|15|f','movement|Speed, Agility & Footwork Training|6:15|45','breakfast|Breakfast|7:00|30','washDishesBreakfast|Wash Dishes|7:30|15|a','schoolPrep|School Preparation|7:45|15','fastMath|Fast Math|8:00|15|a','math|Mathematics|8:15|45|a','break1|Break|9:00|10','writing|Writing — Weekly Essay'+TSA+'|9:10|60|a','break2|Break|10:10|10','science|Science|10:20|40|a','lunch|Lunch|11:00|40','cleanKitchen|Clean Kitchen|11:40|30|a','reading|Advanced Reading And Comprehension|12:10|35|a','break3|Break|12:45|10','language|Language|12:55|30|a','history|History And Social Studies|13:25|30|a','filmStudy|Film Study|13:55|30','snackPrep|Snack And Training Preparation|14:25|20','training|Workout & Football Touches|14:45|80','dinner|Dinner|16:30|40','responsibility|Responsibility Block|17:10|50|a','houseInspection|House Inspection Walk-Through|18:00|35|a','correction|Academic Correction|18:35|30','accountability|Accountability And Life Skills|19:05|20','indepReading|Independent Reading|19:25|25','tomorrowPrep|Tomorrow Preparation|19:50|15','nightRoutine|Night Routine|20:05|15','nightlyGrade|Nightly Grade (Parents)|20:20|5','screenTime|Screen Time (TV Only)|20:25|30','bedtime|Lights Out|21:30|0|f'],
+homedev:['wake|Wake Up|6:00|15|f','movement|Speed, Agility & Footwork Training|6:15|45','breakfast|Breakfast|7:00|30','washDishesBreakfast|Wash Dishes|7:30|15|a','schoolPrep|School Preparation|7:45|15','fastMath|Fast Math|8:00|15|a','math|Mathematics|8:15|55|a','break1|Break|9:10|10','writing|Writing — Weekly Essay'+TSA+'|9:20|60|a','break2|Break|10:20|10','science|Science|10:30|40|a','lunch|Lunch|11:10|40','cleanKitchen|Clean Kitchen|11:50|30|a','reading|Advanced Reading And Comprehension|12:20|35|a','break3|Break|12:55|10','language|Language|13:05|30|a','history|History And Social Studies|13:35|30|a','filmStudy|Film Study|14:05|30','snackPrep|Snack And Training Preparation|14:35|20','training|Workout & Football Touches|14:55|80','dinner|Dinner|16:40|40','responsibility|Responsibility Project|17:20|50|a','houseInspection|House Inspection Walk-Through|18:10|35|a','correction|Academic Correction|18:45|30','accountability|Accountability And Life Skills|19:15|20','indepReading|Independent Reading|19:35|25','tomorrowPrep|Tomorrow Preparation|20:00|15','nightRoutine|Night Routine|20:15|15','nightlyGrade|Nightly Grade (Parents)|20:30|5','screenTime|Screen Time (TV Only)|20:35|30','bedtime|Lights Out|21:30|0|f'],
+trainer:['wake|Wake Up|6:00|15|f','movement|Mobility And Recovery|6:15|20','breakfast|Breakfast|6:35|30','washDishesBreakfast|Wash Dishes|7:05|15|a','fastMath|Fast Math'+TSA+'|7:20|15|a','math|Math'+TSA+'|7:35|45|a','break1|Break|8:20|10','writing|Writing — Weekly Essay'+TSA+'|8:30|60|a','science|Science'+TSA+'|9:30|20|a','trainPrep|Snack And Training Preparation|10:20|30','leaveHome|Leave House For Trainer|10:50|0|f','trainer|Trainer Session|11:30|90|f','travelHome|Travel Home|13:00|35|f','lunch|Lunch And Recovery|14:00|40','cleanKitchen|Clean Kitchen|14:40|30|a','reading|Reading And Comprehension'+TSA+'|15:10|35|a','langHist|Language Or History'+TSA+'|15:45|30|a','break2|Break|16:15|10','filmStudy|Film Study|16:25|30','correction|Academic Correction|16:55|30','dinner|Dinner|17:25|40','responsibility|Responsibility Block|18:05|50|a','houseInspection|House Inspection Walk-Through|18:55|35|a','accountability|Accountability And Life Skills|19:30|15','indepReading|Independent Reading|19:45|25','tomorrowPrep|Tomorrow Preparation And Room Reset|20:10|15','nightRoutine|Night Routine|20:25|15','nightlyGrade|Nightly Grade (Parents)|20:40|5','screenTime|Screen Time (TV Only)|20:45|30','bedtime|Lights Out|21:30|0|f'],
+practice:['wake|Wake Up|6:00|15|f','movement|Mobility And Activation|6:15|20','breakfast|Breakfast|6:35|30','washDishesBreakfast|Wash Dishes|7:05|15|a','schoolPrep|School Preparation|7:20|15','fastMath|Fast Math'+TSA+'|7:35|15|a','math|Mathematics'+TSA+'|7:50|45|a','break1|Break|8:35|10','writing|Writing — Weekly Essay'+TSA+'|8:45|60|a','science|Science'+TSA+'|9:45|40|a','lunch|Lunch|10:25|40','cleanKitchen|Clean Kitchen|11:05|30|a','reading|Reading And Comprehension'+TSA+'|11:35|35|a','language|Language'+TSA+'|12:10|30|a','history|History And Social Studies'+TSA+'|12:40|30|a','filmStudy|Film Study|13:10|30','correction|Academic Correction|13:40|25','dinner|Early Dinner|14:05|40','responsibility|Responsibility Block|14:45|50|a','houseInspection|House Inspection Walk-Through|15:35|35|a','accountability|Accountability And Life Skills|16:10|15','indepReading|Independent Reading|16:25|20','tomorrowPrep|Tomorrow Preparation|16:45|10','screenTime|Screen Time (TV Only)|16:55|15','snackPrep|Snack And Practice Preparation|17:45|30','leaveHome|Leave House For Practice|18:15|0|f','practice|Team Practice|18:50|120|f','travelHome|Travel Home|20:50|30|f','postSnack|Post-Practice Recovery Snack|21:20|15','nightRoutine|Night Routine|22:00|15','nightlyGrade|Nightly Grade (Parents)|22:15|5','bedtime|Lights Out|22:30|0|f'],
+game:['wake|Wake Up|6:00|15|f','movement|Mobility Only|6:15|20','breakfast|Breakfast|6:35|30','washDishesBreakfast|Wash Dishes|7:05|15|a','fastMath|Fast Math'+TSA+'|7:20|15|a','math|Math'+TSA+'|7:35|45|a','break1|Break|8:20|10','writing|Writing — Weekly Essay'+TSA+'|8:30|60|a','science|Science'+TSA+'|9:30|40|a','language|Language'+TSA+'|10:10|30|a','lunch|Lunch|10:40|40','cleanKitchen|Clean Kitchen|11:20|30|a','reading|Reading And Comprehension'+TSA+'|11:50|35|a','history|History'+TSA+'|12:25|30|a','filmStudy|Film Study|12:55|30','correction|Academic Correction|13:25|20','quietRecovery|Quiet Recovery|13:45|20','pregameFood|Pregame Meal|14:30|30','gamePrep|Game Preparation|15:00|35','leaveGame|Leave For The Game|15:35|55|f','kickoff|Game|17:30|150|f','afterGame|After The Game|20:00|60','nightlyGrade|Nightly Grade (Parents)|21:00|5','screenTime|Screen Time (TV Only)|21:05|20'],
+sat:['wake|Wake Up|7:00|15|f','hygieneRoom|Hygiene And Room|7:15|15','breakfast|Breakfast|7:30|30','washDishesBreakfast|Wash Dishes|8:00|15|a','deepClean|Deep Clean And Laundry|8:15|60|a','weakest|Weakest Academic Subject'+TSA+'|9:15|60','break1|Break|10:15|15','secondWeakest|Second Weakest Academic Subject'+TSA+'|10:30|45','reading|Reading'+TSA+'|11:15|35|a','lunch|Lunch|11:50|40','cleanKitchen|Clean Kitchen|12:30|30|a','lifeSkills|Life Skills|13:00|45','filmStudy|Film Study|13:45|25','afternoon|Football, Volunteering, Or Family Time|14:10|120','dinner|Dinner|16:35|40','houseInspection|House Inspection Walk-Through|17:15|35|a','screenTime|Screen Time (TV Only)|17:50|30','nightRoutine|Night Routine|18:20|20','bedtime|Lights Out|21:30|0|f'],
+sun:['wake|Wake Up|7:30|15|f','hygieneBreakfast|Hygiene And Breakfast|7:45|40','washDishesBreakfast|Wash Dishes|8:25|15|a','familyChurch|Family, Church, Or Recovery|8:40|205','lunch|Lunch|12:05|40','cleanKitchen|Clean Kitchen|12:45|30|a','familyTime|Family And Recovery Time|13:15|150','indepReading|Independent Reading|15:45|30','weakReview|Review Anything Weak From This Week|16:15|30','weeklyPlanning|Weekly Planning|16:45|30','dinner|Dinner|17:15|40','houseInspection|House Inspection Walk-Through|17:55|35|a','screenTime|Screen Time (TV Only)|18:30|30','nightRoutine|Night Routine|19:00|20','bedtime|Lights Out|21:30|0|f']
+};
+function jrTm(s){var p=s.split(':');return parseInt(p[0],10)*60+parseInt(p[1],10)}
+function jrTable(type){return (JR_SCHED[type]||[]).map(function(r,i){var p=r.split('|'),f=p[4]||'';return {id:p[0],n:p[1],t:jrTm(p[2]),d:parseInt(p[3],10),fixed:f.indexOf('f')>=0,ap:f.indexOf('a')>=0,s:'',_i:i}})}
+function jrNoteFor(id,type,dow,n,d){
+  var ess='Essay topics: Black history, Black education, African American history, responsibility, respect. The approved sites and the 17 steps are in Jr\'s app.';
+  var log='Keep the log: chapter or page start and end, pages read, synopsis, comprehension answers.';
+  switch(id){
+    case 'wake':
+      var pk=addD(ymd(),-1),py=(S.days[pk]&&S.days[pk].jrType)||jrAutoType((dow+6)%7);
+      return (py==='practice'||py==='game')?'Recovery shower this morning (yesterday was a '+(py==='game'?'game':'practice')+' day). Bathroom, teeth, water, make the bed.':'No morning shower today. Bathroom, teeth, water, make the bed.';
+    case 'breakfast':return 'Eat it, then wipe your spot and rinse your dish.';
+    case 'washDishesBreakfast':return 'Quick. Wash the breakfast dishes.';
+    case 'cleanKitchen':return 'In order: dishes, pots and pans, counters, stove, floors last.';
+    case 'houseInspection':return 'Walk through the rooms. Dog fed and walked.';
+    case 'responsibility':return 'Four areas: Final Kitchen Clean-Up, Bathroom, Upstairs Living Room, His Room. The ordered steps are in Jr\'s app.'+(d.jrChore?' Today\'s focus: '+d.jrChore+'.':'');
+    case 'writing':return ess;
+    case 'reading':case 'indepReading':return log;
+    case 'correction':return 'Catch-up block: finish any unfinished school blocks and school XP.';
+    case 'accountability':return 'Jr writes it, then reads it aloud. A parent confirms with the code. Topic: '+(JR_ACC[dow]||'Reflection')+'.';
+    case 'nightlyGrade':return 'Parents give 1 to 5 stars in 5 areas: Participation, Attitude, Behavior, School Work, Practice or Training Effort.'+(dow===5?' Friday: the Monday to Friday average sets weekend video-game time (A = 180 min a day, B = 120, lower = none).':'');
+    case 'screenTime':return 'TV only.';
+    case 'break1':case 'break2':case 'break3':return 'Bathroom, water, stretch. No electronics.';
+    case 'weakest':return 'This week: '+n.weak1+'.';
+    case 'secondWeakest':return 'This week: '+n.weak2+'.';
+    case 'training':return 'Shower right after training. Heat check first: water, shade, and move it indoors if it is dangerously hot.';
+    case 'travelHome':return (type==='trainer'||type==='practice')?'Shower right after you get home.':'';
+    case 'gamePrep':return 'Touch every piece of gear before it leaves the house: '+JR_GEAR.join(', ')+'.';
+    case 'quietRecovery':return 'No electronics.';
+  }
+  return ''}
 function jbAt(JB,id,fb){for(var i=0;i<JB.length;i++)if(JB[i].id===id)return JB[i].t;return fb}
-function jbLines(JB,t0,t1){return JB.filter(function(b){return b.t>=t0&&b.t<t1}).map(function(b){return {tm:fmt(b.t),t:b.n+(b.s?': '+b.s:'')}})}
-function jrBlocks(){
-  var ctx=ctxFor(ymd()),dow=ctx.dow,type=jrType(),n=S.jr,L=[];
+function jbLines(JB,t0,t1){return JB.filter(function(b){return b.t>=t0&&b.t<t1}).map(function(b){return {tm:fmt(b.t),t:b.n+(b.s?': '+b.s:''),n:b.n,ap:!!b.ap}})}
+function jrCarry(JB,t0){return JB.filter(function(b){return b.t<t0&&b.t+(b.d||0)>t0}).map(function(b){return {tm:'',t:b.n+' (until '+fmt(b.t+b.d)+')',n:b.n,ap:!!b.ap}})}
+function jrGist(lines){var a=lines.map(function(l){return (l.n||l.t.split(':')[0]).replace(TSA,'')});return a.slice(0,3).join(', ')+(a.length>3?' and more':'')+'.'}
+function jrBlocks(type){
+  var ctx=ctxFor(ymd()),dow=ctx.dow,n=S.jr,d=D(),x;
+  type=type||jrType();
   if(type==='sick')return [B('rest',420,660,'Sick day','Rest, fluids, light reading if he feels up to it. No training, no heavy academics. Call it early and protect sleep.')];
   if(type==='travel')return [B('travel',420,660,'Travel day','Adjust freely around the trip. Protect meals and bedtime where you can.')];
   if(type==='special')return [B('event',420,660,'Special event day','Today is built around the event. Protect sleep the night before and after.')];
-  if(type==='home'){
-    L=[
-      B('wake',360,15,'Wake up','Bathroom, teeth, water, training clothes, make the bed.'),
-      B('football',375,100,'Football development',"Dad's training program, outside while it's coolest. Kept out of the hottest part of the day on purpose."),
-      B('shower',475,30,'Shower and dress',''),
-      B('bfast',505,30,'Breakfast','Make it, eat it, clean it up.'),
-      B('prep',535,15,'School setup','Pencil, paper, notebook, calculator, book, water.'),
-      B('fastmath',550,25,'Fast Math','Fluency: addition, subtraction, multiplication, division facts.'),
-      B('math',575,60,'Math','Show the work. Fix mistakes before moving on.'),
-      B('break1',635,10,'Break','Bathroom, water, stretch. No electronics.'),
-      B('writing',645,60,'Writing','Sentences, paragraphs, essays as he improves.'),
-      B('break2',705,10,'Break',''),
-      B('science',715,50,'Science','What happened, how, and why.'),
-      B('lunch',765,45,'Lunch','Make it, eat it, clean it up.'),
-      B('reading',810,40,'Reading and comprehension','Close the book, then: main idea, three details, cause and effect, inference, evidence, summary in his own words.'),
-      B('break3',850,10,'Break',''),
-      B('language',860,40,'Language','Vocabulary, grammar, sentence structure.'),
-      B('history',900,40,'History and social studies','What happened, why, and why it matters today.'),
-      B('chore',940,50,'Household responsibility',(D().jrChore||jrChoreSuggest())),
-      B('dinner',990,60,'Dinner','Cooking starts now. Eat with the family around 5:00, then clean up.'),
-      B('correction',1050,40,'Academic correction',"Fix today's weakest work first."),
-      B('account',1090,25,'Accountability',JR_ACC[dow]||'Reflection'),
-      B('indread',1115,30,'Independent reading','Book only, no phone.'),
-      B('tomorrow',1145,20,'Prepare for tomorrow','Clothes, shoes, school and training gear, water bottle, room reset.'),
-      B('night',1165,20,'Night routine','Teeth, face, bathroom, into bed.'),
-      B('lights',1260,0,'Lights out','',true)
-    ];
-    return L}
+  var L=jrTable(type);
+  function F(id){for(var i=0;i<L.length;i++)if(L[i].id===id)return L[i];return null}
   if(type==='trainer'){
-    var ts=n.trainTime,td=n.trainDur,dr=n.trainDrive,leave=ts-dr-5,home=ts+td+dr;
-    L=[
-      B('wake',360,15,'Wake up','Bathroom, teeth, water, training clothes, make the bed.'),
-      B('move',375,20,'Mobility and recovery','Light movement. Nothing that tires the legs before training.'),
-      B('shower',395,30,'Shower and dress',''),
-      B('bfast',425,30,'Breakfast','Eat it, then wipe your spot and rinse your dish.'),
-      B('fastmath',455,25,'Fast Math',''),
-      B('math',480,60,'Math',''),
-      B('break1',540,10,'Break',''),
-      B('writing',550,50,'Writing',''),
-      B('science',600,25,'Science','Finish after training if it runs long.'),
-      B('prep',625,leave-625,'Training prep and food','Eat something that agrees with him. Bathroom, clothes, shoes, water, gear, training phone.'),
-      B('leave',leave,ts-leave,'Leave for training','About '+dr+' minutes of drive time.',true),
-      B('trainer',ts,td,'Trainer session','Full effort, full attention. Not social hour.',true),
-      B('drive',ts+td,dr,'Drive home','',true),
-      B('lunch',home,50,'Lunch, shower, recovery','Clean up your spot before you shower.'),
-      B('reading',home+50,40,'Reading and comprehension',''),
-      B('language',home+90,40,'Language and history',''),
-      B('break2',home+130,10,'Break',''),
-      B('correction',home+140,45,'Academic correction and science','Finish whatever science did not get done this morning.'),
-      B('chore',home+185,60,'Household responsibility',(D().jrChore||jrChoreSuggest())),
-      B('dinner',home+245,45,'Dinner','Eat it, then clear your plate and wipe your spot.'),
-      B('account',home+290,30,'Accountability',JR_ACC[dow]||'Reflection'),
-      B('indread',home+320,30,'Independent reading',''),
-      B('free',home+350,45,'Family time and overflow','This block can absorb a reasonable delay from earlier in the day.'),
-      B('tomorrow',home+395,30,'Prepare for tomorrow',''),
-      B('night',home+425,20,'Night routine',''),
-      B('lights',1260,0,'Lights out','',true)
-    ];
-    return L}
-  if(type==='game'){
-    var kt=n.gameTime,before=n.gameBefore,dr=n.gameDrive,arrive=kt-before,leave=arrive-dr,eq=leave-20;
-    L=[
-      B('wake',360,15,'Wake up','Bathroom, teeth, water, make the bed.'),
-      B('move',375,20,'Mobility only','No hard conditioning today.'),
-      B('shower',395,30,'Shower and dress',''),
-      B('bfast',425,30,'Breakfast','Eat it, then wipe your spot and rinse your dish.'),
-      B('fastmath',455,25,'Fast Math',''),
-      B('math',480,60,'Math',''),
-      B('break1',540,10,'Break',''),
-      B('writing',550,60,'Writing',''),
-      B('break2',610,10,'Break',''),
-      B('science',620,50,'Science',''),
-      B('language',670,40,'Language',''),
-      B('lunch',710,45,'Lunch','Eat it, then clear your plate and wipe your spot.'),
-      B('reading',755,40,'Reading and comprehension',''),
-      B('history',795,40,'History',''),
-      B('recovery',835,35,'Quiet recovery','No electronics. Read, stretch, rest.'),
-      B('pregame',870,30,'Pregame meal','Something that agrees with him. Hydrate.'),
-      B('equip',eq,Math.max(10,leave-eq),'Equipment check','Physically touch each item: '+JR_GEAR.join(', ')+'. Do not discover something missing after leaving the house.'),
-      B('leave',leave,Math.max(5,arrive-leave),'Leave for the game','About '+dr+' minutes of drive time.',true),
-      B('kickoff',kt,0,'Kickoff','Compete, listen to the coaches, play disciplined football.',true),
-      B('after',kt+180,60,'After the game','Order: travel home, hydration, food, shower, equipment put away, sleep. No late night makeup work tonight.')
-    ];
-    return L}
-  if(type==='sat'){
-    L=[
-      B('wake',420,30,'Wake up','Bathroom, hygiene, make the bed, get dressed. One extra hour of sleep.'),
-      B('bfast',450,30,'Breakfast','Eat it, then wipe your spot and rinse your dish.'),
-      B('clean',540,60,'Room, laundry and deep clean','Start high and work down: dust, surfaces, floor, trash, laundry washed and put away.'),
-      B('weak1',600,60,'Weakest subject: '+(n.weak1||'Math'),'Whatever the week showed was weakest gets the attention, not what is easiest.'),
-      B('break1',660,15,'Break',''),
-      B('weak2',675,45,'Second weakest subject: '+(n.weak2||'Writing'),''),
-      B('reading',720,45,'Reading',''),
-      B('lunch',765,45,'Lunch','Eat it, then clear your plate and wipe your spot.'),
-      B('life',810,45,'Life skills','Cooking, laundry, budgeting basics, organization, first aid, time management. Rotate topics week to week.'),
-      B('after',855,60,'Afternoon','Football development, recovery, volunteering, youth group, family activities, or a household project. No recreational electronics tonight during the reset.')
-    ];
-    return L}
-  L=[
-    B('wake',450,0,'Wake up','7:30, unless church or family plans need earlier.'),
-    B('morn',450,270,'Morning','Make the bed, hygiene, breakfast, church or youth activities if scheduled, family responsibilities, a quick check of his room and bathroom.'),
-    B('lunch',720,60,'Lunch',''),
-    B('reading',780,60,'Weekly reading and review','30 minutes reading, then 30 minutes review. Have him explain out loud what he read.'),
-    B('prep',840,60,'Week preparation','Look at the coming week: school, training, game, appointments, clothes, equipment, laundry, room, supplies.'),
-    B('rest',900,180,'Rest of the day','Recovery, family time, help with meal prep, stretching, approved activities. Get his mind and body ready for Monday.')
-  ];
+    var ts=n.trainTime||690,td=n.trainDur||90,dr=n.trainDrive!=null?n.trainDrive:35,lvT=ts-dr-5;
+    if(x=F('trainPrep')){x.t=lvT-30;x.d=30}
+    if(x=F('leaveHome'))x.t=lvT;
+    if(x=F('trainer')){x.t=ts;x.d=td}
+    if(x=F('travelHome')){x.t=ts+td;x.d=dr}
+  }else if(type==='game'){
+    var kt=n.gameTime||1050,bf=n.gameBefore!=null?n.gameBefore:60,gd=n.gameDrive!=null?n.gameDrive:55,lvG=kt-bf-gd;
+    if(x=F('pregameFood'))x.t=Math.max(845,lvG-65);
+    if(x=F('gamePrep')){x.t=lvG-35;x.d=35}
+    if(x=F('leaveGame')){x.t=lvG;x.d=gd}
+    if(x=F('kickoff'))x.t=kt;
+    if(x=F('afterGame'))x.t=kt+150;
+    if(x=F('nightlyGrade'))x.t=kt+210;
+    if(x=F('screenTime'))x.t=kt+215;
+  }else if(type==='practice'){
+    var pt=n.practTime||1130,pd=n.practDur||120,pdr=n.practDrive!=null?n.practDrive:35,lvP=pt-pdr;
+    if(x=F('snackPrep'))x.t=lvP-30;
+    if(x=F('leaveHome'))x.t=lvP;
+    if(x=F('practice')){x.t=pt;x.d=pd}
+    if(x=F('travelHome')){x.t=pt+pd;x.d=Math.max(10,pdr-5)}
+    if(x=F('postSnack'))x.t=pt+pd+30;
+  }
+  L.forEach(function(b){b.s=jrNoteFor(b.id,type,dow,n,d)||''});
+  L.sort(function(a,b){return a.t-b.t||a._i-b._i});
   return L}
 function jrStatus(id){var d=D();return (d.jrb&&d.jrb[id])||''}
 function jrDone(list){return list.filter(function(b){return jrStatus(b.id)==='done'}).length}
@@ -1710,20 +1886,27 @@ function jrResetHTML(){
   return h}
 function jrHTML(){
   var d=D(),n=S.jr,type=jrType(),L=jrBlocks(),now=jrNow(L),nx=jrNext(L),dow=ctxFor(ymd()).dow;
-  var h='<div class="ptop"><span class="eyebrow">Back pages</span>'+babyToggle()+'</div><div class="ptitle"><div class="time">Jr</div><h2 class="title">Jr\'s Settings</h2><p class="lede">Day type, trainer, game timing, and the 14-day reset. His tasks show up in the book itself, right alongside Mom\'s and Sterling\'s.</p></div>';
+  var h='<div class="ptop"><span class="eyebrow">Back pages</span>'+babyToggle()+'</div><div class="ptitle"><div class="time">Jr</div><h2 class="title">Jr\'s Settings</h2><p class="lede">Day type, trainer, practice and game timing, and the 14-day reset. His tasks show up in the book itself, right alongside Mom\'s and Sterling\'s.</p></div>';
   h+='<div class="card tonight"><h3>'+esc(JR_TYPES.filter(function(x){return x[0]===type})[0][1])+'</h3>';
   if(now)h+='<p class="sub" style="color:var(--ink)">Right now: <b>'+esc(now.n)+'</b>'+(now.s?' — '+esc(now.s):'')+'</p>';
   else if(nx)h+='<p class="sub" style="color:var(--ink)">Next: <b>'+esc(nx.n)+'</b> at '+fmt(nx.t)+'</p>';
   else h+='<p class="sub">Day is done, or nothing is scheduled.</p>';
   h+='</div>';
-  h+='<label for="jr_type">Day type</label><select id="jr_type">'+JR_TYPES.map(function(t){return '<option value="'+t[0]+'"'+((d.jrType||'auto')===t[0]?' selected':'')+'>'+t[1]+'</option>'}).join('')+'</select>';
-  if((dow===3||dow===5)&&!d.jrType)h+='<p class="rtip">Wednesday and Friday are trainer days once trainer sessions resume. Trainer is currently '+(n.trainerPaused?'<b>paused</b>, so today runs as a Home Academic Day.':'<b>on</b>.')+' <button class="btn" style="margin-top:6px" data-a="jrpause" data-v="'+(n.trainerPaused?'0':'1')+'">'+(n.trainerPaused?'Turn trainer back on':'Pause trainer again')+'</button></p>';
+  h+='<label for="jr_type">Day type</label><select id="jr_type">'+JR_TYPES.filter(function(t){var wdx=dow>=1&&dow<=5,k=t[0];return k==='auto'||k===type||(wdx?(k!=='sat'&&k!=='sun'):(k==='sat'||k==='sun'||k==='sick'||k==='travel'||k==='special'))}).map(function(t){return '<option value="'+t[0]+'"'+((d.jrType||'auto')===t[0]?' selected':'')+'>'+t[1]+'</option>'}).join('')+'</select>';
+  if((dow===3||dow===5)&&!d.jrType)h+='<p class="rtip">Wednesday and Friday are Training Days with the trainer. Trainer is currently '+(n.trainerPaused?'<b>paused</b>, so today runs as a Home Development Day (trainer suspended).':'<b>on</b>.')+' <button class="btn" style="margin-top:6px" data-a="jrpause" data-v="'+(n.trainerPaused?'0':'1')+'">'+(n.trainerPaused?'Turn trainer back on':'Pause trainer again')+'</button></p>';
   if(type==='game'){
     h+='<div class="card"><h3>Game details</h3><label for="jr_gt">Kickoff</label><input id="jr_gt" type="time" value="'+pad(Math.floor(n.gameTime/60))+':'+pad(n.gameTime%60)+'">'+
       '<label for="jr_gb">Team arrival, minutes before kickoff</label><input id="jr_gb" type="number" inputmode="numeric" value="'+n.gameBefore+'">'+
       '<label for="jr_gd">Drive time, minutes</label><input id="jr_gd" type="number" inputmode="numeric" value="'+n.gameDrive+'">'+
       '<button class="btn primary full" style="margin-top:12px" data-a="jrgamesave">Save game details</button>'+
       '<p class="rtip">Leave-by time is calculated from these. Adjust them for this week\'s location.</p></div>';
+  }
+  if(type==='practice'){
+    h+='<details class="rec" data-k="jrprac" id="rec_jrprac"'+(recOpen.jrprac?' open':'')+'><summary><span class="rn">Practice details</span><span class="rm">Start time, length, drive</span></summary><div class="rbody form">'+
+      '<label for="jr_pt">Practice start</label><input id="jr_pt" type="time" value="'+pad(Math.floor(n.practTime/60))+':'+pad(n.practTime%60)+'">'+
+      '<label for="jr_pd">Length, minutes</label><input id="jr_pd" type="number" inputmode="numeric" value="'+n.practDur+'">'+
+      '<label for="jr_pdr">Drive time, minutes</label><input id="jr_pdr" type="number" inputmode="numeric" value="'+n.practDrive+'">'+
+      '<button class="btn primary full" style="margin-top:12px" data-a="jrpracsave">Save practice details</button></div></details>';
   }
   if(type==='trainer'){
     h+='<details class="rec" data-k="jrtrain" id="rec_jrtrain"'+(recOpen.jrtrain?' open':'')+'><summary><span class="rn">Trainer details</span><span class="rm">Start time, length, drive</span></summary><div class="rbody form">'+
@@ -1732,7 +1915,7 @@ function jrHTML(){
       '<label for="jr_dr">Drive time, minutes</label><input id="jr_dr" type="number" inputmode="numeric" value="'+n.trainDrive+'">'+
       '<button class="btn primary full" style="margin-top:12px" data-a="jrtrainsave">Save trainer details</button></div></details>';
   }
-  if(type==='home'||type==='trainer'){
+  if(type==='home'||type==='homedev'||type==='trainer'||type==='practice'){
     h+='<details class="rec" data-k="jrchore" id="rec_jrchore"'+(recOpen.jrchore?' open':'')+'><summary><span class="rn">Assign the responsibility</span><span class="rm">'+esc(d.jrChore||jrChoreSuggest())+'</span></summary><div class="rbody form"><label for="jr_chore">Today\'s job</label><input id="jr_chore" type="text" value="'+esc(d.jrChore||'')+'" placeholder="'+esc(jrChoreSuggest())+'"><button class="btn primary full" style="margin-top:12px" data-a="jrchoresave">Save</button></div></details>';
     h+='<details class="rec" data-k="jracc" id="rec_jracc"'+(recOpen.jracc?' open':'')+'><summary><span class="rn">Accountability: '+esc(JR_ACC[dow]||'Reflection')+'</span><span class="rm">His written answer, if he did it</span></summary><div class="rbody"><textarea id="jr_note" placeholder="What decision did he make, and what will he do differently?">'+esc(d.jrNote||'')+'</textarea><button class="btn full" style="margin-top:8px" data-a="jrnotesave">Save</button></div></details>';
   }
@@ -1743,7 +1926,7 @@ function jrHTML(){
       '<button class="btn primary full" style="margin-top:12px" data-a="jrweaksave">Save</button></div></details>';
   }
   h+=jrResetHTML();
-  h+='<p class="rtip" style="margin-top:16px">Fixed steps (trainer, drive, kickoff, lights out) hold their time. Everything else is a target, not a deadline. If the day runs behind, the family time or overflow block near the end absorbs it. Sleep does not get sacrificed for a slow afternoon.</p>';
+  h+='<p class="rtip" style="margin-top:16px">This page matches Jr\'s schedule (Level 13, build v21). Fixed steps (trainer, practice, drives, kickoff, lights out) hold their time. Approval, strikes, screen-time bonuses, grades and the ordered Responsibility steps live in Jr\'s own app; the book shows the blocks and marks the ones a parent checks.</p>';
   return h}
 function jrCard(days){
   var logged=0,goodDays=0;
@@ -1754,6 +1937,7 @@ function jrCard(days){
 function pageHTML(key){
   if(key==='nut')return nutHTML();
   if(key==='jr')return jrHTML();
+  if(key==='al')return alHTML();
   if(key==='toc')return tocHTML();
   if(key==='recap')return recapHTML();
   if(key==='sched')return schedHTML();
@@ -1795,7 +1979,7 @@ var open=false,busy=false,cur=0,freshStamp=null,DUR=880;
 var pinner=$('#pinner'),pageEl=$('#page'),pagesEl=$('#pages'),coverEl=$('#cover'),navEl=$('#nav');
 function drawNav(){
   var ord=order(),chs=getCH(),i=cur;
-  function nm(k){var BK={toc:'Contents',cal:'Calendar',meals:'Meals',nut:'Nutrition',jr:'Jr',move:'Move',ugc:'UGC Desk',recap:'Week recap',sched:'Fights and football',setup:'Set up'};if(BK[k])return BK[k];var c=chs.filter(function(x){return x.id===k})[0];return c?c.title:''}
+  function nm(k){var BK={toc:'Contents',cal:'Calendar',meals:'Meals',nut:'Nutrition',jr:'Jr',al:'Alerts',move:'Move',ugc:'UGC Desk',recap:'Week recap',sched:'Fights and football',setup:'Set up'};if(BK[k])return BK[k];var c=chs.filter(function(x){return x.id===k})[0];return c?c.title:''}
   var prevK=ord[i-1],nextK=ord[i+1];
   navEl.innerHTML='<button class="nbtn" data-a="prev"'+(prevK?'':' disabled')+'>‹ Back<small>'+esc(prevK?nm(prevK):'')+'</small></button>'+
     (i===0?'<button class="nbtn mid" data-a="close">Close</button>':'<button class="nbtn mid" data-a="toc">Contents</button>')+
@@ -1849,7 +2033,7 @@ function toggleDone(id){
   var d=D(),chs=getCH(),before=null,ch=null;
   chs.forEach(function(c){LANES.forEach(function(k){c[k].forEach(function(it){if(it.id===id)ch=c})})});
   if(ch){var p=chProg(ch);before=p.tot>0&&p.done===p.tot}
-  if(d.done[id])delete d.done[id];else d.done[id]=true;
+  if(d.done[id]){delete d.done[id];if(d.doneAt)delete d.doneAt[id]}else{d.done[id]=true;(d.doneAt=d.doneAt||{})[id]=nowMin()}
   if(ch){var q=chProg(ch);if(!before&&q.tot>0&&q.done===q.tot)freshStamp=ch.id}
   if(navigator.vibrate)try{navigator.vibrate(8)}catch(e){}
   keepDraft();updateStats();save();
@@ -1867,9 +2051,9 @@ var A={
   gentle:function(t){D().gentle=t.dataset.v==='1';refresh()},
   teamzone:function(){var d=D();d.teamIdx=(teamIndex()+1)%TEAM.length;CH=null;refresh()},
   daytype:function(t){D().dayType=t.dataset.v;CH=null;cur=0;refresh()},
-  set:function(t){var d=D();d[t.dataset.f]=t.dataset.v;if(t.dataset.f==='rating')d.closed=true;if(t.dataset.f==='tomorrow')d.closed=true;refresh()},
+  set:function(t){var d=D();d[t.dataset.f]=t.dataset.v;if(t.dataset.f==='rating')d.closed=true;if(t.dataset.f==='tomorrow')d.closed=true;refresh();if(d.closed)alScorePost()},
   carry:function(t){D().carry[t.dataset.id]=t.dataset.v==='1';refresh()},
-  savenote:function(){var d=D(),v=$('#noteBox').value.trim();d.note=v;if(v)d.closed=true;refresh();toast(v?'Saved to your journal':'Note cleared')},
+  savenote:function(){var d=D(),v=$('#noteBox').value.trim();d.note=v;if(v)d.closed=true;refresh();toast(v?'Saved to your journal':'Note cleared');if(d.closed)alScorePost()},
   idea:function(t){idea[t.dataset.k]=(idea[t.dataset.k]||0)+1;var y=pinner.scrollTop;pinner.innerHTML=pageHTML(order()[cur]);pinner.scrollTop=y},
   addtask:function(t){var inp=$('#add_'+t.dataset.ch),v=inp&&inp.value.trim();if(!v){toast('Type the task first');return}D().custom.push({id:uid(),ch:t.dataset.ch,text:v});CH=null;refresh();toast('Added to this page')}
 };
@@ -1955,12 +2139,26 @@ Object.assign(A,{
 });
 
 Object.assign(A,{
+  altog:function(t){var f=t.dataset.f;S.al[f]=!S.al[f];if(f==='on'&&!S.al.on)alHide();if(f==='awake'||f==='on')alWake();refresh();if((f==='ntfy'||f==='on')&&S.al.ntfy)alPush();if(f==='sound'&&S.al.sound){alUnlock();alChime('start')}},
+  alvol:function(t){S.al.vol=parseInt(t.dataset.v,10)||2;refresh();alUnlock();alChime('start')},
+  altest:function(){alUnlock();alChime('start');alSpeak('This is a test. Dinner time.');if(S.al.vib&&navigator.vibrate)try{navigator.vibrate([200,100,200])}catch(e){}alShow({id:'test',title:'Test alert',body:'If you heard the chime and the voice, in-book alerts are working.',type:'start'})},
+  alpushtest:function(){if(!S.al.topic){toast('No topic yet');return}S.al.ntfy=true;alSend(S.al.topic,{title:'Test from the Day Book',message:'If you see this on your phone, phone alerts work.',tags:['white_check_mark']}).then(function(){toast('Test sent. Check both phones in a few seconds.',4000)},function(){toast('Could not reach the alert service. Check your connection.',4000)});if(S.al.rtopic)alSend(S.al.rtopic,{title:'Test from the Day Book',message:"If you see this on Rico's phone, phone alerts work.",tags:['white_check_mark']}).catch(function(){});refresh();alPush()},
+  alcopy:function(t){var v=t.dataset.v;try{navigator.clipboard.writeText(v).then(function(){toast('Copied')},function(){toast('Press and hold the topic name to copy it')})}catch(e){toast('Press and hold the topic name to copy it')}},
+  alphone:function(){var i=$('#al_ph');S.al.rphone=((i&&i.value)||'').trim().slice(0,24);refresh();toast('Saved')},
+  alopen:function(t){var id=t.dataset.id,a=alList().filter(function(x){return x.id===id})[0];alHide();if(!a||!a.ch)return;var idx=order().indexOf(a.ch);if(!open){openBook();setTimeout(function(){go(idx)},1250)}else go(idx)},
+  alsnooze:function(t){alDay().snz[t.dataset.id]=Date.now()+10*60000;alHide();save();toast('Snoozed for 10 minutes')},
+  aldismiss:function(){alHide()},
+  sccopy:function(){var tx=scoreText();try{navigator.clipboard.writeText(tx).then(function(){toast('Copied')},function(){toast('Could not copy')})}catch(e){toast('Could not copy')}},
+  scshare:function(){try{navigator.share({text:scoreText()})}catch(e){}},
   jrcyc:function(t){var d=D(),id=t.dataset.id;d.jrb=d.jrb||{};var s=d.jrb[id]||'';d.jrb[id]=s===''?'done':s==='done'?'skip':s==='skip'?'excuse':'';refresh()},
   jrtype:function(t){var d=D(),v=t.dataset.v;if(v==='auto')delete d.jrType;else d.jrType=v;refresh()},
   jrpause:function(t){S.jr.trainerPaused=t.dataset.v==='1';refresh();toast(S.jr.trainerPaused?'Trainer paused':'Trainer back on')},
   jrgamesave:function(){var tv=($('#jr_gt')||{}).value,b=parseInt(($('#jr_gb')||{}).value,10),dr=parseInt(($('#jr_gd')||{}).value,10);
     if(tv){var p=tv.split(':');S.jr.gameTime=parseInt(p[0],10)*60+parseInt(p[1],10)}
     if(b>=0)S.jr.gameBefore=b;if(dr>=0)S.jr.gameDrive=dr;refresh();toast('Saved')},
+  jrpracsave:function(){var tv=($('#jr_pt')||{}).value,du=parseInt(($('#jr_pd')||{}).value,10),dr=parseInt(($('#jr_pdr')||{}).value,10);
+    if(tv){var p=tv.split(':');S.jr.practTime=parseInt(p[0],10)*60+parseInt(p[1],10)}
+    if(du>0)S.jr.practDur=du;if(dr>=0)S.jr.practDrive=dr;recOpen.jrprac=false;refresh();toast('Saved')},
   jrtrainsave:function(){var tv=($('#jr_tt')||{}).value,du=parseInt(($('#jr_td')||{}).value,10),dr=parseInt(($('#jr_dr')||{}).value,10);
     if(tv){var p=tv.split(':');S.jr.trainTime=parseInt(p[0],10)*60+parseInt(p[1],10)}
     if(du>0)S.jr.trainDur=du;if(dr>=0)S.jr.trainDrive=dr;recOpen.jrtrain=false;refresh();toast('Saved')},
@@ -1972,6 +2170,7 @@ Object.assign(A,{
   jrresetsave:function(){var i=$('#jr_reset_start');S.jr.resetStart=(i&&i.value)||null;refresh();toast('Saved')},
   jrresettog:function(t){S.jr.resetOn=t.dataset.v==='1';refresh()}
 });
+['jrtype','jrpause','jrgamesave','jrtrainsave','jrpracsave','jrchoresave','jrweaksave'].forEach(function(k){var f=A[k];if(f)A[k]=function(t){CH=null;f(t);alPush()}});
 function armDel(k){delArm=k;refresh();setTimeout(function(){if(delArm===k){delArm=null;if(open)draw(true)}},4000)}
 document.addEventListener('click',function(e){
   var t=e.target.closest('[data-a]');
@@ -1995,12 +2194,14 @@ pagesEl.addEventListener('touchend',function(e){
   var t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;
   if(Math.abs(dx)>70&&Math.abs(dy)<45&&Date.now()-st0<700){if(dx<0)go(cur+1);else go(cur-1)}
 },{passive:true});
-document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'){CH=null;checkReminders();updateStats();if(open)draw(true);else renderCover()}});
-setInterval(function(){checkReminders();tickCover()},20000);
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'){CH=null;alWake();alTick();setTimeout(alPush,1500);checkReminders();updateStats();if(open)draw(true);else renderCover()}});
+setInterval(function(){checkReminders();tickCover();alTick()},20000);
+setInterval(function(){alPush()},1800000);
 
 /* ================= boot ================= */
 ensureToday();updateStats();save();checkReminders();
 draw();renderCover();showSheet();
+alWake();alTick();setTimeout(alPush,2000);
 if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})}
 })();
 </script>
