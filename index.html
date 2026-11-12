@@ -366,6 +366,24 @@ textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:1
 .lesson li{margin:5px 0;font-size:15px;text-wrap:pretty}
 .lesson h4{margin:14px 0 4px}
 .lesson a{color:var(--accent)}
+.nowcard{display:flex;gap:12px;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:16px;padding:10px 12px;background:var(--soft);margin:4px 0 8px}
+.nowl{min-width:0}
+.nowl b{display:block;font-family:var(--serif);font-size:17px;font-weight:600;line-height:1.15;margin-top:2px}
+.nowl span:not(.eyebrow){display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.nowcard .btn{flex:none;min-height:46px}
+.chips2{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+.chip2{border:1px solid var(--accent);background:var(--paper);color:var(--accent);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;min-height:36px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 0}
+.tile{display:flex;flex-direction:column;justify-content:space-between;text-align:left;border:1px solid var(--line);border-radius:16px;padding:12px;background:var(--paper2);min-height:66px;color:var(--ink)}
+.tile b{font-family:var(--serif);font-size:18px;font-weight:600;line-height:1.1}
+.tile span{font-size:12px;color:var(--muted);margin-top:4px;text-wrap:pretty}
+.tile[aria-expanded="true"]{background:var(--soft);border-color:var(--accent)}
+.tpanel{margin-top:12px;border-top:2px solid var(--accent);padding-top:6px}
+.tlist{margin:10px 0 4px}
+.tbtn{display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:14px;background:var(--paper2);padding:12px 14px;margin:8px 0;color:var(--ink);min-height:56px}
+.tbtn b{display:block;font-family:var(--serif);font-size:18px;font-weight:600}
+.tbtn span{display:block;font-size:13px;color:var(--muted);margin-top:2px}
+.tbody h4{margin:12px 0 4px}
 </style>
 
 </head>
@@ -897,36 +915,42 @@ function closeHTML(ch){
   h+=scoreCardHTML();
   return h;
 }
+var tocG='';
+function tocTile(id,ttl,sub){return '<button class="tile" data-a="tocg" data-v="'+id+'" aria-expanded="'+(tocG===id)+'"><b>'+ttl+'</b><span>'+esc(sub)+'</span></button>'}
+function tocRow(p,tt,ttl,sub,act){return '<button class="trow" data-a="'+(act||'goto')+'" data-p="'+p+'"><span class="tt">'+tt+'</span><span class="ttl">'+ttl+(sub?'<span class="sub">'+esc(sub)+'</span>':'')+'</span><span class="prog"></span></button>'}
 function tocHTML(){
-  var d=D(),chs=getCH(),now=curChapter(),st=starred(chs),gentle=isGentle(),t=new Date();
+  var d=D(),chs=getCH(),now=curChapter(),st=starred(chs),gentle=isGentle(),t=new Date(),x=ctxFor(ymd());
+  var bd=st.filter(function(q){return d.done[q.id]}).length,pn=chProg(now),tn=tonight(),ud=ugcDue().length,evn=eventsOn(ymd()).length;
+  var day=x.wd?'School day':x.dow===0?'Sunday: cleaning day, then football':(function(){var u=UFC[x.date];return 'Saturday: relaxed, football at 11:00'+(u?', UFC starts '+fmt((u.ep||u.p))+' Central':', no UFC this week')})();
   var h='<div class="ptop"><button class="link" data-a="close">‹ Close book</button>'+babyToggle()+'</div>';
-  h+='<div class="ptitle"><div class="time">Contents</div><h2 class="title">'+DAYS[t.getDay()]+', '+MONTHS[t.getMonth()]+' '+t.getDate()+'</h2><p class="lede">'+(function(x){if(x.wd)return 'School day';if(x.dow===0)return 'Sunday: cleaning day, then football';var u=UFC[x.date];return 'Saturday: relaxed, football at 11:00'+(u?', UFC starts '+fmt((u.ep||u.p))+' Central':', no UFC this week')})(ctxFor(ymd()))+'. Tap a chapter to turn to it. Baby awake means active time. Baby asleep means quiet learning.</p></div>';
-  if(d.baby==='asleep')h+=quietBanner();
-  if(gentle)h+='<div class="banner"><b>Gentle day</b>'+esc(gentleWhy())+' Two must-dos, small versions of the rest. Everything else is a bonus.<br><button class="btn" data-a="gentle" data-v="0">Switch to a full day</button></div>';
-  else if(d.gentle===false)h+='<div class="banner"><b>Full day</b>You switched back to the full plan. <button class="btn" data-a="gentle" data-v="1">Go gentle instead</button></div>';
-  h+=calCardHTML();
-  h+=accTocHTML();
-  h+=fuelCardHTML();
-  h+=tvCardHTML();
-  var bd=st.filter(function(x){return d.done[x.id]}).length;
-  h+='<div class="card big mom"><h3>'+(st.length===3?'Your Big 3':'Your must-dos')+'</h3><p class="sub">'+bd+' of '+st.length+' done. Do these first. Tap the star on any task to add or remove it.</p>';
-  if(!st.length)h+='<p class="sub">Nothing starred yet.</p>';
-  st.forEach(function(x){var on=!!d.done[x.id];h+='<div class="it mom"><button class="chk" data-a="chk" data-id="'+esc(x.id)+'" aria-pressed="'+on+'"><span class="box"></span><span class="txt">'+esc(gentle&&x.mini?x.mini:x.t)+'</span></button><button class="pglink" data-a="goto" data-p="'+x.ch+'">Page</button></div>'});
-  h+='</div>';
-  h+='<button class="btn primary full" data-a="now">Turn to now: '+esc(now.title)+'</button>';
-  h+='<div class="toc">';
-  chs.forEach(function(c,i){
-    var p=chProg(c),isDone=p.tot>0&&p.done===p.tot,mom=c.mom.some(function(x){return isStar(x.id)});
-    var sub=c.free?c.free.replace('Your window: ','Your window: '):'';
-    h+='<button class="trow'+(c.id===now.id?' now':'')+(isDone?' done':'')+'" data-a="goto" data-p="'+c.id+'"><span class="tt">'+fmt(c.t[0])+'</span><span class="ttl">'+esc(c.title)+(sub?'<span class="sub">'+esc(sub)+'</span>':'')+'</span><span class="prog">'+(isDone?'Done':(p.tot?p.done+'/'+p.tot:''))+(mom&&!isDone?' ★':'')+'</span></button>';
-  });
-  h+='</div><h3 class="shh">Back of the book</h3><div class="toc" style="margin-top:6px">';
-  var tn=tonight(),ud=ugcDue().length,evn=eventsOn(ymd()).length;
-  function brow(p,tt,ttl,sub){return '<button class="trow" data-a="goto" data-p="'+p+'"><span class="tt">'+tt+'</span><span class="ttl">'+ttl+(sub?'<span class="sub">'+esc(sub)+'</span>':'')+'</span><span class="prog"></span></button>'}
-  h+=brow('cal','Plan','Calendar',evn?evn+' event'+(evn===1?'':'s')+' today':'Appointments and plans')+brow('meals','Dinner','Meals','Tonight: '+tn.n)+brow('nut','Fuel','Nutrition',nutTocSub())+brow('jr','Jr','Jr settings','Day type, trainer, and the 14-day reset')+brow('al','Bell','Alerts',S.al.on?(S.al.ntfy?'Sound on, phone alerts on':'Sound on, phone alerts off'):'Alerts are off')+brow('rw','Gift','Rewards',rwTocSub())+brow('move','Move','Move',todayMove().n+(d.moved?' (done)':''))+brow('ugc','Work','UGC Desk',ud?ud+' follow-up'+(ud===1?'':'s')+' due':'Today: '+ugcSteps()+' of 3 steps done')+brow('ugcschool','Learn','UGC School',SCH.filter(function(l){return S.ugcx.read[l.id]}).length+' of '+SCH.length+' lessons read')+brow('ugcgroup','Build','UGC Group',ugcStats().ap+' applied, '+ugcStats().booked+' booked, '+S.ugc.length+' in your Brand Book')+brow('recap','Week','Recap and journal','')+brow('sched','TV','Fights and football','Every UFC card and NFL Sunday, in Central time')+brow('setup','App','Set up','Save to your phone and back up')+'</div>';
-  h+='<div class="seg" role="group" aria-label="Type of day"><button data-a="daytype" data-v="school" aria-pressed="'+ctxFor(ymd()).wd+'">School day</button><button data-a="daytype" data-v="weekend" aria-pressed="'+(!ctxFor(ymd()).wd)+'">Weekend</button></div>';
-  return h;
-}
+  h+='<div class="ptitle"><div class="time">Contents</div><h2 class="title">'+DAYS[t.getDay()]+', '+MONTHS[t.getMonth()]+' '+t.getDate()+'</h2><p class="lede">'+esc(day)+(gentle?' · Gentle day':'')+'</p></div>';
+  h+='<div class="nowcard"><div class="nowl"><span class="eyebrow">Now · '+range(now.t)+'</span><b>'+esc(now.title)+'</b>'+(pn.tot?'<span>'+pn.done+' of '+pn.tot+' done on this page</span>':'')+'</div><button class="btn primary" data-a="now">Turn to this page</button></div>';
+  var chips=[],bl=behindList(),n=bl.reduce(function(a,q){return a+q.open.length},0);
+  if(n)chips.push('<button class="chip2" data-a="tocg" data-v="today">'+n+' to catch up</button>');
+  if(ud)chips.push('<button class="chip2" data-a="goto" data-p="ugc">'+ud+' follow-up'+(ud===1?'':'s')+' due</button>');
+  if(rwTocBanner())chips.push('<button class="chip2" data-a="goto" data-p="rw">A reward is unlocked</button>');
+  if(chips.length)h+='<div class="chips2">'+chips.join('')+'</div>';
+  h+='<div class="tiles">'+tocTile('today','Today',(st.length?bd+' of '+st.length+' must-dos':d.pct+'% done'))+tocTile('plan','Plan','Meals, calendar, move')+tocTile('ugc','UGC work',ugcSteps()+' of 3 steps today')+tocTile('rw','Rewards',np(rwAvail())+' points')+tocTile('fam','Family','Jr and alerts')+tocTile('more','More','Recap and set up')+'</div>';
+  if(tocG==='today'){
+    h+='<div class="tpanel">';
+    if(d.baby==='asleep')h+=quietBanner();
+    if(gentle)h+='<div class="banner"><b>Gentle day</b>'+esc(gentleWhy())+' Two must-dos, small versions of the rest. Everything else is a bonus.<br><button class="btn" data-a="gentle" data-v="0">Switch to a full day</button></div>';
+    else if(d.gentle===false)h+='<div class="banner"><b>Full day</b>You switched back to the full plan. <button class="btn" data-a="gentle" data-v="1">Go gentle instead</button></div>';
+    h+=accTocHTML();
+    h+='<div class="card big mom"><h3>'+(st.length===3?'Your Big 3':'Your must-dos')+'</h3><p class="sub">'+bd+' of '+st.length+' done. Do these first. Tap the star on any task to add or remove it.</p>';
+    if(!st.length)h+='<p class="sub">Nothing starred yet.</p>';
+    st.forEach(function(q){var on=!!d.done[q.id];h+='<div class="it mom"><button class="chk" data-a="chk" data-id="'+esc(q.id)+'" aria-pressed="'+on+'"><span class="box"></span><span class="txt">'+esc(gentle&&q.mini?q.mini:q.t)+'</span></button><button class="pglink" data-a="goto" data-p="'+q.ch+'">Page</button></div>'});
+    h+='</div><h4 class="sh4">All of today\'s pages</h4><div class="toc" style="margin-top:4px">';
+    chs.forEach(function(c){
+      var p=chProg(c),isDone=p.tot>0&&p.done===p.tot,mom=c.mom.some(function(q){return isStar(q.id)});
+      h+='<button class="trow'+(c.id===now.id?' now':'')+(isDone?' done':'')+'" data-a="goto" data-p="'+c.id+'"><span class="tt">'+fmt(c.t[0])+'</span><span class="ttl">'+esc(c.title)+(c.free?'<span class="sub">'+esc(c.free)+'</span>':'')+'</span><span class="prog">'+(isDone?'Done':(p.tot?p.done+'/'+p.tot:''))+(mom&&!isDone?' ★':'')+'</span></button>'});
+    h+='</div><div class="seg" role="group" aria-label="Type of day"><button data-a="daytype" data-v="school" aria-pressed="'+x.wd+'">School day</button><button data-a="daytype" data-v="weekend" aria-pressed="'+(!x.wd)+'">Weekend</button></div></div>'}
+  else if(tocG==='plan')h+='<div class="tpanel">'+calCardHTML()+fuelCardHTML()+tvCardHTML()+'<div class="toc" style="margin-top:8px">'+tocRow('cal','Plan','Calendar',evn?evn+' event'+(evn===1?'':'s')+' today':'Appointments and plans')+tocRow('meals','Dinner','Meals','Tonight: '+tn.n)+tocRow('nut','Fuel','Nutrition',nutTocSub())+tocRow('move','Move','Move',todayMove().n+(d.moved?' (done)':''))+tocRow('sched','TV','Fights and football','Every UFC card and NFL Sunday, in Central time')+'</div></div>';
+  else if(tocG==='ugc')h+='<div class="tpanel"><div class="toc">'+tocRow('ugc','Work','UGC Desk',ud?ud+' follow-up'+(ud===1?'':'s')+' due':'Fresh leads and today\'s plan')+tocRow('ugcschool','Learn','UGC School',SCH.filter(function(l){return S.ugcx.read[l.id]}).length+' of '+SCH.length+' lessons read')+tocRow('ugcgroup','Build','UGC Group',ugcStats().ap+' applied, '+ugcStats().booked+' booked, '+S.ugc.length+' in your Brand Book')+'</div></div>';
+  else if(tocG==='rw')h+='<div class="tpanel"><div class="toc">'+tocRow('rw','Value','Rewards',rwTocSub())+tocRow('','Guide','How rewards work','A short guide with links to each part','tourstart')+'</div></div>';
+  else if(tocG==='fam')h+='<div class="tpanel"><div class="toc">'+tocRow('jr','Jr','Jr settings','Day type, trainer, and the 14-day reset')+tocRow('al','Alerts','Alerts and scorecard',S.al.on?(S.al.ntfy?'Sound on, phone alerts on':'Sound on, phone alerts off'):'Alerts are off')+'</div></div>';
+  else if(tocG==='more')h+='<div class="tpanel"><div class="toc">'+tocRow('recap','Week','Recap and journal','How the week went')+tocRow('setup','App','Set up','Save to your phone and back up')+tocRow('','Guide','How the book works','A short guide with links to each part','tourstart')+'</div></div>';
+  return h}
 function recapHTML(){
   updateStats();
   var h='<div class="ptop"><span class="eyebrow">Week recap</span>'+babyToggle()+'</div><div class="ptitle"><div class="time">Last 7 days</div><h2 class="title">How the week went</h2><p class="lede">Percent of each day\'s checklist finished. Rough days count too. Showing up is the streak.</p></div>';
@@ -1617,9 +1641,9 @@ function rwTouch(){
 function rwWelcome(gap){
   var el=$('#welcome');if(!el)return;
   var nx=rwNext(),av=rwAvail(),ms=S.rw.prizes.filter(function(p){return p.ms})[0];
-  var h='<div class="wcard"><h2>Welcome back, Devon</h2><p>It has been <b>'+gap+' days</b> since your last visit. We missed you.</p><p>Today is a fresh start. Close today and a 10 point welcome-back bonus is added.</p>';
+  var h='<div class="wcard"><h2>Welcome back, Devon</h2><p>It has been <b>'+gap+' days</b> since your last visit. We missed you.</p><p>Today is a fresh start. Close the day and a 10 point welcome-back bonus is added.</p>';
   h+='<p class="wsub">You have <b>'+np(av)+' points</b> available'+(nx?'. '+np(nx.c-av)+' more gets you: '+esc(nx.n)+'.':'.')+(ms?' Staying active for '+ms.days+' days earns: '+esc(ms.n)+'.':'')+'</p>';
-  h+='<div class="acts"><button class="btn primary" data-a="rwwelcomeok">Let\'s go</button><button class="btn" data-a="rwwelcomerew">See rewards</button></div></div>';
+  h+='<div class="acts"><button class="btn primary" data-a="rwwelcomeok">Continue</button><button class="btn" data-a="rwwelcomerew">View rewards</button></div></div>';
   el.innerHTML=h;el.hidden=false;alUnlock();alChime('start')}
 /* ---- page ---- */
 var rwUnlockUntil=0;
@@ -1633,10 +1657,10 @@ function rwClaimBlock(p,left){
 function rwHTML(){
   rwSync();
   var rw=S.rw,av=rwAvail(),nx=rwNext(),act=rwActive(),tp=rwTodayPts(),claims=rw.claims.slice().reverse();
-  var h='<div class="ptop"><span class="eyebrow">Back pages</span>'+babyToggle()+'</div><div class="ptitle"><div class="time">Rewards</div><h2 class="title">Earn it by showing up</h2><p class="lede">Points for opening the book, finishing must-dos on time and closing the day. Spend them on things you choose. The big prizes come from staying consistent for weeks, not from one big day.</p><div class="acts"><button class="btn" data-a="tourstart">How this works</button></div></div>';
+  var h='<div class="ptop"><span class="eyebrow">Back pages</span>'+babyToggle()+'</div><div class="ptitle"><div class="time">Rewards</div><h2 class="title">Your effort, measured</h2><p class="lede">Nothing can pay you for what you do as a mother. This is a way to measure the effort you put in and turn it into value you can spend on yourself. Points come from showing up, finishing what matters, and closing the day. The larger rewards recognize steady effort over weeks.</p><div class="acts"><button class="btn" data-a="tourstart">How the book works</button></div></div>';
   h+='<div class="card"><h3>Your points</h3><div class="rwbig">'+np(av)+'</div><p class="sub" style="color:var(--ink)">available to spend</p><p class="sub">+'+np(tp)+' so far today (counts once you close the day). Active '+act.n+' of the last '+act.tot+' days.</p>';
   if(nx)h+=rwBar(av/nx.c)+'<p class="sub" style="color:var(--ink);margin-top:6px">'+np(nx.c-av)+' points to go for: '+esc(nx.n)+'</p>';
-  else h+='<p class="sub" style="color:var(--ink)">You can afford everything on the list. Pick something.</p>';
+  else h+='<p class="sub" style="color:var(--ink)">You have enough for anything on the list. Choose what you would enjoy most.</p>';
   h+='</div>';
   var mss=rw.prizes.filter(function(p){return p.ms}).sort(function(a,b){return a.days-b.days});
   if(mss.length){
@@ -1752,7 +1776,7 @@ function ugcPlanHTML(){
   h+=ugcStepRow(t.ap>=1,'Apply or pitch',t.ap+' logged today. Each one is +'+UGC_PTS.apply+', up to '+UGC_PTS.applyCap+' a day.','<button class="btn primary" data-a="ugclog">Log an application</button>');
   h+=ugcStepRow(t.rep,'Today\'s rep',esc(dr.t)+(t.rep?'':' +'+UGC_PTS.rep),t.rep?'':'<button class="btn primary" data-a="ugcrep">I did it</button>');
   h+='<p class="sub" style="margin-top:10px">UGC points so far today: <b>'+np(ugcPts(ymd()))+'</b>. Getting booked is +'+UGC_PTS.booked+' and getting paid is +'+UGC_PTS.done+'.</p></div>';
-  h+='<div class="fchips" role="group" aria-label="Jump to"><button class="fchip" data-a="goto" data-p="ugcschool" aria-pressed="false">UGC School</button><button class="fchip" data-a="goto" data-p="ugcgroup" aria-pressed="false">Your UGC Group</button><button class="fchip" data-a="ugcjump" data-v="ugc_leads" aria-pressed="false">Sources</button><button class="fchip" data-a="tourstart" aria-pressed="false">How rewards work</button></div>';
+  h+='<div class="fchips" role="group" aria-label="Jump to"><button class="fchip" data-a="goto" data-p="ugcschool" aria-pressed="false">UGC School</button><button class="fchip" data-a="goto" data-p="ugcgroup" aria-pressed="false">Your UGC Group</button><button class="fchip" data-a="ugcjump" data-v="ugc_leads" aria-pressed="false">Sources</button><button class="fchip" data-a="tourstart" aria-pressed="false">How the book works</button></div>';
   return h}
 var UGC_ROAD=[
  {p:'Weeks 1 and 2: get good and get seen',s:[
@@ -2061,23 +2085,26 @@ function ugcRoundupText(){
   return x.join('\n')}
 
 /* ---- tutorial ---- */
-var tourI=0;
-function tourSteps(){
+var tourV='';
+function tourTopics(){
   var ms=S.rw.prizes.filter(function(p){return p.ms}).sort(function(a,b){return a.days-b.days});
-  var msl=ms.map(function(p){return '<li><b>'+esc(p.n)+'</b>: '+p.days+' days, up to '+p.slips+' slip days, and at least '+np(p.minp)+' points in the run.</li>'}).join('');
+  var msl=ms.map(function(p){return '<li><b>'+esc(p.n)+'</b>: '+p.days+' days, up to '+p.slips+' slip days, and at least '+np(p.minp)+' points over the run.</li>'}).join('');
   return [
-   {t:'Your Day Book now pays you back',b:'<p>Everything you do in this book earns points. Points turn into things you choose: coffee, dinners, a night off, a getaway.</p><p>The goal is simple: stay on task, finish your day feeling good, and get rewarded for it. This takes a minute.</p>'},
-   {t:'How a day earns points',b:'<ul><li>5 points for opening the book.</li><li>Up to 45 for the share of must-dos you finish.</li><li>Up to 20 for finishing them on time.</li><li>10 for finishing your Big 3.</li><li>15 for closing the day.</li></ul><p>A perfect day is 95. A perfect week is 665, plus a 50 point bonus for any week with 5 good days.</p><p>Points are added when you close the day, so close it every night.</p>'},
-   {t:'What points buy',b:'<p>Open Rewards from the Contents to see the list: coffee and treats, dining out, self-care, and time for yourself. Small prizes take a few good days. Bigger ones take a few weeks.</p><p>To claim one, tap it, type your pick (the restaurant, the shop, the movie), and tap Claim. Rico confirms it. If he says not now, your points come back.</p>'},
-   {t:'The big prizes come from consistency',b:'<p>A <b>good day</b> means you closed the day with at least 70% of your must-dos done (50% on a gentle day). A day you skip or leave open is a <b>slip day</b>.</p><ul>'+msl+'</ul><p>Go over the slip days and that run starts over the next day. You never lose points you already earned. Missing a day or two costs you a slip, not the whole run.</p>'},
-   {t:'Your UGC plan',b:'<p>The UGC Desk has a three step daily plan: check 3 sources for new briefs, apply to or pitch a brand, and do one practice rep.</p><ul><li>10 points per application, up to 3 a day.</li><li>10 for the daily rep and 10 for checking 3 sources.</li><li>40 for getting booked and 60 for getting paid.</li></ul><p>It also has short lessons and a step by step plan to build your own UGC group.</p>'},
-   {t:'How to win',b:'<ul><li>Open the book every day. Even a short visit keeps you in the game.</li><li>Close the day every night. It is worth 15 points and it makes the day count as good.</li><li>Do your Big 3 first and do them on time.</li><li>On a rough day, switch to a gentle day. It only needs 50%.</li></ul><p>If you have been away, the book will welcome you back. You can replay this any time from the Rewards page.</p>'}]}
+   {id:'day',t:'Your day',s:'Pages, check-offs and closing the day',go:'now',goT:'Take me to today\'s page',b:'<p>Your day is divided into pages by time. Each page lists what matters for that stretch of the day. Tap an item to check it off.</p><ul><li>A star marks a must-do. The Big 3 are the ones to do first.</li><li>At the top of each page, tap Baby Awake or Asleep so the book suggests the right tasks for the moment.</li><li>On a hard day, switch to a gentle day: two must-dos and small versions of everything else.</li><li>Each night, close the day. Tell the book how it felt and what carries over to tomorrow. It takes two minutes, and it is what turns the day into points.</li><li>Use Back and Next at the bottom to turn pages, or Contents to come home.</li></ul>'},
+   {id:'rewards',t:'Rewards',s:'How your effort becomes value',go:'rw',goT:'Take me to Rewards',b:'<p>Nothing can pay you for what you do as a mother. Rewards are simply a way to measure the effort you put in and turn it into value you can spend on yourself.</p><h4>How a day adds up</h4><ul><li>5 points for opening the book.</li><li>Up to 45 for the share of must-dos you finish.</li><li>Up to 20 for finishing them on time.</li><li>10 for completing your Big 3.</li><li>15 for closing the day.</li></ul><p>A full day is 95 points and a full week is 665, plus a 50 point bonus for any week with 5 good days.</p><h4>Spending your points</h4><p>Open Rewards, choose something, add your pick (the restaurant, the shop, the place) and tap Claim. Rico confirms it, and if he says not now your points come back.</p><h4>Consistency rewards</h4><p>A good day means you closed the day with at least 70% of your must-dos done (50% on a gentle day). A day you skip or leave open is a slip day.</p><ul>'+msl+'</ul><p>If a run passes its slip days, it starts over the next day. Points you have already earned are never lost.</p>'},
+   {id:'ugc',t:'UGC Desk',s:'Fresh leads, your daily plan and your log',go:'ugc',goT:'Take me to the UGC Desk',b:'<p>The UGC Desk is where your content business lives. It has three small steps each day:</p><ol><li>Open a fresh lead or check a source.</li><li>Apply to or pitch one brand.</li><li>Do one practice rep.</li></ol><ul><li>New leads are collected for you each morning. Tap Open and apply, then I applied, and it is logged for you.</li><li>Every brand you save or contact is kept with its details so you can follow up.</li><li>Each application earns 10 points, up to 3 a day. Getting booked earns 40, and getting paid earns 60.</li></ul>'},
+   {id:'learn',t:'UGC School and Group',s:'Lessons, rates, scripts and your Brand Book',go:'ugcschool',goT:'Take me to UGC School',b:'<p><b>UGC School</b> has 14 short lessons in plain language: what the words mean, what to charge in 2026 going into 2027, how to pitch, message scripts you can copy, contracts, and how to get paid. It also has a quote calculator.</p><p><b>UGC Group</b> is where it all comes together. Everything you log on the UGC Desk builds your Brand Book automatically, along with your reply and booking rates and a launch plan for your own paid community.</p>'},
+   {id:'plan',t:'Plan the home',s:'Calendar, meals, nutrition and movement',go:'meals',goT:'Take me to Meals',b:'<p>These pages keep the household running without extra thinking.</p><ul><li><b>Calendar:</b> appointments and plans, with reminders.</li><li><b>Meals:</b> tonight\'s dinner, recipes and a grocery list.</li><li><b>Nutrition:</b> eating times, water and vitamins for a breastfeeding mother.</li><li><b>Move:</b> one small movement for the day that fits your energy.</li></ul>'},
+   {id:'alerts',t:'Alerts and scorecard',s:'Chimes, nudges and what Rico sees',go:'al',goT:'Take me to Alerts',b:'<p>The book chimes when a new page begins and gives a gentle nudge if nothing has been checked off for a while. You can snooze or turn sounds off.</p><p>When you close the day, a short scorecard goes to Rico so he can see how the day went. You can also text it to him yourself. It shows what was done, not a grade.</p>'}]}
 function tourShow(){
   var el=$('#tour');if(!el)return;
-  var st=tourSteps(),s=st[tourI],last=tourI===st.length-1;
-  el.innerHTML='<div class="wcard"><div class="tdots">'+st.map(function(x,i){return '<i'+(i===tourI?' class="on"':'')+'></i>'}).join('')+'</div><p class="sub">Step '+(tourI+1)+' of '+st.length+'</p><h2>'+s.t+'</h2><div class="tbody">'+s.b+'</div><div class="acts">'+(tourI?'<button class="btn" data-a="tourback">Back</button>':'')+(last?'<button class="btn primary" data-a="tourdone">Got it, let\'s go</button>':'<button class="btn primary" data-a="tournext">Next</button><button class="btn" data-a="tourskip">Skip</button>')+'</div></div>';
-  el.hidden=false;var w=el.querySelector('.wcard');if(w)w.scrollTop=0}
-function tourStart(){tourI=0;tourShow()}
+  var tp=tourTopics(),cur=tp.filter(function(x){return x.id===tourV})[0],h;
+  if(cur){
+    h='<div class="wcard"><p class="sub"><button class="link" data-a="tourhome">‹ All topics</button></p><h2>'+esc(cur.t)+'</h2><div class="tbody">'+cur.b+'</div><div class="acts"><button class="btn primary" data-a="tourgo" data-id="'+cur.id+'">'+esc(cur.goT)+'</button><button class="btn" data-a="tourhome">Back to topics</button></div></div>'}
+  else{
+    h='<div class="wcard"><h2>Welcome, Devon</h2><p>You work hard every day, and nothing can pay you for what you do as a mother. This book simply measures the effort you put in and turns it into value you can spend on yourself.</p><p class="wsub">Choose any topic to see how it works. Each one can take you straight to that part of the book.</p><div class="tlist">'+tp.map(function(x){return '<button class="tbtn" data-a="tourtopic" data-id="'+x.id+'"><b>'+esc(x.t)+'</b><span>'+esc(x.s)+'</span></button>'}).join('')+'</div><div class="acts"><button class="btn" data-a="tourdone">Close</button></div></div>'}
+  el.innerHTML=h;el.hidden=false;var w=el.querySelector('.wcard');if(w)w.scrollTop=0}
+function tourStart(){tourV='';tourShow()}
 function tourEnd(){var el=$('#tour');if(el)el.hidden=true;if(!S.rw.tour){S.rw.tour=1;save()}}
 
 /* ---- scorecard ---- */
@@ -2872,8 +2899,14 @@ Object.assign(A,{
 
 Object.assign(A,{
   tourstart:function(){tourStart()},
-  tournext:function(){tourI++;tourShow()},
-  tourback:function(){if(tourI>0)tourI--;tourShow()},
+  tourtopic:function(t){tourV=t.dataset.id;tourShow()},
+  tourhome:function(){tourV='';tourShow()},
+  tourgo:function(t){
+    var tp=tourTopics().filter(function(x){return x.id===t.dataset.id})[0];if(!tp)return;
+    var key=tp.go==='now'?curChapter().id:tp.go;tourEnd();
+    var run=function(){go(order().indexOf(key))};
+    if(open)run();else{openBook();setTimeout(run,DUR+250)}},
+  tocg:function(t){var v=t.dataset.v;tocG=(tocG===v)?'':v;draw(true)},
   tourskip:function(){tourEnd()},
   tourdone:function(){tourEnd()},
   ugcjump:function(t){var el=document.getElementById(t.dataset.v);if(el)el.scrollIntoView({block:'start',behavior:MOTION?'smooth':'auto'})},
