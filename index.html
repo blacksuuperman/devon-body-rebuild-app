@@ -322,6 +322,50 @@ textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:1
   .cover,.cover.open,.leaf,.leaf::after{transition-duration:.01s!important;transition-delay:0s!important}
   .stamp.fresh{animation:none}
 }
+.rwbig{font-family:var(--serif);font-size:48px;font-weight:700;line-height:1;color:var(--accent);margin:4px 0 2px;font-variant-numeric:tabular-nums}
+.rwbar{height:10px;border-radius:999px;background:var(--line);overflow:hidden;margin:10px 0 2px}
+.rwbar i{display:block;height:100%;background:var(--accent);border-radius:999px;transition:width .4s}
+.rwlock{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 2px;border-bottom:1px solid var(--line);font-size:15px;color:var(--muted)}
+.rwlock b{font-size:12px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.rwed{border-bottom:1px dashed var(--line);padding:10px 0}
+.rwed>input{width:100%;min-height:44px;border:1px solid var(--line);border-radius:12px;background:var(--paper);padding:0 12px;font-size:16px;color:var(--ink)}
+.rwed3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.rwed label,.rwc{display:block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:8px 0 2px}
+.rwed label input,.rwc input{display:block;width:100%;min-height:44px;margin-top:3px;border:1px solid var(--line);border-radius:12px;background:var(--paper);padding:0 10px;font-size:16px;color:var(--ink)}
+.rwed .btn{margin-top:8px}
+.welcome{position:fixed;inset:0;z-index:70;background:rgba(30,10,20,.62);display:flex;align-items:center;justify-content:center;padding:20px}
+.welcome[hidden]{display:none}
+.wcard{background:var(--paper);color:var(--ink);border-radius:20px;padding:22px 20px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.4);max-height:90vh;overflow:auto}
+.wcard h2{font-family:var(--serif);font-size:28px;font-weight:700;line-height:1.1;margin-bottom:8px;color:var(--accent)}
+.wcard p{font-size:16px;margin:8px 0;text-wrap:pretty}
+.wcard .wsub{font-size:14px;color:var(--muted)}
+.wcard .btn{min-height:46px}
+.wcard .btn.primary{color:var(--paper)}
+
+.ugcstats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0 6px}
+.ugcstats div{border:1px solid var(--line);border-radius:12px;padding:8px 4px;text-align:center;background:var(--paper2)}
+.ugcstats b{display:block;font-family:var(--serif);font-size:22px;line-height:1.1;font-variant-numeric:tabular-nums}
+.ugcstats span{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+.ugcstep{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed var(--line)}
+.ugcstep>div{flex:1;min-width:0}
+.ugcstep b{display:block;font-size:15px}
+.ugcstep span:not(.ugcck){display:block;font-size:14px;color:var(--muted);margin-top:2px;text-wrap:pretty}
+.ugcstep .btn{margin-top:8px;min-height:44px}
+.ugcstep .btn.primary{color:var(--paper)}
+.ugcck{flex:none;width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:15px;line-height:1;color:var(--paper);margin-top:1px}
+.ugcstep.ok .ugcck{background:var(--ok);border-color:var(--ok)}
+.tdots{display:flex;gap:6px;margin-bottom:8px}
+.tdots i{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.tdots i.on{background:var(--accent);width:22px;border-radius:999px}
+.tbody ul{margin:6px 0;padding-left:20px;font-size:15px}
+.tbody li{margin:4px 0;text-wrap:pretty}
+.rwed select{width:100%;min-height:44px;border:1px solid var(--line);border-radius:12px;background:var(--paper);padding:0 10px;font-size:16px;color:var(--ink);margin-top:3px}
+.lkpill{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 9px;border-radius:999px;background:var(--accent);color:var(--paper);margin-left:4px}
+.lesson p{margin:8px 0;font-size:15px;text-wrap:pretty}
+.lesson ul,.lesson ol{margin:6px 0;padding-left:20px}
+.lesson li{margin:5px 0;font-size:15px;text-wrap:pretty}
+.lesson h4{margin:14px 0 4px}
+.lesson a{color:var(--accent)}
 </style>
 
 </head>
@@ -340,6 +384,8 @@ textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:1
 </div>
 <div class="alertbar" id="alertbar" role="alert" hidden></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="welcome" id="welcome" hidden role="dialog" aria-modal="true" aria-label="Welcome back"></div>
+<div class="welcome" id="tour" hidden role="dialog" aria-modal="true" aria-label="How rewards work"></div>
 <div class="sheet" id="sheet" hidden role="dialog" aria-label="Save to your phone"></div>
 
 <script>
@@ -365,7 +411,9 @@ var MOTION=!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').m
 var KEY='daybook.v1',S;
 function load(){try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);if(o&&o.v===1&&o.days)return o}}catch(e){}return {v:1,days:{}}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
-function norm(){S.events=S.events||[];S.ugc=S.ugc||[];S.groc=S.groc||[];S.fav=S.fav||{};S.rf=S.rf||{};S.stepGoal=S.stepGoal||5000;S.nut=Object.assign(nutDefaults(),S.nut||{});S.jr=Object.assign(jrDefaults(),S.jr||{});S.al=Object.assign(alDefaults(),S.al||{});if(!S.al.topic)S.al.topic='daybook-'+alRand(14);if(!S.al.rtopic)S.al.rtopic='daybook-rico-'+alRand(14);if(S.jr.schedVer!==2){if(S.jr.gameDrive===35)S.jr.gameDrive=55;S.jr.trainerPaused=false;S.jr.schedVer=2}if(!S.vits)S.vits=[{id:'v_pre',name:'Prenatal vitamin or multivitamin'},{id:'v_dha',name:'Omega-3 DHA, if you do not eat fish 2 to 3 times a week'}]}
+function norm(){S.events=S.events||[];S.ugc=S.ugc||[];S.groc=S.groc||[];S.fav=S.fav||{};S.rf=S.rf||{};S.stepGoal=S.stepGoal||5000;S.nut=Object.assign(nutDefaults(),S.nut||{});S.jr=Object.assign(jrDefaults(),S.jr||{});S.al=Object.assign(alDefaults(),S.al||{});if(!S.al.topic)S.al.topic='daybook-'+alRand(14);if(!S.al.rtopic)S.al.rtopic='daybook-rico-'+alRand(14);if(S.jr.schedVer!==2){if(S.jr.gameDrive===35)S.jr.gameDrive=55;S.jr.trainerPaused=false;S.jr.schedVer=2}S.rw=Object.assign(rwDefaults(),S.rw||{});if(!S.rw.prizes||!S.rw.prizes.length){S.rw.prizes=rwPrizeDefaults();S.rw.ver=2}else if((S.rw.ver||0)<2){var nd=rwPrizeDefaults(),oldIds=/^(p_coffee|p_movie|p_texmex|p_afternoon|p_coffeewk|p_dinner|p_spa|m_30|m_60)$/;S.rw.prizes=nd.concat(S.rw.prizes.filter(function(p){return !oldIds.test(p.id)}));S.rw.ver=2}
+S.feed=Object.assign(feedDefaults(),S.feed||{});S.feed.dismissed=S.feed.dismissed||{};S.feed.items=S.feed.items||[];S.ugcx=Object.assign({road:{},read:{}},S.ugcx||{});S.ugcx.road=S.ugcx.road||{};S.ugcx.read=S.ugcx.read||{};
+S.ugc.forEach(function(u){if(!u.ev){u.ev=[];if(u.st!=='idea'&&u.st!=='pass')u.ev.push({t:'apply',d:'legacy'});if(u.st==='deal'||u.st==='done')u.ev.push({t:'booked',d:'legacy'});if(u.st==='done')u.ev.push({t:'done',d:'legacy'})}});S.rw.hist=S.rw.hist||{};S.rw.claims=S.rw.claims||[];S.rw.adj=S.rw.adj||[];if(!S.vits)S.vits=[{id:'v_pre',name:'Prenatal vitamin or multivitamin'},{id:'v_dha',name:'Omega-3 DHA, if you do not eat fish 2 to 3 times a week'}]}
 S=load();norm();
 
 /* ================= words ================= */
@@ -731,6 +779,7 @@ function chapters(c){
     if(c.date===today){
       var tr=tonight();
       L.forEach(function(ch){if(ch.id==='close')return;if(ch.id==='dinner'||ch.mom.some(function(it){return it.id==='m_dinner'}))(ch.notes=ch.notes||[]).push({b:'Tonight',t:tr.n+', about '+tr.t+' minutes.',link:'meals',lk:'Open Meals'})});
+      L.forEach(function(ch){if(ch.id!=='close'&&ch.mom.some(function(it){return it.id&&String(it.id).indexOf('m_ugc')===0&&!it.opt}))(ch.notes=ch.notes||[]).push({b:'Your UGC plan for today',t:'Open your fresh leads, apply to one, and do today\'s rep. Three small steps, and each earns points.',link:'ugc',lk:'UGC Desk'})});
       var due=ugcDue();
       if(due.length)L.forEach(function(ch){if(ch.mom.some(function(it){return it.id&&String(it.id).indexOf('m_ugc')===0}))(ch.notes=ch.notes||[]).push({b:'UGC follow-ups due',t:due.slice(0,3).map(function(u){return u.name}).join(', ')+(due.length>3?' and more':'')+'.',link:'ugc',lk:'UGC Desk'})});
     }
@@ -748,7 +797,7 @@ function chapters(c){
   return L;
 }
 function getCH(){var t=ymd();if(!CH||CHdate!==t){ensureToday();CH=chapters(ctxFor(t));CHdate=t}return CH}
-function order(){return ['toc'].concat(getCH().map(function(c){return c.id}),['cal','meals','nut','jr','al','move','ugc','recap','sched','setup'])}
+function order(){return ['toc'].concat(getCH().map(function(c){return c.id}),['cal','meals','nut','jr','al','rw','move','ugc','ugcschool','ugcgroup','recap','sched','setup'])}
 function curChapter(){var m=nowMin(),c=getCH();for(var i=0;i<c.length;i++)if(m>=c[i].t[0]&&m<c[i].t[1])return c[i];return m<c[0].t[0]?c[0]:c[c.length-1]}
 var LANES=['mom','jr','st'];
 function chProg(c){var d=D();if(c.id==='close')return {done:d.closed?1:0,tot:1};var done=0,tot=0;LANES.forEach(function(k){c[k].forEach(function(it){if(it.opt)return;tot++;if(d.done[it.id])done++})});return {done:done,tot:tot}}
@@ -759,7 +808,7 @@ function updateStats(){
     c.mom.forEach(function(it){ids.push(it.id);if((isStar(it.id)||it.custom)&&!it.opt&&!d.done[it.id])open.push({id:it.id,t:it.t,custom:!!it.custom,ch:c.id})})});
   d.pct=tot?Math.round(done/tot*100):0;
   var st=starred(chs);d.big={done:st.filter(function(x){return d.done[x.id]}).length,total:st.length};
-  d.open=open;d.ids=ids;d.sc=scoreToday(chs,d);delete d.sc.missed;
+  d.open=open;d.ids=ids;d.sc=scoreToday(chs,d);delete d.sc.missed;rwSync();
 }
 function skips(id){var t=ymd(),days=Object.keys(S.days).filter(function(k){return k<t&&(S.days[k].pct>0||S.days[k].closed)}).sort().slice(-5),n=0,seen=0;
   days.forEach(function(k){var dd=S.days[k];if(dd.ids&&dd.ids.indexOf(id)>=0){seen++;if(!dd.done[id])n++}});return (seen>=3&&n>=3)?n:0}
@@ -874,7 +923,7 @@ function tocHTML(){
   h+='</div><h3 class="shh">Back of the book</h3><div class="toc" style="margin-top:6px">';
   var tn=tonight(),ud=ugcDue().length,evn=eventsOn(ymd()).length;
   function brow(p,tt,ttl,sub){return '<button class="trow" data-a="goto" data-p="'+p+'"><span class="tt">'+tt+'</span><span class="ttl">'+ttl+(sub?'<span class="sub">'+esc(sub)+'</span>':'')+'</span><span class="prog"></span></button>'}
-  h+=brow('cal','Plan','Calendar',evn?evn+' event'+(evn===1?'':'s')+' today':'Appointments and plans')+brow('meals','Dinner','Meals','Tonight: '+tn.n)+brow('nut','Fuel','Nutrition',nutTocSub())+brow('jr','Jr','Jr settings','Day type, trainer, and the 14-day reset')+brow('al','Bell','Alerts',S.al.on?(S.al.ntfy?'Sound on, phone alerts on':'Sound on, phone alerts off'):'Alerts are off')+brow('move','Move','Move',todayMove().n+(d.moved?' (done)':''))+brow('ugc','Work','UGC Desk',ud?ud+' follow-up'+(ud===1?'':'s')+' due':(S.ugc.length?S.ugc.length+' brand'+(S.ugc.length===1?'':'s'):'Brands and contacts'))+brow('recap','Week','Recap and journal','')+brow('sched','TV','Fights and football','Every UFC card and NFL Sunday, in Central time')+brow('setup','App','Set up','Save to your phone and back up')+'</div>';
+  h+=brow('cal','Plan','Calendar',evn?evn+' event'+(evn===1?'':'s')+' today':'Appointments and plans')+brow('meals','Dinner','Meals','Tonight: '+tn.n)+brow('nut','Fuel','Nutrition',nutTocSub())+brow('jr','Jr','Jr settings','Day type, trainer, and the 14-day reset')+brow('al','Bell','Alerts',S.al.on?(S.al.ntfy?'Sound on, phone alerts on':'Sound on, phone alerts off'):'Alerts are off')+brow('rw','Gift','Rewards',rwTocSub())+brow('move','Move','Move',todayMove().n+(d.moved?' (done)':''))+brow('ugc','Work','UGC Desk',ud?ud+' follow-up'+(ud===1?'':'s')+' due':'Today: '+ugcSteps()+' of 3 steps done')+brow('ugcschool','Learn','UGC School',SCH.filter(function(l){return S.ugcx.read[l.id]}).length+' of '+SCH.length+' lessons read')+brow('ugcgroup','Build','UGC Group',ugcStats().ap+' applied, '+ugcStats().booked+' booked, '+S.ugc.length+' in your Brand Book')+brow('recap','Week','Recap and journal','')+brow('sched','TV','Fights and football','Every UFC card and NFL Sunday, in Central time')+brow('setup','App','Set up','Save to your phone and back up')+'</div>';
   h+='<div class="seg" role="group" aria-label="Type of day"><button data-a="daytype" data-v="school" aria-pressed="'+ctxFor(ymd()).wd+'">School day</button><button data-a="daytype" data-v="weekend" aria-pressed="'+(!ctxFor(ymd()).wd)+'">Weekend</button></div>';
   return h;
 }
@@ -1269,12 +1318,12 @@ var UORD={deal:0,talks:1,reached:2,idea:3,done:4,pass:5};
 var ugcF='all',ugcEdit=null;
 function ustLabel(k){for(var i=0;i<UST.length;i++)if(UST[i][0]===k)return UST[i][1];return k}
 /* ================= UGC brand and platform leads (reference directory) ================= */
-var LEAD_CATS=[['all','All'],['match','Marketplaces that match you to campaigns'],['profile','You build a profile, brands book you'],['platform','Built into an app you already use'],['family','Family and lifestyle focused']];
+var LEAD_CATS=[['all','All'],['match','Marketplaces that match you to campaigns'],['profile','You build a profile, brands book you'],['platform','Built into an app you already use'],['family','Family and lifestyle focused'],['daily','Posts new work daily'],['jobs','Job boards and newsletters'],['comm','Communities'],['research','Find brands to pitch']];
 var UGC_LEADS=[
-  {name:'Billo',cat:'match',url:'billo.app',desc:'Short-form product videos for ecommerce brands.',note:'Free to join, no follower minimum. Brands pick submissions and pay per video.'},
-  {name:'JoinBrands',cat:'match',url:'joinbrands.com',desc:'High-volume marketplace for product photos, videos and social posts.',note:'Free to join. About a 20% platform fee on earnings. Certifications unlock more jobs.'},
-  {name:'Trend',cat:'match',url:'trend.io',desc:'Curated network producing ad-ready videos, photos and product demos.',note:'Free to join, pay-per-video or photo, no subscription. Full licensing rights go to the brand.'},
-  {name:'Insense',cat:'match',url:'insense.pro',desc:'UGC, influencer, product seeding and affiliate campaigns for ecommerce brands.',note:'Free for creators. Portfolio review required, rates are negotiable.'},
+  {name:'Billo',cat:'match',fresh:'Free app. You upload a short intro video, then browse and apply to brand offers. Paid twice a month by PayPal. US, Canada, UK, 18+.',url:'billo.app',desc:'Short-form product videos for ecommerce brands.',note:'Free to join, no follower minimum. Brands pick submissions and pay per video.'},
+  {name:'JoinBrands',cat:'match',daily:1,fresh:'New briefs drop daily. Fixed rates from about $60 a video. US, UK, Germany, Australia, Canada, 18+.',url:'joinbrands.com',desc:'High-volume marketplace for product photos, videos and social posts.',note:'Free to join. About a 20% platform fee on earnings. Certifications unlock more jobs.'},
+  {name:'Trend',cat:'match',daily:1,fresh:'New partnerships added daily. iPhone app, US only, 100% free for creators.',url:'trend.io',desc:'Curated network producing ad-ready videos, photos and product demos.',note:'Free to join, pay-per-video or photo, no subscription. Full licensing rights go to the brand.'},
+  {name:'Insense',cat:'match',fresh:'Wants about 1,000 Instagram followers or 500 median TikTok views plus a portfolio. Apply to about 20 campaigns, brands answer in 5 to 10 business days.',url:'insense.pro',desc:'UGC, influencer, product seeding and affiliate campaigns for ecommerce brands.',note:'Free for creators. Portfolio review required, rates are negotiable.'},
   {name:'Aspire',cat:'match',url:'aspire.io',desc:'Connects creators with 800+ brands for sponsored content, UGC, seeding and affiliate offers.',note:'Free, no creator commission. Browse open opportunities or get invited directly.'},
   {name:'Cohley',cat:'match',url:'cohley.com',desc:'Vetted network doing UGC photos, videos, reviews and product seeding.',note:'Portfolio review required, then apply to individual briefs. About a 2.9% payment processing fee.'},
   {name:'Social Cat',cat:'match',url:'social-cat.com',desc:'Matches Instagram and TikTok creators with smaller, local brands.',note:'Requires roughly 3,000+ followers and 100 posts. Collaborations can be gifted, affiliate, or paid.'},
@@ -1286,21 +1335,30 @@ var UGC_LEADS=[
   {name:'Statusphere',cat:'family',url:'joinstatus.com',desc:'Micro-influencer and UGC platform that matches everyday creators with product-for-content deals.',note:'Free to join. A strong fit for family, home, and lifestyle content, not just huge followings.'},
   {name:'TikTok One',cat:'platform',url:'tiktok.com',desc:"TikTok's own brand-deal hub, reachable from TikTok Studio (replaced the old TikTok Creator Marketplace).",note:'Must be 18+. No follower minimum. Browse open campaigns and apply; brands can also invite you.'},
   {name:'Amazon Influencer Program',cat:'platform',url:'amazon.com/influencer',desc:'Build a shoppable storefront on Amazon and earn commission on products you feature.',note:'Typically wants an engaged following (roughly 1,000+) on one social account, plus a few review videos to unlock full commission.'}
+  ,{name:'Pitchlo',cat:'jobs',daily:1,fresh:'A job board with 300+ active listings. New ones appear regularly.',url:'pitchlo.com',desc:'Job board where creators apply directly to brand UGC listings.',note:'No large following needed, per their site. Read each listing for pay and terms.'}
+  ,{name:'Creator-related Jobs newsletter',cat:'jobs',fresh:'A weekly roundup of UGC and creator job listings.',url:'newsletter.ugcjob.com',desc:'A weekly email of UGC listings from around the internet, each with pay and an apply link.',note:'Listings come from other sites and the publisher does not vouch for them. Check each one yourself.'}
+  ,{name:'UGC Playground job board',cat:'jobs',url:'ugcplayground.com/jobs',desc:'A job board and weekly newsletter from a UGC education site.',note:'Check what is listed on the day you visit.'}
+  ,{name:'r/UGCcreators on Reddit',cat:'comm',fresh:'A large, active community (about 98,000 members).',url:'reddit.com/r/UGCcreators',desc:'Creators share jobs, rates, contracts and questions.',note:'Free. Good for seeing real rates and spotting scams.'}
+  ,{name:'UGC Brand Deals (Facebook group)',cat:'comm',fresh:'About 12,000 members.',url:'facebook.com',desc:'A Facebook group where brand deals and leads get shared. Search for the group name inside Facebook.',note:'Free to join. Never pay to be considered.'}
+  ,{name:'UGC Creators Community (Facebook group)',cat:'comm',fresh:'About 15,000 members.',url:'facebook.com',desc:'A Facebook group for UGC creators. Search for the group name inside Facebook.',note:'Free to join. Good for questions and finding collaborators.'}
+  ,{name:'Meta Ad Library',cat:'research',url:'facebook.com/ads/library',desc:'See every ad a brand is running right now. Set the country to United States.',note:'A brand running creator-style ads already pays for this content. Pitch it a better one.'}
+  ,{name:'TikTok Creative Center',cat:'research',url:'ads.tiktok.com/business/creativecenter',desc:'Top performing TikTok ads, hooks and trends by industry.',note:'Study the hook, length and shots of ads that work, then use them in your samples.'}
 ];
 var ugcLeadF='all';
 function ugcDue(){var t=ymd();return S.ugc.filter(function(u){return u.follow&&u.follow<=t&&u.st!=='pass'})}
 function ugcRowHTML(u){
   var t=ymd(),due=u.follow&&u.follow<=t&&u.st!=='pass',armed=delArm==='u'+u.id;
-  var line=[u.contact,u.deal].filter(Boolean).map(esc).join(' · ');
+  var line=[u.src,u.contact,u.email,u.deal,u.amt?'$'+np(u.amt)+' earned':''].filter(Boolean).map(esc).join(' · ');
   return '<div class="evrow"><div class="evt"><b>'+esc(u.name)+'</b><span><span class="pill">'+esc(ustLabel(u.st))+'</span>'+(due?' <span class="pill due">Follow up now</span>':'')+'</span>'+(line?'<span>'+line+'</span>':'')+(u.follow?'<span>Follow up: '+esc(lbl(u.follow))+'</span>':'')+(u.notes?'<em>'+esc(u.notes)+'</em>':'')+'</div><div class="acts"><button class="btn" data-a="ugcfu" data-id="'+u.id+'">Followed up</button><button class="btn" data-a="ugcedit" data-id="'+u.id+'">Edit</button><button class="btn" data-a="ugcdel" data-id="'+u.id+'">'+(armed?'Tap again to delete':'Delete')+'</button></div></div>'}
 function leadRowHTML(u){
-  var already=S.ugc.some(function(x){return x.name.toLowerCase()===u.name.toLowerCase()});
-  return '<div class="evrow"><div class="evt"><b>'+esc(u.name)+'</b><span><span class="pill">'+esc((LEAD_CATS.filter(function(c){return c[0]===u.cat})[0]||['',''])[1])+'</span></span><span>'+esc(u.desc)+'</span><em>'+esc(u.note)+'</em></div><div class="acts"><a class="btn" href="https://'+esc(u.url)+'" target="_blank" rel="noopener">Visit '+esc(u.url)+'</a><button class="btn'+(already?'':' primary')+'" data-a="leadadd" data-name="'+esc(u.name)+'">'+(already?'On your list':'Add to my list')+'</button></div></div>'}
+  var already=S.ugc.some(function(x){return x.name.toLowerCase()===u.name.toLowerCase()}),chk=!!(D().ugcRun&&D().ugcRun[u.name]);
+  return '<div class="evrow"><div class="evt"><b>'+esc(u.name)+'</b><span><span class="pill">'+esc((LEAD_CATS.filter(function(c){return c[0]===u.cat})[0]||['',''])[1])+'</span>'+(u.daily?'<span class="lkpill">Posts often</span>':'')+'</span><span>'+esc(u.desc)+'</span>'+(u.fresh?'<span style="color:var(--ink)">'+esc(u.fresh)+'</span>':'')+'<em>'+esc(u.note)+'</em></div><div class="acts"><a class="btn" href="https://'+esc(u.url)+'" target="_blank" rel="noopener">Visit '+esc(u.url.split('/')[0])+'</a><button class="btn'+(chk?'':' primary')+'" data-a="ugccheck" data-name="'+esc(u.name)+'">'+(chk?'Checked today':'I checked this')+'</button>'+(u.cat==='match'||u.cat==='profile'||u.cat==='platform'||u.cat==='family'?'<button class="btn" data-a="leadadd" data-name="'+esc(u.name)+'">'+(already?'On your list':'Add to my list')+'</button>':'')+'</div></div>'}
 function ugcHTML(){
   var t=ymd(),due=ugcDue(),ed=null;
   if(ugcEdit)for(var i=0;i<S.ugc.length;i++)if(S.ugc[i].id===ugcEdit)ed=S.ugc[i];
   var v=ed||{name:'',st:'reached',contact:'',deal:'',follow:'',notes:''};
   var h='<div class="ptop"><span class="eyebrow">Back pages</span>'+babyToggle()+'</div><div class="ptitle"><div class="time">Work</div><h2 class="title">UGC Desk</h2><p class="lede">Your brands and contacts in one place. Add the companies you have worked with, have deals with, or have reached out to. A few at a time is plenty.</p></div>';
+  h+=ugcPlanHTML()+feedHTML();
   if(due.length)h+='<div class="banner"><b>'+due.length+' follow-up'+(due.length===1?'':'s')+' due</b>'+due.slice(0,4).map(function(u){return esc(u.name)}).join(', ')+(due.length>4?' and '+(due.length-4)+' more':'')+'.</div>';
   var counts={all:S.ugc.length,due:due.length};UST.forEach(function(s){counts[s[0]]=S.ugc.filter(function(u){return u.st===s[0]}).length});
   h+='<div class="fchips" role="group" aria-label="Filter brands"><button class="fchip" data-a="ugcf" data-v="all" aria-pressed="'+(ugcF==='all')+'">All ('+counts.all+')</button>'+(due.length?'<button class="fchip" data-a="ugcf" data-v="due" aria-pressed="'+(ugcF==='due')+'">Follow-ups due ('+counts.due+')</button>':'')+UST.map(function(s){return counts[s[0]]?'<button class="fchip" data-a="ugcf" data-v="'+s[0]+'" aria-pressed="'+(ugcF===s[0])+'">'+s[1]+' ('+counts[s[0]]+')</button>':''}).join('')+'</div>';
@@ -1312,13 +1370,20 @@ function ugcHTML(){
     '<label for="u_st">Where things stand</label><select id="u_st">'+UST.map(function(s){return '<option value="'+s[0]+'"'+(v.st===s[0]?' selected':'')+'>'+s[1]+'</option>'}).join('')+'</select>'+
     '<label for="u_contact">Contact (name, email or Instagram)</label><input id="u_contact" type="text" value="'+esc(v.contact)+'" placeholder="Name and email or handle">'+
     '<label for="u_deal">Deal or rate (optional)</label><input id="u_deal" type="text" value="'+esc(v.deal)+'" placeholder="What you agreed on">'+
-    '<label for="u_follow">Follow up on</label><input id="u_follow" type="date" value="'+esc(v.follow)+'">'+
+    '<label for="u_src">Where you found it</label><select id="u_src"><option value="">Choose one</option><option value="Direct pitch or DM"'+(v.src==='Direct pitch or DM'?' selected':'')+'>Direct pitch or DM</option>'+UGC_LEADS.filter(function(x){return x.cat==='match'||x.cat==='profile'||x.cat==='jobs'||x.cat==='platform'||x.cat==='family'}).map(function(x){return '<option value="'+esc(x.name)+'"'+(v.src===x.name?' selected':'')+'>'+esc(x.name)+'</option>'}).join('')+'<option value="Other"'+(v.src==='Other'?' selected':'')+'>Other</option></select>'+
+     '<label for="u_link">Link to the campaign (optional)</label><input id="u_link" type="url" value="'+esc(v.link||'')+'" placeholder="https://">'+
+     '<label for="u_amt">Amount earned, when paid (optional)</label><input id="u_amt" type="number" inputmode="numeric" value="'+esc(v.amt||'')+'" placeholder="0">'+
+     '<label for="u_email">Email (optional)</label><input id="u_email" type="email" value="'+esc(v.email||'')+'" placeholder="name@brand.com">'+
+     '<label for="u_addr">Mailing address, for products (optional)</label><input id="u_addr" type="text" value="'+esc(v.addr||'')+'" placeholder="Street, city, state, zip">'+
+     '<label for="u_rate">Rate you quoted (optional)</label><input id="u_rate" type="text" value="'+esc(v.rate||'')+'" placeholder="$150 per video">'+
+     '<label for="u_follow">Follow up on</label><input id="u_follow" type="date" value="'+esc(v.follow)+'">'+
     '<label for="u_notes">Notes</label><input id="u_notes" type="text" value="'+esc(v.notes)+'" placeholder="Products, ideas, deadlines">'+
     '<button class="btn primary full" style="margin-top:12px" data-a="ugcsave">'+(ed?'Save changes':'Save brand')+'</button>'+(ed?'<button class="btn full" style="margin-top:8px" data-a="ugccancel">Cancel</button>':'')+'</div></details>';
   h+='<details class="rec" data-k="ugctmpl" id="rec_ugctmpl"'+(recOpen.ugctmpl?' open':'')+'><summary><span class="rn">Message starters</span><span class="rm">For reaching out and following up</span></summary><div class="rbody"><h4>First message</h4><p class="rtip" style="color:var(--ink)">Hi [name], I am Devon, a UGC creator. I have used [product] and would love to make a short video for [brand]. I can send a few ideas and my rates. Would you be open to that?</p><h4>Follow-up, 3 to 5 days later</h4><p class="rtip" style="color:var(--ink)">Hi [name], just checking in on my note about [product]. I would be happy to send a sample video or a quick idea list.</p><h4>After a yes</h4><p class="rtip" style="color:var(--ink)">Thank you. To get started, can you confirm the deliverables, the deadline and the usage terms?</p></div></details>';
-  h+='<h3 class="shh">Brand and platform leads</h3><p class="lede">Real companies and platforms that work with UGC creators, to browse whenever you want more pipeline. Programs and terms change, so double-check details on their site before you apply.</p>';
+  h+='<h3 class="shh" id="ugc_leads">Brand and platform leads</h3><p class="lede">Real companies and platforms that work with UGC creators, to browse whenever you want more pipeline. Programs and terms change, so double-check details on their site before you apply.</p>';
   h+='<div class="fchips" role="group" aria-label="Filter leads">'+LEAD_CATS.map(function(c){return '<button class="fchip" data-a="leadf" data-v="'+c[0]+'" aria-pressed="'+(ugcLeadF===c[0])+'">'+c[1]+'</button>'}).join('')+'</div>';
-  h+=UGC_LEADS.filter(function(u){return ugcLeadF==='all'||u.cat===ugcLeadF}).map(leadRowHTML).join('');
+  h+=UGC_LEADS.filter(function(u){return ugcLeadF==='all'||(ugcLeadF==='daily'?!!u.daily:u.cat===ugcLeadF)}).map(leadRowHTML).join('');
+  h+='<details class="rec" data-k="feedset"'+(recOpen.feedset?' open':'')+'><summary><span class="rn">Leads feed settings</span><span class="rm">For Rico. Normally nothing to change</span></summary><div class="rbody form"><p class="sub">The app looks for a file called leads.json next to the app. If you ever need it to read from somewhere else, put the full address here.</p><label for="feed_url">Feed address (optional)</label><input id="feed_url" type="url" value="'+esc(S.feed.url||'')+'" placeholder="https://raw.githubusercontent.com/you/repo/main/leads.json"><div class="acts"><button class="btn primary" data-a="feedurl">Save and refresh</button></div><p class="sub" style="margin-top:8px">Last updated: '+(S.feed.updated?esc(S.feed.updated.slice(0,10)):'never')+'. '+(S.feed.sources||[]).map(function(x){return esc(x.name)+': '+(x.ok?x.count+' found':'did not load')}).join('. ')+'</p></div></details>';
   return h}
 
 /* ================= install ================= */
@@ -1451,17 +1516,570 @@ function alPush(){
     if(st.sent['d:'+a.id]!==sig)jobs.push({k:'d:'+a.id,sig:sig,topic:S.al.topic,msg:msg});
     if(a.fam&&S.al.rtopic&&st.sent['r:'+a.id]!==sig)jobs.push({k:'r:'+a.id,sig:sig,topic:S.al.rtopic,msg:msg});
   });
-  var tm=addD(t,1),tdow=new Date(tm+'T12:00:00').getDay(),mk='d:morning:'+tm;
-  if(!st.sent[mk]){var mw=alDayStart(tm)+((tdow>=1&&tdow<=5)?390:450)*60000;
-    jobs.push({k:mk,sig:'1',topic:S.al.topic,msg:{title:'Good morning. Open the Day Book',message:"Open the book so today's alerts get lined up.",at:mw,priority:4,tags:['sunrise']}})}
+  S.al.mornSent=S.al.mornSent||{};Object.keys(S.al.mornSent).forEach(function(k){if(k<t)delete S.al.mornSent[k]});
+  for(var mi=1;mi<=3;mi++){
+    var tm=addD(t,mi),tdow=new Date(tm+'T12:00:00').getDay(),mk='d:morning:'+tm;
+    if(st.sent[mk]||S.al.mornSent[tm])continue;
+    var mw=alDayStart(tm)+((tdow>=1&&tdow<=5)?390:450)*60000;
+    if(mw-now>71*3600000)continue;
+    jobs.push({k:mk,m:tm,sig:'1',topic:S.al.topic,msg:{title:'Good morning. Open the Day Book',message:"Open the book so today's alerts get lined up.",at:mw,priority:4,tags:['sunrise']}})}
   jobs=jobs.slice(0,70);if(!jobs.length)return;
   alBusy=true;var i=0;
   (function next(){
     if(i>=jobs.length){alBusy=false;save();return}
     var j=jobs[i++];
-    alSend(j.topic,j.msg).then(function(){st.sent[j.k]=j.sig;setTimeout(next,350)},function(){alBusy=false;save()});
+    alSend(j.topic,j.msg).then(function(){st.sent[j.k]=j.sig;if(j.m)S.al.mornSent[j.m]=1;setTimeout(next,350)},function(){alBusy=false;save()});
   })();
 }
+/* ================= rewards ================= */
+var RW_G=[['treat','Treats and coffee'],['food','Dining out'],['self','Self-care'],['time','Time for you'],['other','More']];
+function rwPrizeDefaults(){return [
+ {id:'p_coffee',g:'treat',n:'Coffee of your choice, from any shop',c:300},
+ {id:'p_sweet',g:'treat',n:'A sweet treat: bakery, boba, ice cream or a dessert run',c:300},
+ {id:'p_flowers',g:'treat',n:'Fresh flowers',c:450},
+ {id:'p_movie',g:'treat',n:'Movie of your choice (a rental at home, or the theater for two)',c:500},
+ {id:'p_takeout',g:'treat',n:'Takeout night from the place you pick, and Rico picks it up',c:600},
+ {id:'p_coffeewk',g:'treat',n:'A whole week of coffee: one a day, from any shop you choose, ordered or in person',c:1400},
+ {id:'p_brunch',g:'food',n:'Brunch date at the spot you pick',c:800},
+ {id:'p_texmex',g:'food',n:'Tex-Mex dinner at the place you pick, with Rico',c:900},
+ {id:'p_dinner',g:'food',n:'Date night: dinner anywhere you pick, plus dessert',c:1800},
+ {id:'p_athome',g:'self',n:'At-home spa night: Rico handles the kids and bedtime',c:700},
+ {id:'p_nails',g:'self',n:'Nails or a blowout',c:1200},
+ {id:'p_shop',g:'self',n:'A shopping trip with a $75 budget',c:1600},
+ {id:'p_hair',g:'self',n:'Hair appointment',c:2000},
+ {id:'p_spa',g:'self',n:'Massage or a full spa visit',c:2500},
+ {id:'p_sleepin',g:'time',n:'Sleep-in morning: Rico handles the kids',c:600},
+ {id:'p_nightoff',g:'time',n:'A night off: Rico handles dinner and cleanup',c:800},
+ {id:'p_afternoon',g:'time',n:'Kid-free afternoon for yourself while Rico covers the kids',c:1000},
+ {id:'m_14',g:'big',n:'Spa or girls day: you pick it',ms:1,days:14,slips:2,minp:900},
+ {id:'m_30',g:'big',n:'Weekend getaway: a hotel night, you pick the place',ms:1,days:30,slips:4,minp:2000},
+ {id:'m_60',g:'big',n:'Vacation of your choice',ms:1,days:60,slips:8,minp:4500}]}
+function rwDefaults(){return {ver:0,tour:0,on:true,enroll:'',fin:'',lastOpen:'',welcomed:'',hist:{},claims:[],adj:[],prizes:[],pin:''}}
+function rwHash(p){var h=5381,s='daybook:'+p;for(var i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return String(h)}
+function np(n){return Math.round(n).toLocaleString('en-US')}
+function daysBetween(a,b){return Math.round((new Date(b+'T12:00:00')-new Date(a+'T12:00:00'))/864e5)}
+function rwCalc(d,gt,k){
+  var sc=d.sc||{tot:0,done:0,on:0},pct=sc.tot?sc.done/sc.tot:0,onp=sc.tot?sc.on/sc.tot:0;
+  var big=d.big&&d.big.total&&d.big.done>=d.big.total;
+  var p=5+Math.round(pct*45)+Math.round(onp*20)+(big?10:0)+(d.closed?15:0)+(d.rwBack?10:0)+(k?ugcPts(k):0);
+  var g=!!d.closed&&sc.tot>0&&pct>=(gt?.5:.7);
+  return {p:p,g:g?1:0,c:d.closed?1:0,gt:gt?1:0}}
+function rwSync(){
+  var rw=S.rw,t=ymd();if(!rw||!rw.on)return;
+  if(!rw.enroll)rw.enroll=t;
+  var k=rw.fin&&rw.fin>=rw.enroll?rw.fin:rw.enroll,g=0;
+  while(k<=t&&g++<900){
+    var d=S.days[k],h=rw.hist[k];
+    if(!d&&k<t&&!h)rw.hist[k]={p:0,g:0,c:0,gt:0,f:1};
+    else if(d&&(!h||!h.f)){var gt=(k===t)?isGentle():(h?!!h.gt:!!d.gentle);var r=rwCalc(d,gt,k);r.f=(k<t)?1:0;rw.hist[k]=r}
+    k=addD(k,1)}
+  var f=rw.enroll;while(f<t&&rw.hist[f]&&rw.hist[f].f)f=addD(f,1);
+  rw.fin=f}
+function rwWeekBonus(){
+  var t=ymd(),wk={},sum=0;
+  Object.keys(S.rw.hist).forEach(function(k){var d=new Date(k+'T12:00:00'),mon=addD(k,-((d.getDay()+6)%7));wk[mon]=wk[mon]||0;if(S.rw.hist[k].g)wk[mon]++});
+  Object.keys(wk).forEach(function(m){if(addD(m,6)<t&&wk[m]>=5)sum+=50});
+  return sum}
+function rwBank(){
+  var t=ymd(),sum=0;
+  Object.keys(S.rw.hist).forEach(function(k){var h=S.rw.hist[k];if(k<t||(k===t&&h.c))sum+=h.p});
+  S.rw.adj.forEach(function(a){sum+=a.p});
+  return sum+rwWeekBonus()}
+function rwHeld(){return S.rw.claims.reduce(function(a,c){return a+(c.st==='no'?0:c.cost)},0)}
+function rwAvail(){return rwBank()-rwHeld()}
+function rwTodayPts(){var h=S.rw.hist[ymd()];return h?h.p:0}
+function rwRun(m){
+  var t=ymd(),h0=S.rw.hist[t],last=(h0&&h0.c)?t:addD(t,-1),s=S.rw.enroll||t,n=0,sl=0,pts=0,done=0,k=s,g=0;
+  while(k<=last&&g++<900){
+    var h=S.rw.hist[k];if(!(h&&h.g))sl++;pts+=h?h.p:0;n++;
+    if(sl>m.slips){s=addD(k,1);n=0;sl=0;pts=0}
+    else if(n>=m.days&&pts>=m.minp){done++;s=addD(k,1);n=0;sl=0;pts=0}
+    k=addD(k,1)}
+  return {start:s,n:n,slips:sl,pts:pts,done:done}}
+function rwMsLeft(p){var r=rwRun(p),used=S.rw.claims.filter(function(c){return c.pid===p.id&&c.st!=='no'}).length;return {r:r,avail:Math.max(0,r.done-used)}}
+function rwNext(){
+  var av=rwAvail(),best=null;
+  S.rw.prizes.forEach(function(p){if(p.ms)return;if(p.c>av&&(!best||p.c<best.c))best=p});
+  return best}
+function rwActive(){var t=ymd(),n=0,tot=0;for(var i=0;i<14;i++){var k=addD(t,-i);if(k<S.rw.enroll)break;tot++;var d=S.days[k];if(d&&d.sc&&d.sc.done>0)n++}return {n:n,tot:tot}}
+/* ---- welcome back ---- */
+function rwTouch(){
+  var rw=S.rw,t=ymd();if(!rw.on)return;
+  if(!rw.enroll)rw.enroll=t;
+  if(!rw.tour){rw.lastOpen=t;rw.welcomed=t;save();tourStart();return}
+  var gap=rw.lastOpen?daysBetween(rw.lastOpen,t):0;
+  if(gap>=2&&rw.welcomed!==t){
+    D().rwBack=true;rw.welcomed=t;rw.lastOpen=t;updateStats();save();
+    rwWelcome(gap);
+    if(gap>=3&&S.al&&S.al.ntfy&&S.al.tellRico&&S.al.rtopic)alSend(S.al.rtopic,{title:'Devon is back',message:'First visit in '+gap+' days. A welcome-back note was shown.',priority:3,tags:['wave']}).catch(function(){});
+    return}
+  rw.lastOpen=t}
+function rwWelcome(gap){
+  var el=$('#welcome');if(!el)return;
+  var nx=rwNext(),av=rwAvail(),ms=S.rw.prizes.filter(function(p){return p.ms})[0];
+  var h='<div class="wcard"><h2>Welcome back, Devon</h2><p>It has been <b>'+gap+' days</b> since your last visit. We missed you.</p><p>Today is a fresh start. Close today and a 10 point welcome-back bonus is added.</p>';
+  h+='<p class="wsub">You have <b>'+np(av)+' points</b> available'+(nx?'. '+np(nx.c-av)+' more gets you: '+esc(nx.n)+'.':'.')+(ms?' Staying active for '+ms.days+' days earns: '+esc(ms.n)+'.':'')+'</p>';
+  h+='<div class="acts"><button class="btn primary" data-a="rwwelcomeok">Let\'s go</button><button class="btn" data-a="rwwelcomerew">See rewards</button></div></div>';
+  el.innerHTML=h;el.hidden=false;alUnlock();alChime('start')}
+/* ---- page ---- */
+var rwUnlockUntil=0;
+function rwOK(){return Date.now()<rwUnlockUntil}
+function rwBar(p){return '<div class="rwbar"><i style="width:'+Math.max(0,Math.min(100,Math.round(p*100)))+'%"></i></div>'}
+function rwClaimBlock(p,left){
+  var h='<details class="rec" data-k="rwp_'+p.id+'"'+(recOpen['rwp_'+p.id]?' open':'')+'><summary><span class="rn">'+esc(p.n)+'</span><span class="rm">'+(p.ms?'Unlocked: claim it':np(p.c)+' points')+'</span></summary><div class="rbody form">';
+  h+='<label for="rw_pick_'+p.id+'">Your pick (restaurant, shop, movie, place)</label><input id="rw_pick_'+p.id+'" type="text" placeholder="Where, what, or when">';
+  h+='<button class="btn primary full" style="margin-top:12px" data-a="rwclaim" data-id="'+p.id+'">Claim'+(p.ms?'':' for '+np(p.c)+' points')+'</button></div></details>';
+  return h}
+function rwHTML(){
+  rwSync();
+  var rw=S.rw,av=rwAvail(),nx=rwNext(),act=rwActive(),tp=rwTodayPts(),claims=rw.claims.slice().reverse();
+  var h='<div class="ptop"><span class="eyebrow">Back pages</span>'+babyToggle()+'</div><div class="ptitle"><div class="time">Rewards</div><h2 class="title">Earn it by showing up</h2><p class="lede">Points for opening the book, finishing must-dos on time and closing the day. Spend them on things you choose. The big prizes come from staying consistent for weeks, not from one big day.</p><div class="acts"><button class="btn" data-a="tourstart">How this works</button></div></div>';
+  h+='<div class="card"><h3>Your points</h3><div class="rwbig">'+np(av)+'</div><p class="sub" style="color:var(--ink)">available to spend</p><p class="sub">+'+np(tp)+' so far today (counts once you close the day). Active '+act.n+' of the last '+act.tot+' days.</p>';
+  if(nx)h+=rwBar(av/nx.c)+'<p class="sub" style="color:var(--ink);margin-top:6px">'+np(nx.c-av)+' points to go for: '+esc(nx.n)+'</p>';
+  else h+='<p class="sub" style="color:var(--ink)">You can afford everything on the list. Pick something.</p>';
+  h+='</div>';
+  var mss=rw.prizes.filter(function(p){return p.ms}).sort(function(a,b){return a.days-b.days});
+  if(mss.length){
+    h+='<h3 class="shh">Consistency prizes</h3><p class="lede" style="margin-bottom:6px">A good day is a day you closed with at least 70% of your must-dos done (50% on a gentle day). A day you skip or leave open is a slip day. Each run needs its days, no more than its slip days, and its points.</p>';
+    mss.forEach(function(p){
+      var o=rwMsLeft(p),r=o.r;
+      h+='<div class="card"><h3>'+esc(p.n)+'</h3><p class="sub" style="color:var(--ink)">Day '+r.n+' of '+p.days+' · slip days used '+r.slips+' of '+p.slips+' · points '+np(r.pts)+' of '+np(p.minp)+'</p>'+rwBar(Math.min(r.n/p.days,r.pts/p.minp))+(o.avail?'<p class="sub" style="color:var(--accent);margin:8px 0 2px"><b>Unlocked.</b> You earned this.</p>'+rwClaimBlock(p,o.avail):'<p class="sub" style="margin-top:6px">If a run passes its slip days, it starts over the next day.</p>')+'</div>'})}
+  h+='<h3 class="shh">Prize list</h3>';
+  RW_G.forEach(function(g){
+    var ps=rw.prizes.filter(function(p){return !p.ms&&(p.g||'other')===g[0]}).sort(function(a,b){return a.c-b.c});
+    if(!ps.length)return;
+    h+='<h4 class="sh4">'+g[1]+'</h4>';
+    ps.forEach(function(p){
+      if(p.c<=av)h+=rwClaimBlock(p,0);
+      else h+='<div class="rwlock"><span>'+esc(p.n)+'</span><b>'+np(p.c-av)+' to go</b></div>'})});
+  if(claims.length){
+    h+='<h3 class="shh">Your claims</h3>';
+    claims.slice(0,12).forEach(function(c){h+='<div class="evrow"><div class="evt"><b>'+esc(c.name)+'</b><span>'+esc(c.date)+(c.pick?' · '+esc(c.pick):'')+' · '+(c.st==='done'?'Fulfilled':c.st==='no'?'Not now, points returned':'Waiting for Rico')+'</span></div></div>'})}
+  h+='<details class="rec" data-k="rwhow"'+(recOpen.rwhow?' open':'')+'><summary><span class="rn">How points work</span><span class="rm">What earns what</span></summary><div class="rbody"><ul><li>5 points for opening the book each day.</li><li>Up to 45 points for the share of must-dos you finish.</li><li>Up to 20 points for finishing them on time.</li><li>10 points for finishing your Big 3.</li><li>15 points for closing the day.</li><li>10 points as a welcome back after a couple of days away.</li><li>UGC Desk: 10 per application (up to 3 a day), 10 for the daily rep, 10 for checking 3 sources, 40 for getting booked and 60 for getting paid.</li><li>50 bonus points for any Monday to Sunday week with 5 good days.</li></ul></div></details>';
+  h+=rwCornerHTML();
+  return h}
+function rwCornerHTML(){
+  var rw=S.rw,h='<details class="rec" data-k="rwrico"'+(recOpen.rwrico?' open':'')+'><summary><span class="rn">Rico\'s corner</span><span class="rm">Approve claims, bonus points, edit prizes</span></summary><div class="rbody form">';
+  if(!rw.pin){
+    h+='<p class="sub" style="color:var(--ink)">Rico: set a 4 digit PIN. It is needed to approve claims and change the prize list, and claims will not work until it is set.</p><label for="rw_pin1">New PIN</label><input id="rw_pin1" type="password" inputmode="numeric" maxlength="4" autocomplete="off"><label for="rw_pin2">Enter it again</label><input id="rw_pin2" type="password" inputmode="numeric" maxlength="4" autocomplete="off"><button class="btn primary full" style="margin-top:12px" data-a="rwsetpin">Save PIN</button>';
+    return h+'</div></details>'}
+  if(!rwOK()){
+    h+='<label for="rw_pin">Rico\'s PIN</label><input id="rw_pin" type="password" inputmode="numeric" maxlength="4" autocomplete="off"><button class="btn primary full" style="margin-top:12px" data-a="rwunlock">Unlock</button>';
+    return h+'</div></details>'}
+  var pend=rw.claims.filter(function(c){return c.st==='wait'});
+  h+='<h4 class="sh4">Waiting for you</h4>';
+  h+=pend.length?pend.map(function(c){return '<div class="evrow"><div class="evt"><b>'+esc(c.name)+'</b><span>'+esc(c.date)+(c.pick?' · '+esc(c.pick):'')+' · '+(c.cost?np(c.cost)+' points':'consistency prize')+'</span></div><div class="acts"><button class="btn primary" data-a="rwfulfill" data-id="'+c.id+'">Fulfilled</button><button class="btn" data-a="rwdecline" data-id="'+c.id+'">Not now</button></div></div>'}).join(''):'<p class="sub">Nothing waiting.</p>';
+  h+='<h4 class="sh4">Bonus points</h4><label for="rw_bp">Points</label><input id="rw_bp" type="number" inputmode="numeric" placeholder="50"><label for="rw_bn">For what</label><input id="rw_bn" type="text" placeholder="Handled a hard day well"><button class="btn full" style="margin-top:10px" data-a="rwbonus">Add bonus points</button>';
+  h+='<h4 class="sh4">Prize list</h4>';
+  rw.prizes.forEach(function(p){
+    h+='<div class="rwed"><input id="rw_n_'+p.id+'" type="text" value="'+esc(p.n)+'" aria-label="Prize name">';
+    if(p.ms)h+='<div class="rwed3"><label>Days<input id="rw_d_'+p.id+'" type="number" inputmode="numeric" value="'+p.days+'"></label><label>Slip days<input id="rw_s_'+p.id+'" type="number" inputmode="numeric" value="'+p.slips+'"></label><label>Points<input id="rw_m_'+p.id+'" type="number" inputmode="numeric" value="'+p.minp+'"></label></div>';
+    else h+='<label class="rwc">Category<select id="rw_g_'+p.id+'">'+RW_G.map(function(g){return '<option value="'+g[0]+'"'+((p.g||'other')===g[0]?' selected':'')+'>'+g[1]+'</option>'}).join('')+'</select></label><label class="rwc">Points<input id="rw_c_'+p.id+'" type="number" inputmode="numeric" value="'+p.c+'"></label>';
+    h+='<button class="btn" data-a="rwprizedel" data-id="'+p.id+'">'+(delArm==='rwp'+p.id?'Tap again to remove':'Remove')+'</button></div>'});
+  h+='<div class="acts"><button class="btn primary" data-a="rwprizesave">Save prize list</button><button class="btn" data-a="rwprizeadd">Add a prize</button></div>';
+  h+='<h4 class="sh4">Season</h4><p class="sub">Starts the points, runs and claims over from today.</p><button class="btn" data-a="rwreset">'+(delArm==='rwreset'?'Tap again to start a fresh season':'Start a fresh season')+'</button>';
+  h+='<div class="acts"><button class="btn" data-a="rwlock">Lock</button></div>';
+  return h+'</div></details>'}
+function rwTocSub(){
+  if(!S.rw.on)return 'Rewards are off';
+  rwSync();var av=rwAvail(),nx=rwNext(),un=0;
+  S.rw.prizes.forEach(function(p){if(p.ms&&rwMsLeft(p).avail)un++});
+  return np(av)+' points'+(un?' · a prize is unlocked':(nx?' · next: '+nx.n.split(',')[0].split(' (')[0]:''))}
+function rwTocBanner(){
+  if(!S.rw.on)return '';var h='',pend=S.rw.claims.filter(function(c){return c.st==='wait'}).length;
+  S.rw.prizes.forEach(function(p){if(p.ms&&rwMsLeft(p).avail)h+='<div class="banner"><b>Prize unlocked</b>'+esc(p.n)+'. <button class="pglink" data-a="goto" data-p="rw">Claim it</button></div>'});
+  return h}
+function rwCloseToast(){
+  var d=D();if(!S.rw.on||d.rwToast)return;d.rwToast=1;rwSync();
+  var h=S.rw.hist[ymd()];if(h)toast('Day closed. +'+np(h.p)+' points. You have '+np(rwAvail())+'.',3200)}
+
+/* ================= UGC studio ================= */
+var UGC_PTS={apply:10,applyCap:3,rep:10,run:10,booked:40,done:60};
+var UGC_DRILLS=[
+ {id:'d1',t:'Film a 15 second hands-only demo of any product in your house. One take, good light, no talking.'},
+ {id:'d2',t:'Write 3 opening lines for a product you used this week. Start each with the problem it solved.'},
+ {id:'d3',t:'Say your rate out loud 3 times with no apology: "My rate for a video is ___." Then write it down.'},
+ {id:'d4',t:'Open the Meta Ad Library, search a brand you like, and write one thing their ads are missing.'},
+ {id:'d5',t:'Pick one brand, use the first-message starter below, and send it. That counts as an application.'},
+ {id:'d6',t:'Film a 20 second first-impression of something you own, in natural light, saying what you noticed first.'},
+ {id:'d7',t:'Record a voiceover reading 3 benefits of a product. No filming, just your voice, clear and warm.'},
+ {id:'d8',t:'Take one old video and add captions and cut every dead second.'},
+ {id:'d9',t:'Re-film your best sample with a stronger first 2 seconds.'},
+ {id:'d10',t:'Write down 5 products in your home you would happily recommend. Those are your next 5 samples.'},
+ {id:'d11',t:'Open TikTok Creative Center, find one top ad, and write its hook, length, and the shots it uses.'},
+ {id:'d12',t:'Make or update a one page portfolio with links to your 3 to 6 best samples.'},
+ {id:'d13',t:'Draft your rate card: a price for the video itself, and a separate price for 30, 60 and 90 days of usage.'},
+ {id:'d14',t:'Film a problem and solution sample: show the problem in 3 seconds, then the product fixing it.'},
+ {id:'d15',t:'Film a testimonial sample: talk to the camera for 20 seconds about one product you really use.'},
+ {id:'d16',t:'Follow up on one pitch that is 3 or more days old, using the follow-up starter below.'},
+ {id:'d17',t:'Read one real brief on a marketplace and write the deliverables in your own words.'},
+ {id:'d18',t:'Write a 5 shot list for a product you own: wide, hands, close-up, reaction, result.'},
+ {id:'d19',t:'Rehearse your 15 second intro: who you are, what you make, and who it is for. Say it twice.'},
+ {id:'d20',t:'Watch your best sample and write what worked and one thing to change next time.'},
+ {id:'d21',t:'Record a 60 second intro video. Marketplaces like Billo ask for one, and brands like to see you.'}];
+function ugcDrill(){var i=daysBetween('2026-01-01',ymd()),n=UGC_DRILLS.length;return UGC_DRILLS[((i%n)+n)%n]}
+function ugcEvs(k,t){var n=0;S.ugc.forEach(function(u){(u.ev||[]).forEach(function(e){if(e.d===k&&e.t===t)n++})});return n}
+function ugcPts(k){
+  var n=Math.min(ugcEvs(k,'apply'),UGC_PTS.applyCap)*UGC_PTS.apply+ugcEvs(k,'booked')*UGC_PTS.booked+ugcEvs(k,'done')*UGC_PTS.done,d=S.days[k];
+  if(d&&d.ugcRep)n+=UGC_PTS.rep;
+  if(d&&d.ugcRun&&Object.keys(d.ugcRun).length>=3)n+=UGC_PTS.run;
+  return n}
+function ugcToday(){var d=D();return {run:Object.keys(d.ugcRun||{}).length,ap:ugcEvs(ymd(),'apply'),rep:!!d.ugcRep}}
+function ugcSteps(){var t=ugcToday();return (t.run>=3?1:0)+(t.ap>=1?1:0)+(t.rep?1:0)}
+function ugcStats(){
+  var s={ap:0,heard:0,booked:0,done:0,earn:0};
+  S.ugc.forEach(function(u){
+    s.ap+=(u.ev||[]).filter(function(e){return e.t==='apply'}).length;
+    if(u.st==='talks'||u.st==='deal'||u.st==='done')s.heard++;
+    if(u.st==='deal'||u.st==='done')s.booked++;
+    if(u.st==='done'){s.done++;s.earn+=(+u.amt||0)}});
+  return s}
+function ugcLevel(){
+  var s=ugcStats();
+  if(s.done>=3)return {n:'Pro creator',next:'You have '+s.done+' finished jobs. Keep building the proof for your group.'};
+  if(s.booked>=1)return {n:'Booked creator',next:'You have been booked. Three finished and paid jobs makes you a Pro creator ('+s.done+' so far).'};
+  if(s.ap>=20)return {n:'Hustler',next:'20 applications sent. Your first booking is the next level.'};
+  if(s.ap>=5)return {n:'Active creator',next:(20-s.ap)+' more applications to reach Hustler.'};
+  return {n:'Starter',next:(5-s.ap)+' more application'+(5-s.ap===1?'':'s')+' to reach Active creator.'}}
+function ugcStepRow(ok,ttl,det,btn){
+  return '<div class="ugcstep'+(ok?' ok':'')+'"><span class="ugcck" aria-hidden="true">'+(ok?'&#10003;':'')+'</span><div><b>'+ttl+(ok?' (done)':'')+'</b><span>'+det+'</span>'+(btn||'')+'</div></div>'}
+function ugcPlanHTML(){
+  var st=ugcStats(),t=ugcToday(),lv=ugcLevel(),dr=ugcDrill();
+  var h='<div class="ugcstats">'+[['Applied',st.ap],['Heard back',st.heard],['Booked',st.booked],['Earned','$'+np(st.earn)]].map(function(x){return '<div><b>'+x[1]+'</b><span>'+x[0]+'</span></div>'}).join('')+'</div>';
+  h+='<p class="sub" style="color:var(--ink);margin:2px 0 8px"><b>Creator level: '+lv.n+'.</b> '+esc(lv.next)+'</p>';
+  h+='<div class="card"><h3>Today\'s UGC plan</h3><p class="sub">Three steps, about 20 minutes. Each one earns points toward your prizes when you close the day.</p>';
+  h+=ugcStepRow(t.run>=3,'Check 3 sources',t.run+' of 3 checked. Tap Open and apply on a lead, or tap "I checked this" on a source. +'+UGC_PTS.run,'<button class="btn" data-a="ugcjump" data-v="ugc_feed">See fresh leads</button>');
+  h+=ugcStepRow(t.ap>=1,'Apply or pitch',t.ap+' logged today. Each one is +'+UGC_PTS.apply+', up to '+UGC_PTS.applyCap+' a day.','<button class="btn primary" data-a="ugclog">Log an application</button>');
+  h+=ugcStepRow(t.rep,'Today\'s rep',esc(dr.t)+(t.rep?'':' +'+UGC_PTS.rep),t.rep?'':'<button class="btn primary" data-a="ugcrep">I did it</button>');
+  h+='<p class="sub" style="margin-top:10px">UGC points so far today: <b>'+np(ugcPts(ymd()))+'</b>. Getting booked is +'+UGC_PTS.booked+' and getting paid is +'+UGC_PTS.done+'.</p></div>';
+  h+='<div class="fchips" role="group" aria-label="Jump to"><button class="fchip" data-a="goto" data-p="ugcschool" aria-pressed="false">UGC School</button><button class="fchip" data-a="goto" data-p="ugcgroup" aria-pressed="false">Your UGC Group</button><button class="fchip" data-a="ugcjump" data-v="ugc_leads" aria-pressed="false">Sources</button><button class="fchip" data-a="tourstart" aria-pressed="false">How rewards work</button></div>';
+  return h}
+var UGC_ROAD=[
+ {p:'Weeks 1 and 2: get good and get seen',s:[
+  {id:'r1',t:'Make 5 portfolio samples',auto:function(){return null}},
+  {id:'r2',t:'Record a 60 second intro video',auto:function(){return null}},
+  {id:'r3',t:'Join 2 marketplaces',auto:function(){return null}},
+  {id:'r4',t:'Log 20 applications',auto:function(){return [ugcStats().ap,20]}}]},
+ {p:'Weeks 3 and 4: get booked and keep notes',s:[
+  {id:'r5',t:'Land your first booking',auto:function(){return [ugcStats().booked,1]}},
+  {id:'r6',t:'Log 40 applications',auto:function(){return [ugcStats().ap,40]}},
+  {id:'r7',t:'Keep a list of 15 sources you trust, and check them weekly',auto:function(){return null}},
+  {id:'r8',t:'Write what you learned from each no, each yes and each rate you quoted',auto:function(){return null}}]},
+ {p:'Weeks 5 to 8: turn it into your group',s:[
+  {id:'r9',t:'Write a start-here guide: the 8 UGC School lessons in your own words',auto:function(){return null}},
+  {id:'r10',t:'Pick the home: a Facebook group, Discord, or a paid community platform. Compare fees and rules first.',auto:function(){return null}},
+  {id:'r11',t:'Invite 3 founding members for free and ask what they need',auto:function(){return null}},
+  {id:'r12',t:'Set your price and launch',auto:function(){return null}}]}];
+
+/* ================= leads feed ================= */
+function feedDefaults(){return {url:'',items:[],updated:'',fetched:0,dismissed:{},status:'',more:false}}
+var feedBusy=false;
+function feedLoad(force){
+  if(feedBusy||!window.fetch)return;
+  var now=Date.now();if(!force&&now-(S.feed.fetched||0)<30*60000)return;
+  feedBusy=true;
+  var urls=[];if(S.feed.url)urls.push(S.feed.url);urls.push('leads.json');
+  var gh=location.hostname.match(/^([^.]+)\.github\.io$/),seg=location.pathname.split('/')[1];
+  if(gh){var repo=(seg&&seg.indexOf('.')<0)?seg:gh[1]+'.github.io';['main','master'].forEach(function(br){urls.push('https://raw.githubusercontent.com/'+gh[1]+'/'+repo+'/'+br+'/leads.json')})}
+  var best=null,i=0;
+  (function next(){
+    if(i>=urls.length){
+      feedBusy=false;S.feed.fetched=now;
+      if(best){S.feed.items=best.items||[];S.feed.updated=best.updated||'';S.feed.sources=best.sources||[];S.feed.status='ok'}
+      else if(!S.feed.items.length)S.feed.status='none';
+      save();
+      var ae=document.activeElement;
+      if(open&&order()[cur]==='ugc'&&!(ae&&/INPUT|TEXTAREA|SELECT/.test(ae.tagName)))draw(true);
+      return}
+    var base=urls[i++],u=base+(base.indexOf('?')<0?'?t='+Math.floor(now/600000):'');
+    fetch(u,{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){if(j&&j.items&&(!best||(j.updated||'')>(best.updated||'')))best=j;next()},function(){next()})
+  })()}
+function feedFind(id){var a=S.feed.items;for(var i=0;i<a.length;i++)if(a[i].id===id)return a[i];return null}
+function feedList(){
+  var t=ymd(),d=S.feed;
+  return d.items.filter(function(i){
+    if(i.kind==='news'||d.dismissed[i.id])return false;
+    if(S.ugc.some(function(u){return u.fid===i.id}))return false;
+    return !i.seen||daysBetween(i.seen,t)<=7})
+   .sort(function(a,b){return (b.fit?1:0)-(a.fit?1:0)||(b.seen||'').localeCompare(a.seen||'')})}
+function feedNews(){return S.feed.items.filter(function(i){return i.kind==='news'}).slice(0,3)}
+function feedAge(){
+  if(!S.feed.updated)return '';
+  var d=new Date(S.feed.updated),n=Math.floor((Date.now()-d.getTime())/864e5);
+  return n<=0?'today':n===1?'yesterday':n+' days ago'}
+function feedPitch(i){
+  var nm=i.t.replace(/\s*\(.*?\)\s*$/,'').slice(0,60);
+  return "Hi "+nm+" team,\n\nI'm Devon, a mom of three who makes real, relatable short videos for brands. I saw your listing and would love to create content for you. I can film a natural product demo or first-impression video with a strong opening, and I'm happy to send a short sample.\n\nMy rate for one video is $[your rate], with usage terms we can agree on. When would be a good time to talk?\n\nThank you,\nDevon"}
+function feedHTML(){
+  var L=feedList(),d=S.feed,h='<div class="card" id="ugc_feed"><h3>Fresh leads for you</h3>';
+  if(d.status==='none'&&!d.items.length)return h+'<p class="sub" style="color:var(--ink)">No leads feed is connected yet. Ask Rico to turn on the daily leads update. Until then, the sources list below is a good place to look.</p></div>';
+  h+='<p class="sub">New UGC listings, picked up automatically'+(d.updated?'. Updated '+feedAge():'')+'. Tap Open and apply. Everything else is optional.</p>';
+  if(d.updated&&Date.now()-new Date(d.updated).getTime()>3*864e5)h+='<div class="banner behind"><b>The leads list has not updated in a few days</b>Rico can check the daily update. Older leads may be closed.</div>';
+  if(!L.length)h+='<p class="sub" style="color:var(--ink)">You are all caught up. New leads show up here every morning.</p>';
+  var shown=d.more?L:L.slice(0,5);
+  shown.forEach(function(i){
+    var line=[i.pay,i.posted?'Posted '+i.posted:'',i.src].filter(Boolean).map(esc).join(' · ');
+    h+='<div class="evrow"><div class="evt"><b>'+esc(i.t)+'</b><span>'+line+(i.fit?' <span class="lkpill">Good fit</span>':'')+'</span>'+(i.snip?'<em>'+esc(i.snip.slice(0,160))+'</em>':'')+'</div><div class="acts"><a class="btn primary" data-a="feedopen" data-id="'+esc(i.id)+'" href="'+esc(i.url)+'" target="_blank" rel="noopener">Open and apply</a><button class="btn" data-a="feeddone" data-id="'+esc(i.id)+'">I applied</button><button class="btn" data-a="feedsave" data-id="'+esc(i.id)+'">Save for later</button><button class="btn" data-a="feedpitch" data-id="'+esc(i.id)+'">Copy a pitch</button><button class="btn" data-a="feedskip" data-id="'+esc(i.id)+'">Not for me</button></div></div>'});
+  if(L.length>5)h+='<div class="acts"><button class="btn" data-a="feedmore">'+(d.more?'Show fewer':'Show all '+L.length)+'</button></div>';
+  var nw=feedNews();
+  if(nw.length){h+='<h4 class="sh4">Mom creator newsletter</h4>';nw.forEach(function(i){h+='<div class="evrow"><div class="evt"><b>'+esc(i.t)+'</b><span>'+esc(i.posted||'')+'</span></div><div class="acts"><a class="btn" data-a="feedopen" data-id="'+esc(i.id)+'" href="'+esc(i.url)+'" target="_blank" rel="noopener">Read</a></div></div>'})}
+  h+='<p class="sub" style="margin-top:8px">Listings come from public job boards. Check each one for the real pay and terms.</p></div>';
+  return h}
+function feedToEntry(i,st){
+  var e={id:uid(),name:i.t.replace(/\s*\(.*?\)\s*$/,'').slice(0,80),st:st,contact:'',deal:i.pay||'',follow:'',notes:i.snip||'',ev:[],src:i.src,link:i.url,amt:0,fid:i.id,addr:'',email:'',rate:''};
+  if(st!=='idea')e.ev.push({t:'apply',d:ymd()});
+  S.ugc.push(e);return e}
+
+/* ================= UGC School ================= */
+var GLOSS=[
+['UGC (user generated content)','Videos, photos or reviews made by a regular person instead of the brand itself. Brands pay creators like you to make it, then use it as ads and on their own pages.'],
+['UGC creator','A person paid to make this kind of content. You do not need a big following. Brands hire you for how natural the video looks, not for your follower count.'],
+['Influencer','Someone who posts to their own audience, and the brand pays for access to that audience. UGC is different: you make the content, and the brand posts it on its own accounts.'],
+['Brand / client','The company paying you.'],
+['Brief (creative brief)','The instructions from the brand: what the product is, who it is for, what to say, what to show, and how long the video should be. Read it twice before you film.'],
+['Deliverables','The exact things you promise to hand over, such as "2 videos, 20 seconds each, plus 3 photos."'],
+['Usage rights / licensing','Permission for the brand to use your video. It says where (their Instagram, their ads, their website), for how long, and whether they can run it as a paid ad. This is separate from your fee for making the video, and it is where much of the extra money is.'],
+['Organic usage','The brand posts your video on its own page for free, with no ad money behind it.'],
+['Paid usage / paid ads','The brand puts ad money behind your video so more strangers see it. Brands expect to pay more for this.'],
+['Whitelisting / partnership ads / Spark Ads','The brand runs ads that appear to come from your account, using your handle. It looks more real to viewers, so brands pay extra for it. Spark Ads is TikTok\'s version. It is a monthly add-on and you can say no.'],
+['Perpetual / perpetuity','Forever, with no end date. Brands like it and it should cost a lot more. Be careful with "perpetual usage" for a small fee.'],
+['Exclusivity','You agree not to make content for the brand\'s direct competitors for a set time. It limits your income, so it should cost extra.'],
+['Raw footage','The original, uncut clips before editing. Brands sometimes ask for it so their editor can re-cut it. Charge extra.'],
+['Hook','The first 1 to 3 seconds of the video. Its only job is to stop someone from scrolling.'],
+['CTA (call to action)','What you tell the viewer to do at the end, such as "tap the link to try it."'],
+['B-roll','Extra footage that shows the product or the scene while you talk or while a voice plays: close-ups, hands using it, the packaging.'],
+['Talking head','A video where you speak straight to the camera.'],
+['Voiceover (VO)','Your voice recorded over footage of the product. You do not have to appear on camera.'],
+['Hands-only','A video that shows only your hands using the product. No face needed.'],
+['Unboxing','Opening a package on camera and reacting to what is inside.'],
+['First impressions','Trying a product for the first time on camera and saying what you notice.'],
+['Testimonial','You talking about how a product worked for you in real life.'],
+['Problem and solution','A video that shows a problem in the first seconds, then the product fixing it.'],
+['Demo','A video showing how the product works, step by step.'],
+['Short-form video','Vertical video of about 6 to 60 seconds, made for TikTok, Instagram Reels and YouTube Shorts.'],
+['Evergreen','Content that stays useful for a long time and can be reused.'],
+['Revisions','Rounds of changes the brand asks for after seeing your video. Your agreement should say how many are included, usually one or two. Extra rounds cost extra.'],
+['Approval window','A set time (like 3 business days) for the brand to approve or ask for changes. After that, the video counts as approved.'],
+['Rush fee','An extra charge when the brand needs the video faster than normal.'],
+['Kill fee','Money you keep if the brand cancels after you started the work.'],
+['Deposit','A part of the payment paid before you start.'],
+['Net 15 / Net 30','Payment terms. The brand pays within 15 or 30 days after you deliver or after the invoice.'],
+['Invoice','A simple bill you send: what you did, the amount, the due date, and how to pay you.'],
+['Retainer','A monthly agreement where a brand pays you a set amount for a set amount of content every month. This is steadier money than one-off jobs.'],
+['Bundle / package','A discounted price for several videos at once, such as 3 videos for less than 3 separate ones.'],
+['Gifted / product-for-content','The brand sends you free product instead of money. Fine to build samples, but it is not a paid job. Do not accept it for work that will run as an ad.'],
+['Affiliate / commission','You earn a percentage when someone buys through your link. It can be extra on top of a fee. On its own, it is a gamble.'],
+['Base rate','Your price for the video itself, before usage rights and add-ons.'],
+['Add-ons','Extras priced on top of the base rate, such as paid ad usage, raw footage, extra hooks, a script, or rush delivery.'],
+['Hook variations','Several versions of the same video with different openings so the brand can test which works best. Priced per version.'],
+['Cut-downs','Shorter versions of a longer video, such as a 15 second version of a 30 second video.'],
+['Marketplace','A website or app that connects brands and creators, such as Billo, JoinBrands or Insense. They set the process and often the price.'],
+['Job board','A page of listings you apply to, such as Pitchlo.'],
+['Cold pitch / cold DM','Messaging a brand that has not asked for anything yet. Short, specific, and polite.'],
+['Media kit / one-page portfolio','One page or link with your samples, your rates, and how to reach you.'],
+['Sample / spec video','A video you made on your own to show your skill. Always label it as a personal sample.'],
+['Meta Ad Library','A free public tool from Meta (Facebook and Instagram) that shows every ad a brand is running right now.'],
+['TikTok Creative Center','A free TikTok tool that shows top performing ads and trends by industry.'],
+['Scope creep','When a brand slowly asks for more than you agreed to. Fix it by pointing to the deliverables in writing.'],
+['FTC disclosure','The rule that you must clearly say when content is paid or gifted, such as #ad or the platform\'s paid partnership tag.'],
+['W-9','A form you give a US company so it has your tax information to pay you. It is normal and safe to send to a real brand. Never send it to someone who has not agreed to hire you.'],
+['1099','A tax form a US company may send you in January showing what it paid you. Ask a tax professional how to handle it.'],
+['NDA','A non-disclosure agreement. A promise not to share private details, such as an unreleased product.'],
+['Exclusive license vs. non-exclusive license','Exclusive means only that brand can use the video. Non-exclusive means you could also license it to others. Most UGC is non-exclusive unless you agree otherwise.'],
+['ROI / conversion','How many viewers bought after watching. Brands care about this, so you should too.'],
+['TikTok Shop','TikTok\'s built-in store. Brands there often hire creators for product videos and sometimes live sessions.']];
+var SCRIPTS=[
+{id:'sc1',t:'Applying on a marketplace or job board',when:'Use this in the note box when you apply to a campaign.',txt:`Hi [Brand] team,\n\nI'm Devon, a mom of three who makes real, relatable short videos. Your [product] is something I could genuinely use at home, and I'd love to show it the way a real customer would.\n\nMy idea: a [15 to 30] second [first-impression / problem-and-solution / demo] video with a strong opening line. I'm happy to send a sample.\n\nThank you for considering me,\nDevon`},
+{id:'sc2',t:'Cold message to a brand (Instagram or TikTok DM)',when:'For a brand that runs ads but has not posted a job.',txt:`Hi [Name], I'm Devon, a UGC creator and mom of three. I noticed [Brand] is running creator-style ads for [product], and I had an idea: [one sentence idea, like "a 20 second morning-routine video showing it in a real home"].\n\nHere is a sample of my style: [link]. Would you be open to a quick video from me? I can send my rates.`},
+{id:'sc3',t:'Cold email to a brand',when:'When you find the social media manager or marketing contact.',txt:`Subject: A UGC idea for [Product]\n\nHi [Name],\n\nI'm Devon, a UGC creator who makes natural, real-life videos for family and home brands. I use [product or a similar product] and noticed [Brand] is running creator-style ads.\n\nA quick idea: [one sentence]. Here is my best sample: [link].\n\nIf it is helpful, I can send my rates and turnaround time. Thank you for your time.\n\nDevon\n[your phone or Instagram]`},
+{id:'sc4',t:'Follow-up, 3 to 5 days later',when:'No answer yet. One kind nudge.',txt:`Hi [Name], just checking in on my note about [product]. I'd be glad to send a quick sample or a few ideas. Thanks again, and no worries if the timing is off.`},
+{id:'sc5',t:'Second follow-up, about 10 days later',when:'Last nudge. Then let it go.',txt:`Hi [Name], one last note in case it got buried. I'd love to make something for [Brand]. If now is not the right time, I'd be happy to stay in touch for future campaigns. Thank you!`},
+{id:'sc6',t:'They said yes: confirm the details',when:'Before you film anything.',txt:`Thank you so much! Before I start, can we confirm these in writing?\n\n- Deliverables: [number] of videos, [length] each\n- Usage: [organic only / paid ads] for [30 / 60 / 90] days\n- Fee: $[amount], paid [on delivery / within 15 days]\n- Revisions: [1 or 2] rounds included\n- Deadline: [date]\n\nOnce you confirm, I'll get started.`},
+{id:'sc7',t:'Sending your rate',when:'When they ask "what are your rates?"',txt:`Thanks for asking! My rate is $[amount] per video, which includes [1 or 2] rounds of revisions and organic use on your own social accounts for [30 / 90] days. Paid ad use is $[amount] extra for [30 / 60 / 90] days. I'm happy to adjust the package if you tell me what you need.`},
+{id:'sc8',t:'They offer less than your rate',when:'Stay friendly. Offer a smaller package instead of a smaller price.',txt:`Thank you for the offer! That is below my rate for this scope. I could do [one video / a shorter version / organic use only] for $[their budget], or the full package at $[your rate]. Which works better for you?`},
+{id:'sc9',t:'Saying no politely',when:'Low pay, free product only, forever usage, or no written terms.',txt:`Thank you for thinking of me! This one isn't the right fit for my current rates and terms, but I'd love to work together on a future campaign. Please keep me in mind!`},
+{id:'sc10',t:'Asking for paid ad usage or an extension',when:'When they love the video and want to keep using it.',txt:`I'm so glad it is performing well! If you would like to run it as a paid ad or keep using it past [date], I can extend the license. For [30 / 60 / 90] more days, the fee is $[amount]. Just let me know and I'll send the updated terms.`},
+{id:'sc11',t:'They ask for extra changes',when:'The included revisions are used up, or the request is new work.',txt:`Happy to help! The agreed package includes [one / two] rounds of revisions, and this request is beyond that. An additional round is $[amount], or I can include it if we add [something] to the next order. Which do you prefer?`},
+{id:'sc12',t:'Asking about a late payment',when:'The due date passed.',txt:`Hi [Name], I hope you're well! I'm following up on the invoice for [project], due on [date]. Could you let me know when I can expect the payment? I've attached the invoice again for convenience. Thank you!`},
+{id:'sc13',t:'Asking for raw footage or extra versions price',when:'When they ask for more files.',txt:`Yes, I can provide the raw footage for $[amount], or [number] hook variations for $[amount] each. Let me know which you'd like and I'll add them to the order.`},
+{id:'sc14',t:'A rush request',when:'They need it faster.',txt:`I can deliver by [date]. Rush delivery has a [25 to 50]% fee, so the total would be $[amount]. Would you like me to go ahead?`},
+{id:'sc15',t:'After a great job: ask for a review and more work',when:'Right after they approve and pay.',txt:`Thank you so much for working with me! Would you be willing to share a short testimonial I can add to my portfolio? I'd also love to make more content for [Brand]. I could do a monthly package of [2 / 4] videos at a bundle rate. Would that be useful?`},
+{id:'sc16',t:'Pitching a monthly package',when:'After one or two good jobs.',txt:`Based on how the first video went, I'd love to propose a monthly package: [number] videos per month with [number] hook variations each, for $[amount] per month. It keeps your ad account supplied with fresh content, and the monthly price is lower than ordering one at a time.`}];
+var SCH=[
+{id:'s1',t:'Start here: what UGC is and how you earn',m:'In plain words',h:`<p><b>UGC</b> stands for user generated content. A company wants a video that looks like a real person using its product, not a TV commercial. You make that video on your phone. The company pays you and then posts your video on its own accounts, or runs it as an ad.</p>
+<p>That is the whole job. You are not an "influencer." You do not need followers. The brand gets your video, and your audience size does not matter.</p>
+<p><b>How you get paid:</b> a fee per video, sometimes extra for letting the brand run it as a paid ad, sometimes free product on top, and sometimes a monthly retainer if a brand keeps coming back.</p>
+<p><b>What a normal job looks like:</b> you apply or pitch, the brand says yes, you agree on the details in writing, you film one or two short videos at home, the brand asks for small changes if needed, you send the final video, and you get paid.</p>
+<p><b>Why it suits your life:</b> it can be done in short sessions at home, around naps and feeds. Many jobs need only your hands or your voice. You choose which jobs to take.</p>`},
+{id:'s2',t:'The words you will hear',m:'About 55 terms, in layman\'s terms',h:'GLOSSARY'},
+{id:'s3',t:'What to charge: 2026 going into 2027',m:'Real number ranges and a quote calculator',h:'RATES'},
+{id:'s4',t:'Your edge: being a mom',m:'Niche brands look for',h:`<p>Brands that sell to parents want content from parents. That is real, steady demand. Categories where a mom of three looks natural:</p>
+<ul><li>Baby and toddler products, feeding, sleep, and travel gear</li><li>Postpartum and nursing products, including comfort and wellness items</li><li>Kids' snacks, lunch boxes, clothing, and toys</li><li>Cleaning, laundry, kitchen and organizing products</li><li>Family meals, meal prep, and grocery items</li><li>Skincare, haircare and wellness for busy women</li><li>Home and decor products, and anything that saves time</li></ul>
+<p>Say it in your pitch: "mom of three" tells a brand you understand the buyer. Use products you already use. Real use looks better on camera than anything staged.</p>
+<p>Note on rates: none of the 2026 rate guides we reviewed gave a separate price for parenting content. Do not accept the low end just because you are new. Quote from your own rate card once you have 3 samples.</p>`},
+{id:'s5',t:'Filming around kids and feeds',m:'Short sessions that fit your day',h:`<p>You do not need a free afternoon. Treat each video as a 10 to 15 minute job.</p>
+<ul><li><b>Choose a filming window.</b> Nap time, right after a feed when the baby is settled, or after bedtime. Pick the same window each day so it becomes a habit.</li><li><b>Batch.</b> Film 2 or 3 videos in the same session with the same lighting spot. Edit later in small pieces.</li><li><b>Use a spot near a window.</b> Daylight does most of the work. Sit or stand facing the light, not with it behind you.</li><li><b>Hands-only and voiceover are easier.</b> No makeup, no outfit, no face needed. Record the voiceover later, even in the car, with the phone close to your mouth.</li><li><b>Keep the phone steady.</b> A cheap phone stand or a stack of books works.</li><li><b>Write the script on a sticky note,</b> or use the daily rep drill, so you are never starting from a blank page.</li><li><b>Use feeding time for the thinking parts,</b> like reading a brief, sending a pitch, or checking the leads list. You can do that with one hand.</li></ul>
+<p>One short video a day beats one long session a month. That is also why the daily plan in this book is small.</p>`},
+{id:'s6',t:'Make your first samples',m:'Shot lists, hooks and what to film',h:`<p>Brands hire from samples. Make 3 to 6 short videos using products you already own. Say they are personal samples. One of each style covers most jobs.</p>
+<p><b>The five styles brands buy most</b></p>
+<ul><li><b>Demo:</b> show how it works in steps.</li><li><b>Problem and solution:</b> show the problem in 3 seconds, then the product fixing it.</li><li><b>First impressions or unboxing:</b> open it, react, say what you notice first.</li><li><b>Testimonial:</b> talk to the camera for 20 seconds about why you use it.</li><li><b>Hands-only or voiceover:</b> no face, just the product and your voice.</li></ul>
+<p><b>A simple shot list for any product (5 shots):</b> wide shot of the product in your home, hands opening or using it, close-up of the detail, your reaction, the result.</p>
+<p><b>Hook lines you can borrow (first 2 seconds):</b></p>
+<ul><li>"I did not expect this to work, but..."</li><li>"If you have [a problem], stop scrolling."</li><li>"Three kids, no time. This is the one thing I kept using."</li><li>"I tried [product] so you do not have to."</li><li>"The [thing] I wish I had found sooner."</li></ul>
+<p><b>Simple script shape (20 to 30 seconds):</b> hook (2 sec), the problem (5 sec), the product in action (10 sec), one honest benefit (5 sec), a call to action (3 sec).</p>
+<p>Make the same video with 3 different openings. Brands love variations, and you can sell them.</p>`},
+{id:'s7',t:'Where the work is',m:'Marketplaces, job boards, direct pitches',h:`<p>Use two active channels and one passive one.</p>
+<p><b>Marketplaces and apps (apply to briefs):</b> Billo (free app, intro video, paid twice a month by PayPal), JoinBrands (new briefs daily, fixed rates from about $60 a video), Trend (iPhone app, US only, new partnerships daily), Insense (wants a portfolio and about 1,000 Instagram followers or 500 median TikTok views), Cohley, Collabstr. Marketplaces usually pay less than direct work, but they are the fastest way to get your first paid jobs, reviews and real samples.</p>
+<p><b>Job boards:</b> Pitchlo lists hundreds of open UGC jobs and says it updates daily. That is the main source behind your Fresh leads list.</p>
+<p><b>Direct pitching:</b> find brands that already run creator-style ads, using the Meta Ad Library and TikTok Creative Center, and message them. This pays the most. Reply rates are low (about 5 to 10 percent of cold messages get answered), so send steadily.</p>
+<p><b>Communities:</b> r/UGCcreators on Reddit (about 98,000 members) and Facebook groups like UGC Brand Deals and UGC Creators Community. Good for real rates and spotting scams.</p>
+<p>How long until money? There is no promise. Early on, treat your first 20 applications as practice.</p>`},
+{id:'s8',t:'How to apply and pitch, step by step',m:'The process from lead to sent',h:`<ol><li><b>Open the lead.</b> Read the whole listing. Note the pay, the number of videos, how long they want, and what the product is.</li><li><b>Check it is real.</b> Look for a brand name, a website, and clear terms. Skip anything that asks you to pay.</li><li><b>Pick your best matching sample</b> and have its link ready.</li><li><b>Copy a pitch</b> from the Fresh leads card or the message scripts, and fill in the brackets.</li><li><b>Add one specific idea</b> for their product. One sentence is enough.</li><li><b>Send it,</b> then tap "I applied" so it is logged and counts toward your points.</li><li><b>Follow up</b> once after 3 to 5 days and once after about 10 days. Then move on.</li></ol>
+<p>Aim for quality: a few tailored messages work better than many copied ones. If you hear nothing, it tells you nothing about your talent.</p>`},
+{id:'s9',t:'Message scripts you can copy',m:'16 ready-to-send messages',h:'SCRIPTS'},
+{id:'s10',t:'Reading a brief and doing the job',m:'From yes to delivered',h:`<ol><li><b>Read the brief twice.</b> Underline the must-haves: product points to mention, words to avoid, length, and the call to action.</li><li><b>Confirm in writing</b> the deliverables, usage, fee, revisions, and deadline (script 6 above).</li><li><b>Plan your shots</b> with the 5 shot list.</li><li><b>Film more than you need.</b> Two or three takes of the opening.</li><li><b>Edit simply:</b> trim dead air, add captions, export vertical.</li><li><b>Check the brief again</b> before you send. Did you say what they asked? Is the length right?</li><li><b>Deliver early</b> with a friendly note. Brands remember creators who are on time.</li><li><b>Send an invoice</b> as soon as they approve.</li></ol>`},
+{id:'s11',t:'Contracts, usage rights and getting paid',m:'What to check before you say yes',h:`<p>This is general information, not legal or tax advice.</p>
+<p><b>Check these 8 things in writing before you film:</b></p>
+<ol><li><b>Usage:</b> which channels (organic or paid ads), how long, and whether your name, face or voice can appear in ads.</li><li><b>Deliverables:</b> exactly what you will hand over.</li><li><b>Revisions:</b> how many are included, and a time limit for the brand to respond.</li><li><b>Payment:</b> the amount, due date, and what happens if they cancel.</li><li><b>Ownership vs. license:</b> you normally keep ownership and give a license to use it.</li><li><b>Exclusivity:</b> which competitors, and for how long. It costs extra.</li><li><b>Termination:</b> who can end the deal and what is owed.</li><li><b>Files:</b> whether they get raw footage and whether they can re-edit.</li></ol>
+<p><b>What the 2026 data says:</b> in a 2026 Aspire survey, 77 percent of brands said they reuse creator content in paid ads, and 67 percent put paid use in the creator\'s first contract or rate. A 30 day window is becoming the starting point for usage, with higher prices for longer, multi-platform or exclusive rights.</p>
+<p><b>Getting paid:</b> ask for a deposit on bigger jobs, send an invoice, and write the due date on it. Marketplaces hold payment and release it after approval. If a brand sends a W-9 or asks for one, that is normal after they agree to hire you. Keep records of what you earn, because US businesses may send a 1099 and you may owe tax. Ask a tax professional how to set that up.</p>
+<p><b>Disclose paid content.</b> Use #ad or the platform\'s paid partnership tag on anything you post that was paid or gifted.</p>`},
+{id:'s12',t:'Red flags and common mistakes',m:'How to avoid the bad ones',h:`<p><b>Walk away from:</b></p>
+<ul><li>Anyone who asks you to pay to join, pay to be considered, or buy a "course" to get the job.</li><li>"Perpetual" or "buyout" usage for a small flat fee.</li><li>No written terms, or terms that keep changing.</li><li>Free product only, for content that will run as an ad.</li><li>A rush to start before the price is agreed.</li><li>Products you must buy with no written promise to reimburse you.</li></ul>
+<p><b>Common beginner mistakes:</b></p>
+<ul><li>Not asking for usage terms and giving away paid-ad rights for free.</li><li>Quoting one flat price that does not change with scope.</li><li>Waiting for the perfect sample instead of making a good one.</li><li>Sending the same message to everyone.</li><li>Giving up after 5 applications.</li><li>Forgetting to log it. The log is how you see which sources work.</li></ul>`},
+{id:'s13',t:'2027: what is changing',m:'Demand, AI, usage rights, retainers',h:`<p>Most of these are predictions from companies that sell UGC tools, so treat them as direction, not promises.</p>
+<ul><li><b>Demand:</b> brands keep shifting money to creators. An IAB report cited by Verified Market Research puts US creator ad spend near $37 billion in 2025 and about $44 billion forecast for 2026.</li><li><b>Usage rights are getting more formal:</b> expect shorter default windows (30 days), monthly pricing, and written permission for ads that use your handle. Paid-ad use is increasingly expected, so price it.</li><li><b>AI:</b> brands use AI for scripts, edits and testing, and platforms are labeling AI-made content. Real people showing real use stay valuable. A standard usage license does not let a brand train AI on your video, so keep that in your contract.</li><li><b>Retainers:</b> long-term partnerships keep replacing one-off jobs. Creators who deliver on time and communicate well get renewed.</li><li><b>Formats:</b> the first 1 to 2 seconds matter more every year. Hooks, variations, and clear stories win.</li><li><b>Skills to build:</b> hooks, simple editing, reading a brief, quoting usage, and keeping proof of results.</li></ul>`},
+{id:'s14',t:'Growing: bundles, retainers and referrals',m:'From one video to steady income',h:`<ol><li><b>Sell bundles.</b> Three videos for 10 to 25 percent less than three single ones is a common offer.</li><li><b>Offer hook variations.</b> Same video, different openings, priced per version.</li><li><b>Pitch a monthly package</b> after one or two good jobs (script 16). Retainers reported in 2026 guides range from about $375 to $2,200 a month for smaller brands, and higher for bigger scopes.</li><li><b>Ask for a testimonial and a referral</b> after every good job (script 15).</li><li><b>Keep your Brand Book current.</b> It is your list of who to contact again.</li><li><b>Then build your group.</b> Your log, your lessons and your leads list are what a paid group is made of.</li></ol>`}];
+var RATE_TABLE=[
+['Beginner (first 1 to 3 months)','$50 to $200 on marketplaces. $100 to $400 when you pitch direct. Your first jobs are about samples and reviews, so take a few.'],
+['Intermediate (5 to 15 jobs, good samples)','$150 to $500 per video. Some guides report up to $1,000.'],
+['Experienced (steady clients, results to show)','$300 to $1,500 or more. Niche specialists and strong performers can be higher.']];
+var RATE_ADDONS=[
+['Paid ad usage','About 30 to 50% of your base rate for 30 to 90 days. Longer than 6 months: 50 to 100%.'],
+['Whitelisting / partnership ads','About 30% of your base rate per month, or a flat monthly fee.'],
+['Perpetual (forever) usage','100 to 150% on top of the base rate. Avoid it for small fees.'],
+['Exclusivity','15 to 50% extra, depending on how long and how broad.'],
+['Raw footage','30 to 50% extra (one guide disagrees, so quote it as an add-on).'],
+['Rush delivery','25 to 50% extra.'],
+['Extra revision round','$50 to $200 each.'],
+['Extra hook variation','$50 to $100 each.'],
+['Script writing','About $150 to $200.'],
+['Photos','$30 to $150 each. 3 to 5 photos about $200 to $800.'],
+['Bundles','3 videos: 10 to 25% off. 5 or more: 15 to 25% off.'],
+['Monthly retainer','About $375 to $2,200 for smaller brands. Bigger scopes cost more.']];
+var RATE_MKT=[
+['Billo','Reported $30 to $150 per video depending on the source and the length.'],
+['JoinBrands','Default around $60 a video, minimum $50 (before platform fee).'],
+['Pitchlo listings','Median about $100 per video in one guide. Some jobs pay more.'],
+['Collabstr','Average ask about $180, average paid about $154.']];
+function ratesHTML(){
+  var h='<p>The numbers below come from creator-marketing guides published in 2026 (JoinBrands, Launchpoint, Influee, PitchBrand, UGCad, Knowlify and an Aspire survey). They disagree with each other, and many of those companies sell UGC services, so use them as <b>ranges</b>, not rules.</p>';
+  h+='<h4>Base rate for one short video</h4>'+RATE_TABLE.map(function(r){return '<p style="margin:6px 0"><b>'+r[0]+'</b><br>'+r[1]+'</p>'}).join('');
+  h+='<h4>Add-ons on top of the base rate</h4>'+RATE_ADDONS.map(function(r){return '<p style="margin:6px 0"><b>'+r[0]+':</b> '+r[1]+'</p>'}).join('');
+  h+='<h4>What marketplaces pay</h4>'+RATE_MKT.map(function(r){return '<p style="margin:6px 0"><b>'+r[0]+':</b> '+r[1]+'</p>'}).join('')+'<p style="margin:6px 0">Marketplaces pay less than direct work. Use them to build samples, reviews and speed, then pitch direct at higher rates.</p>';
+  h+='<h4>Going into 2027</h4><p style="margin:6px 0">Nothing we reviewed forecast specific 2027 prices. The direction: brands want paid-ad rights more often, usage is priced by the month, retainers are growing, and AI tools are pushing down prices for simple generic videos. Real, specific, trustworthy content holds its value.</p>';
+  h+='<h4>Quote calculator</h4><div class="form"><label for="cq_base">Your base price for the video ($)</label><input id="cq_base" type="number" inputmode="numeric" value="150"><label for="cq_use">Usage</label><select id="cq_use"><option value="0">Organic only on the brand\'s own pages (3 months)</option><option value="30">Paid ads, 30 days</option><option value="50">Paid ads, 90 days</option><option value="75">Paid ads, 6 months</option><option value="125">Forever (perpetual)</option></select><label for="cq_wl">Whitelisting (ads from your handle)</label><select id="cq_wl"><option value="0">No</option><option value="1">1 month</option><option value="3">3 months</option></select><label for="cq_hk">Extra hook versions</label><input id="cq_hk" type="number" inputmode="numeric" value="0"><label for="cq_ex">Exclusivity</label><select id="cq_ex"><option value="0">None</option><option value="20">Short, one product type</option><option value="40">Longer or broader</option></select><label><input type="checkbox" id="cq_raw"> Include raw footage</label><label><input type="checkbox" id="cq_rush"> Rush delivery</label><label><input type="checkbox" id="cq_scr"> I write the script</label><button class="btn primary full" style="margin-top:12px" data-a="calcgo">Work out my quote</button><div id="calcOut"></div></div>';
+  return h}
+var calcTxt='';
+function calcRun(){
+  var g=function(id){var e=document.getElementById(id);return e?e.value:''},c=function(id){var e=document.getElementById(id);return !!(e&&e.checked)};
+  var base=Math.max(0,Math.round(+g('cq_base')||0)),lines=[['Video',base]],tot=base;
+  var use=+g('cq_use')||0;if(use){var a=Math.round(base*use/100);lines.push(['Paid ad usage ('+g('cq_use')+'% of base)',a]);tot+=a}
+  var wl=+g('cq_wl')||0;if(wl){var w=Math.round(base*.3*wl);lines.push(['Whitelisting, '+wl+' month'+(wl>1?'s':'')+' (about 30% of base per month)',w]);tot+=w}
+  var hk=Math.max(0,Math.round(+g('cq_hk')||0));if(hk){lines.push([hk+' extra hook version'+(hk>1?'s':'')+' at $75',hk*75]);tot+=hk*75}
+  var ex=+g('cq_ex')||0;if(ex){var e=Math.round(base*ex/100);lines.push(['Exclusivity ('+ex+'% of base)',e]);tot+=e}
+  if(c('cq_raw')){var r=Math.round(base*.4);lines.push(['Raw footage (about 40% of base)',r]);tot+=r}
+  if(c('cq_scr')){lines.push(['Script writing',175]);tot+=175}
+  if(c('cq_rush')){var u=Math.round(tot*.35);lines.push(['Rush delivery (about 35% of the total)',u]);tot+=u}
+  calcTxt='My quote:\n'+lines.map(function(l){return '- '+l[0]+': $'+np(l[1])}).join('\n')+'\nTotal: $'+np(tot)+'\nIncludes 1 to 2 rounds of revisions. Payment due within 15 days of delivery.';
+  var out=document.getElementById('calcOut');
+  if(out)out.innerHTML='<div class="card" style="margin-top:12px"><h3>Total: $'+np(tot)+'</h3>'+lines.map(function(l){return '<p class="sub" style="color:var(--ink);margin:4px 0">'+esc(l[0])+': <b>$'+np(l[1])+'</b></p>'}).join('')+'<p class="sub">These percentages are the middle of the ranges above. Adjust to fit the job.</p><button class="btn full" data-a="calccopy">Copy this quote</button></div>'}
+function schoolBody(l){
+  if(l.h==='GLOSSARY')return '<p class="sub">Tap any word. They are listed in the order you will meet them.</p>'+GLOSS.map(function(g){return '<p style="margin:8px 0;font-size:15px"><b>'+esc(g[0])+'.</b> '+esc(g[1])+'</p>'}).join('');
+  if(l.h==='RATES')return ratesHTML();
+  if(l.h==='SCRIPTS')return '<p class="sub">Tap Copy, paste it, then fill in the [brackets]. Change anything so it sounds like you.</p>'+SCRIPTS.map(function(s,i){return '<div class="evrow"><div class="evt"><b>'+(i+1)+'. '+esc(s.t)+'</b><span>'+esc(s.when)+'</span><em style="white-space:pre-wrap">'+esc(s.txt)+'</em></div><div class="acts"><button class="btn primary" data-a="copyscript" data-id="'+s.id+'">Copy</button></div></div>'}).join('');
+  return l.h}
+function schoolHTML(){
+  var rd=S.ugcx.read,n=SCH.filter(function(l){return rd[l.id]}).length;
+  var h='<div class="ptop"><span class="eyebrow">Back pages</span>'+babyToggle()+'</div><div class="ptitle"><div class="time">Learn</div><h2 class="title">UGC School</h2><p class="lede">Everything you need to go from "I do not know what to do" to sending confident pitches, quoting your rate, and getting paid. Plain language. Take one lesson at a time. '+n+' of '+SCH.length+' read.</p></div>';
+  SCH.forEach(function(l){
+    h+='<details class="rec" data-k="'+l.id+'" id="rec_'+l.id+'"'+(recOpen[l.id]?' open':'')+'><summary><span class="rn">'+(rd[l.id]?'&#10003; ':'')+esc(l.t)+'</span><span class="rm">'+esc(l.m)+'</span></summary><div class="rbody lesson">'+schoolBody(l)+'<button class="btn'+(rd[l.id]?'':' primary')+'" style="margin-top:10px" data-a="ugcread" data-id="'+l.id+'">'+(rd[l.id]?'Marked as read':'Mark as read')+'</button></div></details>'});
+  h+='<p class="sub" style="margin-top:14px">Rates and rules change. These lessons reflect creator-marketing guides published in 2026. Always check a brand\'s terms and ask a lawyer or tax professional about contracts and taxes.</p>';
+  return h}
+
+/* ================= UGC Group: auto-built Brand Book ================= */
+function evDate(u,t){var e=(u.ev||[]).filter(function(x){return x.t===t&&x.d!=='legacy'})[0];return e?e.d:''}
+function ugcSourceStats(){
+  var m={};
+  S.ugc.forEach(function(u){
+    var k=u.src||'Not recorded',r=m[k]=m[k]||{n:k,ap:0,re:0,bk:0};
+    if((u.ev||[]).some(function(e){return e.t==='apply'}))r.ap++;
+    if(u.st==='talks'||u.st==='deal'||u.st==='done')r.re++;
+    if(u.st==='deal'||u.st==='done')r.bk++});
+  return Object.keys(m).map(function(k){return m[k]}).filter(function(r){return r.ap>0}).sort(function(a,b){return b.bk-a.bk||b.re-a.re||b.ap-a.ap})}
+function ugcBookCard(u){
+  var rows=[['Contact',u.contact],['Email',u.email],['Mailing address',u.addr],['Found at',u.src],['Listing',u.link?'<a href="'+esc(u.link)+'" target="_blank" rel="noopener">Open the listing</a>':''],['Offer or deal',u.deal],['Rate you quoted',u.rate],['Earned',u.amt?'$'+np(u.amt):''],['Follow up',u.follow?lbl(u.follow):''],['Notes',u.notes]].filter(function(r){return r[1]});
+  var tl=[['apply','Applied'],['reply','Replied'],['booked','Booked'],['done','Paid and done']].map(function(p){var d=evDate(u,p[0]);return d?p[1]+' '+lbl(d):''}).filter(Boolean).join(' · ');
+  return '<details class="rec" data-k="bk_'+u.id+'"'+(recOpen['bk_'+u.id]?' open':'')+'><summary><span class="rn">'+esc(u.name)+'</span><span class="rm">'+esc(ustLabel(u.st))+(tl?' · '+esc(tl):'')+'</span></summary><div class="rbody">'+
+    (rows.length?rows.map(function(r){return '<p style="margin:5px 0;font-size:15px"><b>'+r[0]+':</b> '+(r[0]==='Listing'?r[1]:esc(r[1]))+'</p>'}).join(''):'<p class="sub">Nothing added yet. Fill in what you know.</p>')+
+    '<div class="acts"><button class="btn" data-a="ugcedit" data-id="'+u.id+'">Add or edit details</button></div></div></details>'}
+function groupHTML(){
+  var st=ugcStats(),rd=S.ugcx.road,tot=0,dn=0;
+  UGC_ROAD.forEach(function(g){g.s.forEach(function(s){tot++;var a=s.auto(),ok=a?a[0]>=a[1]:!!rd[s.id];if(ok)dn++})});
+  var h='<div class="ptop"><span class="eyebrow">Back pages</span>'+babyToggle()+'</div><div class="ptitle"><div class="time">Build</div><h2 class="title">Your UGC Group</h2><p class="lede">The plan: a paid community with brand opportunities and how-to lessons, built from what you are already doing. Everything you log on the UGC Desk lands here by itself. You do not have to enter anything twice.</p></div>';
+  h+='<div class="ugcstats">'+[['Applied',st.ap],['Heard back',st.heard],['Booked',st.booked],['Earned','$'+np(st.earn)]].map(function(x){return '<div><b>'+x[1]+'</b><span>'+x[0]+'</span></div>'}).join('')+'</div>';
+  if(st.ap)h+='<p class="sub" style="color:var(--ink);margin:2px 0 8px">'+Math.round(st.heard/st.ap*100)+'% of your applications got a reply, and '+Math.round(st.booked/st.ap*100)+'% turned into a booking. That is real proof for your group.</p>';
+  var ss=ugcSourceStats();
+  if(ss.length){h+='<h3 class="shh">What is working</h3><p class="lede" style="margin-bottom:4px">Your results by where you found the work.</p>';ss.slice(0,6).forEach(function(r,i){h+='<div class="evrow"><div class="evt"><b>'+esc(r.n)+(i===0&&r.re?' <span class="lkpill">Best so far</span>':'')+'</b><span>'+r.ap+' applied · '+r.re+' replied · '+r.bk+' booked</span></div></div>'})}
+  var groups=[['done','Worked with'],['deal','Deal in progress'],['talks','In talks'],['reached','Reached out'],['idea','Want to pitch'],['pass','Not now']];
+  h+='<h3 class="shh">Your Brand Book</h3><p class="lede" style="margin-bottom:4px">Every brand you have saved or contacted, with everything you entered. Tap one to see it all.</p>';
+  if(!S.ugc.length)h+='<p class="sub" style="color:var(--ink)">Nothing yet. When you tap "I applied" or "Save for later" on a lead, it appears here.</p>';
+  groups.forEach(function(g){var L=S.ugc.filter(function(u){return u.st===g[0]});if(!L.length)return;h+='<h4 class="sh4">'+g[1]+' ('+L.length+')</h4>';L.forEach(function(u){h+=ugcBookCard(u)})});
+  h+='<div class="acts"><button class="btn" data-a="ugcbook">Copy my Brand Book</button><button class="btn" data-a="ugcexport">Copy as spreadsheet</button><button class="btn" data-a="ugcroundup">Copy this week\'s roundup</button></div>';
+  h+='<p class="sub" style="margin-top:6px">The roundup is a ready-made post for your members: this week\'s leads with links back to where they came from, plus your own numbers.</p>';
+  h+='<h3 class="shh" style="margin-top:22px">Launch plan</h3><p class="lede" style="margin-bottom:4px">'+dn+' of '+tot+' steps done. Some check themselves from your log.</p>';
+  UGC_ROAD.forEach(function(g){
+    h+='<h4 class="sh4">'+g.p+'</h4>';
+    g.s.forEach(function(s){
+      var a=s.auto(),ok=a?a[0]>=a[1]:!!rd[s.id];
+      h+='<div class="ugcstep'+(ok?' ok':'')+'"><span class="ugcck" aria-hidden="true">'+(ok?'&#10003;':'')+'</span><div><b>'+esc(s.t)+'</b>'+(a?'<span>'+Math.min(a[0],a[1])+' of '+a[1]+' (counted from your log)</span>':'<button class="btn" data-a="ugcroad" data-id="'+s.id+'">'+(ok?'Undo':'Mark done')+'</button>')+'</div></div>'})});
+  h+='<p class="sub" style="margin-top:10px">When you share opportunities with members, link to where they came from instead of copying other people\'s listings, and check each source\'s rules first.</p>';
+  return h}
+function ugcBookText(){
+  var L=['Brand Book'];
+  [['done','Worked with'],['deal','Deal in progress'],['talks','In talks'],['reached','Reached out'],['idea','Want to pitch']].forEach(function(g){
+    var a=S.ugc.filter(function(u){return u.st===g[0]});if(!a.length)return;L.push('','== '+g[1]+' ==');
+    a.forEach(function(u){L.push(u.name);[['Contact',u.contact],['Email',u.email],['Address',u.addr],['Found at',u.src],['Link',u.link],['Offer',u.deal],['Rate quoted',u.rate],['Earned',u.amt?'$'+u.amt:''],['Notes',u.notes]].forEach(function(r){if(r[1])L.push('  '+r[0]+': '+r[1])})})});
+  return L.join('\n')}
+function ugcRoundupText(){
+  var L=feedList().slice(0,10),st=ugcStats(),t=new Date();
+  var x=["This week's UGC leads ("+MONTHS[t.getMonth()]+' '+t.getDate()+')',''];
+  if(!L.length)x.push('No new leads this week.');
+  L.forEach(function(i,n){x.push((n+1)+'. '+i.t+(i.pay?' ('+i.pay+')':'')+' ['+i.src+']',i.url)});
+  x.push('','My numbers so far: '+st.ap+' applications, '+st.heard+' replies, '+st.booked+' bookings.','Always check each listing for pay and terms.');
+  return x.join('\n')}
+
+/* ---- tutorial ---- */
+var tourI=0;
+function tourSteps(){
+  var ms=S.rw.prizes.filter(function(p){return p.ms}).sort(function(a,b){return a.days-b.days});
+  var msl=ms.map(function(p){return '<li><b>'+esc(p.n)+'</b>: '+p.days+' days, up to '+p.slips+' slip days, and at least '+np(p.minp)+' points in the run.</li>'}).join('');
+  return [
+   {t:'Your Day Book now pays you back',b:'<p>Everything you do in this book earns points. Points turn into things you choose: coffee, dinners, a night off, a getaway.</p><p>The goal is simple: stay on task, finish your day feeling good, and get rewarded for it. This takes a minute.</p>'},
+   {t:'How a day earns points',b:'<ul><li>5 points for opening the book.</li><li>Up to 45 for the share of must-dos you finish.</li><li>Up to 20 for finishing them on time.</li><li>10 for finishing your Big 3.</li><li>15 for closing the day.</li></ul><p>A perfect day is 95. A perfect week is 665, plus a 50 point bonus for any week with 5 good days.</p><p>Points are added when you close the day, so close it every night.</p>'},
+   {t:'What points buy',b:'<p>Open Rewards from the Contents to see the list: coffee and treats, dining out, self-care, and time for yourself. Small prizes take a few good days. Bigger ones take a few weeks.</p><p>To claim one, tap it, type your pick (the restaurant, the shop, the movie), and tap Claim. Rico confirms it. If he says not now, your points come back.</p>'},
+   {t:'The big prizes come from consistency',b:'<p>A <b>good day</b> means you closed the day with at least 70% of your must-dos done (50% on a gentle day). A day you skip or leave open is a <b>slip day</b>.</p><ul>'+msl+'</ul><p>Go over the slip days and that run starts over the next day. You never lose points you already earned. Missing a day or two costs you a slip, not the whole run.</p>'},
+   {t:'Your UGC plan',b:'<p>The UGC Desk has a three step daily plan: check 3 sources for new briefs, apply to or pitch a brand, and do one practice rep.</p><ul><li>10 points per application, up to 3 a day.</li><li>10 for the daily rep and 10 for checking 3 sources.</li><li>40 for getting booked and 60 for getting paid.</li></ul><p>It also has short lessons and a step by step plan to build your own UGC group.</p>'},
+   {t:'How to win',b:'<ul><li>Open the book every day. Even a short visit keeps you in the game.</li><li>Close the day every night. It is worth 15 points and it makes the day count as good.</li><li>Do your Big 3 first and do them on time.</li><li>On a rough day, switch to a gentle day. It only needs 50%.</li></ul><p>If you have been away, the book will welcome you back. You can replay this any time from the Rewards page.</p>'}]}
+function tourShow(){
+  var el=$('#tour');if(!el)return;
+  var st=tourSteps(),s=st[tourI],last=tourI===st.length-1;
+  el.innerHTML='<div class="wcard"><div class="tdots">'+st.map(function(x,i){return '<i'+(i===tourI?' class="on"':'')+'></i>'}).join('')+'</div><p class="sub">Step '+(tourI+1)+' of '+st.length+'</p><h2>'+s.t+'</h2><div class="tbody">'+s.b+'</div><div class="acts">'+(tourI?'<button class="btn" data-a="tourback">Back</button>':'')+(last?'<button class="btn primary" data-a="tourdone">Got it, let\'s go</button>':'<button class="btn primary" data-a="tournext">Next</button><button class="btn" data-a="tourskip">Skip</button>')+'</div></div>';
+  el.hidden=false;var w=el.querySelector('.wcard');if(w)w.scrollTop=0}
+function tourStart(){tourI=0;tourShow()}
+function tourEnd(){var el=$('#tour');if(el)el.hidden=true;if(!S.rw.tour){S.rw.tour=1;save()}}
+
 /* ---- scorecard ---- */
 function scoreToday(chs,d){
   var tot=0,done=0,on=0,late=0,m=nowMin(),missed=[],jrT=0,jrD=0,stT=0,stD=0;
@@ -1490,6 +2108,8 @@ function scoreText(){
   if(s.missed.length)L.push('Missed: '+s.missed.slice(0,6).map(function(x){return alShort(x,48)}).join('; ')+(s.missed.length>6?' and '+(s.missed.length-6)+' more':''));
   if(s.jrD||s.stD)L.push('Checked in the book: Jr '+s.jrD+' of '+s.jrT+' · Sterling '+s.stD+' of '+s.stT);
   var sk=alStreak();if(sk)L.push('Streak: '+sk+' day'+(sk===1?'':'s')+' at 80% or better');
+  if(S.rw&&S.rw.on){rwSync();L.push('Reward points: '+np(rwAvail())+' available, +'+np(rwTodayPts())+' today');S.rw.prizes.forEach(function(p){if(p.ms&&p.days<=40){var r=rwRun(p);L.push('Consistency run: day '+r.n+' of '+p.days+', '+r.slips+' of '+p.slips+' slip days used')}})}
+  var ut=ugcToday();L.push('UGC today: '+ut.ap+' application'+(ut.ap===1?'':'s')+', '+ut.run+' of 3 sources checked, rep '+(ut.rep?'done':'not yet'));
   if(d.rating)L.push('How it felt: '+d.rating);
   return L.join('\n')}
 function scoreCardHTML(){
@@ -1516,6 +2136,7 @@ function accTocHTML(){
     h+=b.length>4?'<div>and '+(b.length-4)+' more pages.</div>':'';
     h+='<small>Check off what is done. Whatever is left can carry to tomorrow when you close the day.</small></div>';
   }
+  h+=rwTocBanner();
   if(sk>=2)h+='<div class="banner"><b>Streak: '+sk+' days</b>At least 80% of your must-dos, day after day. Keep it going.</div>';
   return h}
 function chBehindHTML(ch){
@@ -1938,6 +2559,9 @@ function pageHTML(key){
   if(key==='nut')return nutHTML();
   if(key==='jr')return jrHTML();
   if(key==='al')return alHTML();
+  if(key==='rw')return rwHTML();
+  if(key==='ugcschool')return schoolHTML();
+  if(key==='ugcgroup')return groupHTML();
   if(key==='toc')return tocHTML();
   if(key==='recap')return recapHTML();
   if(key==='sched')return schedHTML();
@@ -1979,7 +2603,7 @@ var open=false,busy=false,cur=0,freshStamp=null,DUR=880;
 var pinner=$('#pinner'),pageEl=$('#page'),pagesEl=$('#pages'),coverEl=$('#cover'),navEl=$('#nav');
 function drawNav(){
   var ord=order(),chs=getCH(),i=cur;
-  function nm(k){var BK={toc:'Contents',cal:'Calendar',meals:'Meals',nut:'Nutrition',jr:'Jr',al:'Alerts',move:'Move',ugc:'UGC Desk',recap:'Week recap',sched:'Fights and football',setup:'Set up'};if(BK[k])return BK[k];var c=chs.filter(function(x){return x.id===k})[0];return c?c.title:''}
+  function nm(k){var BK={toc:'Contents',cal:'Calendar',meals:'Meals',nut:'Nutrition',jr:'Jr',al:'Alerts',rw:'Rewards',move:'Move',ugc:'UGC Desk',ugcschool:'UGC School',ugcgroup:'UGC Group',recap:'Week recap',sched:'Fights and football',setup:'Set up'};if(BK[k])return BK[k];var c=chs.filter(function(x){return x.id===k})[0];return c?c.title:''}
   var prevK=ord[i-1],nextK=ord[i+1];
   navEl.innerHTML='<button class="nbtn" data-a="prev"'+(prevK?'':' disabled')+'>‹ Back<small>'+esc(prevK?nm(prevK):'')+'</small></button>'+
     (i===0?'<button class="nbtn mid" data-a="close">Close</button>':'<button class="nbtn mid" data-a="toc">Contents</button>')+
@@ -2051,9 +2675,9 @@ var A={
   gentle:function(t){D().gentle=t.dataset.v==='1';refresh()},
   teamzone:function(){var d=D();d.teamIdx=(teamIndex()+1)%TEAM.length;CH=null;refresh()},
   daytype:function(t){D().dayType=t.dataset.v;CH=null;cur=0;refresh()},
-  set:function(t){var d=D();d[t.dataset.f]=t.dataset.v;if(t.dataset.f==='rating')d.closed=true;if(t.dataset.f==='tomorrow')d.closed=true;refresh();if(d.closed)alScorePost()},
+  set:function(t){var d=D();d[t.dataset.f]=t.dataset.v;if(t.dataset.f==='rating')d.closed=true;if(t.dataset.f==='tomorrow')d.closed=true;refresh();if(d.closed){alScorePost();rwCloseToast()}},
   carry:function(t){D().carry[t.dataset.id]=t.dataset.v==='1';refresh()},
-  savenote:function(){var d=D(),v=$('#noteBox').value.trim();d.note=v;if(v)d.closed=true;refresh();toast(v?'Saved to your journal':'Note cleared');if(d.closed)alScorePost()},
+  savenote:function(){var d=D(),v=$('#noteBox').value.trim();d.note=v;if(v)d.closed=true;refresh();toast(v?'Saved to your journal':'Note cleared');if(d.closed){alScorePost();rwCloseToast()}},
   idea:function(t){idea[t.dataset.k]=(idea[t.dataset.k]||0)+1;var y=pinner.scrollTop;pinner.innerHTML=pageHTML(order()[cur]);pinner.scrollTop=y},
   addtask:function(t){var inp=$('#add_'+t.dataset.ch),v=inp&&inp.value.trim();if(!v){toast('Type the task first');return}D().custom.push({id:uid(),ch:t.dataset.ch,text:v});CH=null;refresh();toast('Added to this page')}
 };
@@ -2090,9 +2714,17 @@ Object.assign(A,{
   ugcf:function(t){ugcF=t.dataset.v;refresh()},
   ugcsave:function(){
     var nm=$('#u_name');if(!nm)return;var name=nm.value.trim();if(!name){toast('Add the brand name');return}
-    var o={name:name,st:$('#u_st').value,contact:$('#u_contact').value.trim(),deal:$('#u_deal').value.trim(),follow:$('#u_follow').value,notes:$('#u_notes').value.trim()};
-    if(ugcEdit){S.ugc.forEach(function(u){if(u.id===ugcEdit)Object.assign(u,o)})}else{o.id=uid();S.ugc.push(o)}
-    ugcEdit=null;recOpen.ugcform=false;CH=null;refresh();toast('Saved to your UGC Desk')},
+    var o={name:name,st:$('#u_st').value,contact:$('#u_contact').value.trim(),deal:$('#u_deal').value.trim(),follow:$('#u_follow').value,notes:$('#u_notes').value.trim(),src:($('#u_src')||{}).value||'',link:(($('#u_link')||{}).value||'').trim().slice(0,300),amt:Math.max(0,Math.round(+(($('#u_amt')||{}).value)||0)),email:(($('#u_email')||{}).value||'').trim().slice(0,120),addr:(($('#u_addr')||{}).value||'').trim().slice(0,200),rate:(($('#u_rate')||{}).value||'').trim().slice(0,60)};
+    var u=null,t=ymd(),msg='Saved to your UGC Desk';
+    if(ugcEdit)S.ugc.forEach(function(x){if(x.id===ugcEdit)u=x});
+    if(u)Object.assign(u,o);else{o.id=uid();o.ev=[];S.ugc.push(o);u=o}
+    u.ev=u.ev||[];
+    function had(x){return u.ev.some(function(e){return e.t===x})}
+    if(u.st!=='idea'&&u.st!=='pass'&&!had('apply')){u.ev.push({t:'apply',d:t});msg='Application logged. +'+UGC_PTS.apply+' points when you close the day.'}
+    if((u.st==='talks'||u.st==='deal'||u.st==='done')&&!had('reply'))u.ev.push({t:'reply',d:t});
+    if((u.st==='deal'||u.st==='done')&&!had('booked')){u.ev.push({t:'booked',d:t});msg='Booked! +'+UGC_PTS.booked+' points. Big win.'}
+    if(u.st==='done'&&!had('done')){u.ev.push({t:'done',d:t});msg='Finished and paid! +'+UGC_PTS.done+' points.'}
+    ugcEdit=null;recOpen.ugcform=false;CH=null;refresh();toast(msg,3200)},
   ugcedit:function(t){ugcEdit=t.dataset.id;recOpen.ugcform=true;refresh();var el=document.getElementById('rec_ugcform');if(el)el.scrollIntoView({block:'start',behavior:MOTION?'smooth':'auto'})},
   ugccancel:function(){ugcEdit=null;recOpen.ugcform=false;refresh()},
   ugcfu:function(t){S.ugc.forEach(function(u){if(u.id===t.dataset.id)u.follow=addD(ymd(),7)});CH=null;refresh();toast('Next follow-up in a week')},
@@ -2102,7 +2734,7 @@ Object.assign(A,{
     var name=t.dataset.name;if(!name)return;
     if(S.ugc.some(function(u){return u.name.toLowerCase()===name.toLowerCase()})){toast('Already on your list');return}
     var lead=UGC_LEADS.filter(function(u){return u.name===name})[0];
-    S.ugc.push({id:uid(),name:name,st:'idea',contact:'',deal:'',follow:'',notes:lead?lead.note:''});
+    S.ugc.push({id:uid(),name:name,st:'idea',contact:'',deal:'',follow:'',notes:lead?lead.note:'',ev:[],src:name,link:'',amt:0,addr:'',email:'',rate:''});
     CH=null;refresh();toast('Added to your UGC Desk')},
   /* setup */
   bkcopy:function(){var b=$('#bk');if(!b)return;b.value=backupText();b.focus();b.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}toast(ok?'Copied. Paste it somewhere safe.':'Selected. Press and hold, then tap Copy.')},
@@ -2178,6 +2810,104 @@ document.addEventListener('click',function(e){
   if(!open&&e.target.closest('#front'))openBook();
 });
 document.addEventListener('change',function(e){if(e.target&&e.target.id==='jr_type'){A.jrtype({dataset:{v:e.target.value}})}});
+Object.assign(A,{
+  rwwelcomeok:function(){var el=$('#welcome');if(el)el.hidden=true;refresh()},
+  rwwelcomerew:function(){var el=$('#welcome');if(el)el.hidden=true;go(order().indexOf('rw'))},
+  rwclaim:function(t){
+    var rw=S.rw,id=t.dataset.id,p=rw.prizes.filter(function(x){return x.id===id})[0];if(!p)return;
+    if(!rw.pin){toast("Rico needs to set his PIN first (Rewards, Rico's corner)",3200);return}
+    var cost=0;
+    if(p.ms){if(!rwMsLeft(p).avail){toast('Not unlocked yet');return}}
+    else{cost=p.c;if(rwAvail()<cost){toast('Not enough points yet');return}}
+    var inp=document.getElementById('rw_pick_'+id),pick=inp?inp.value.trim().slice(0,80):'';
+    rw.claims.push({id:uid(),pid:id,name:p.n,cost:cost,pick:pick,date:ymd(),st:'wait'});
+    recOpen['rwp_'+id]=false;
+    save();
+    if(S.al&&S.al.ntfy&&S.al.rtopic)alSend(S.al.rtopic,{title:'Devon claimed a reward',message:p.n+(pick?'\nHer pick: '+pick:'')+'\nOpen Rewards, Rico\'s corner, to approve.',priority:4,tags:['gift']}).catch(function(){});
+    refresh();toast('Claimed. Rico will confirm it.',2600)},
+  rwsetpin:function(){
+    var a=($('#rw_pin1')||{}).value||'',b=($('#rw_pin2')||{}).value||'';
+    if(!/^\d{4}$/.test(a)){toast('Use exactly 4 digits');return}
+    if(a!==b){toast('The two PINs do not match');return}
+    S.rw.pin=rwHash(a);rwUnlockUntil=Date.now()+5*60000;recOpen.rwrico=true;save();draw(true);toast('PIN saved')},
+  rwunlock:function(){
+    var a=($('#rw_pin')||{}).value||'';
+    if(rwHash(a)!==S.rw.pin){toast('That PIN is not right');return}
+    rwUnlockUntil=Date.now()+5*60000;recOpen.rwrico=true;draw(true)},
+  rwlock:function(){rwUnlockUntil=0;draw(true)},
+  rwfulfill:function(t){
+    if(!rwOK()){toast('Locked');draw(true);return}
+    S.rw.claims.forEach(function(c){if(c.id===t.dataset.id&&c.st==='wait')c.st='done'});
+    save();draw(true);toast('Marked fulfilled')},
+  rwdecline:function(t){
+    if(!rwOK()){toast('Locked');draw(true);return}
+    S.rw.claims.forEach(function(c){if(c.id===t.dataset.id&&c.st==='wait')c.st='no'});
+    save();draw(true);toast('Points returned')},
+  rwbonus:function(){
+    if(!rwOK()){toast('Locked');draw(true);return}
+    var p=Math.round(+($('#rw_bp')||{}).value||0),n=(($('#rw_bn')||{}).value||'').trim().slice(0,60);
+    if(!p||Math.abs(p)>1000){toast('Enter points between 1 and 1000');return}
+    S.rw.adj.push({p:p,n:n||'Bonus',date:ymd()});save();draw(true);toast((p>0?'+':'')+p+' points added')},
+  rwprizesave:function(){
+    if(!rwOK()){toast('Locked');draw(true);return}
+    S.rw.prizes.forEach(function(p){
+      var n=document.getElementById('rw_n_'+p.id);if(n&&n.value.trim())p.n=n.value.trim().slice(0,90);var ge=document.getElementById('rw_g_'+p.id);if(ge)p.g=ge.value;
+      function num(id,lo,hi,fb){var e=document.getElementById(id),v=e?Math.round(+e.value):NaN;return (isFinite(v)&&v>=lo&&v<=hi)?v:fb}
+      if(p.ms){p.days=num('rw_d_'+p.id,7,365,p.days);p.slips=num('rw_s_'+p.id,0,60,p.slips);p.minp=num('rw_m_'+p.id,0,50000,p.minp)}
+      else p.c=num('rw_c_'+p.id,10,50000,p.c)});
+    save();draw(true);toast('Prize list saved')},
+  rwprizeadd:function(){
+    if(!rwOK()){toast('Locked');draw(true);return}
+    S.rw.prizes.push({id:uid(),n:'New prize',c:300});recOpen.rwrico=true;save();draw(true)},
+  rwprizedel:function(t){
+    if(!rwOK()){toast('Locked');draw(true);return}
+    var id=t.dataset.id;
+    if(delArm==='rwp'+id){S.rw.prizes=S.rw.prizes.filter(function(p){return p.id!==id});delArm=null;save();draw(true);toast('Removed')}
+    else armDel('rwp'+id)},
+  rwreset:function(){
+    if(!rwOK()){toast('Locked');draw(true);return}
+    if(delArm==='rwreset'){var pz=S.rw.prizes,pin=S.rw.pin;S.rw=Object.assign(rwDefaults(),{ver:2,tour:1,prizes:pz,pin:pin,enroll:ymd(),lastOpen:ymd(),welcomed:ymd()});delArm=null;updateStats();save();draw(true);toast('Fresh season started')}
+    else armDel('rwreset')}
+});
+
+Object.assign(A,{
+  tourstart:function(){tourStart()},
+  tournext:function(){tourI++;tourShow()},
+  tourback:function(){if(tourI>0)tourI--;tourShow()},
+  tourskip:function(){tourEnd()},
+  tourdone:function(){tourEnd()},
+  ugcjump:function(t){var el=document.getElementById(t.dataset.v);if(el)el.scrollIntoView({block:'start',behavior:MOTION?'smooth':'auto'})},
+  ugclog:function(){ugcEdit=null;recOpen.ugcform=true;refresh();var el=document.getElementById('rec_ugcform');if(el)el.scrollIntoView({block:'start',behavior:MOTION?'smooth':'auto'})},
+  ugcrep:function(){var d=D();d.ugcRep=true;refresh();toast('Rep done. +'+UGC_PTS.rep+' points when you close the day. That is how experts are made.',3200)},
+  ugccheck:function(t){var d=D();d.ugcRun=d.ugcRun||{};var n=t.dataset.name;if(d.ugcRun[n])delete d.ugcRun[n];else d.ugcRun[n]=1;refresh();if(Object.keys(d.ugcRun).length===3&&d.ugcRun[n])toast('3 sources checked. +'+UGC_PTS.run+' points.')},
+  ugcread:function(t){var id=t.dataset.id;S.ugcx.read[id]=!S.ugcx.read[id];recOpen[id]=true;save();draw(true)},
+  ugcroad:function(t){var id=t.dataset.id;S.ugcx.road[id]=!S.ugcx.road[id];save();draw(true)},
+  ugcexport:function(){
+    function q(x){return '"'+String(x==null?'':x).replace(/"/g,'""')+'"'}
+    var rows=[['Brand','Status','Found at','Applied on','Replied on','Booked on','Paid on','Amount','Contact','Email','Address','Rate quoted','Link','Notes'].map(q).join(',')];
+    S.ugc.forEach(function(u){rows.push([u.name,ustLabel(u.st),u.src||'',evDate(u,'apply'),evDate(u,'reply'),evDate(u,'booked'),evDate(u,'done'),u.amt||'',u.contact||'',u.email||'',u.addr||'',u.rate||'',u.link||'',u.notes||''].map(q).join(','))});
+    copyText(rows.join('\n'),'Copied. Paste it into a spreadsheet.')}
+});
+
+Object.assign(A,{
+  feedopen:function(t){var d=D();d.ugcRun=d.ugcRun||{};d.ugcRun[t.dataset.id]=1;save()},
+  feeddone:function(t){var i=feedFind(t.dataset.id);if(!i)return;feedToEntry(i,'reached');CH=null;refresh();toast('Logged. +'+UGC_PTS.apply+' points when you close the day.',3000)},
+  feedsave:function(t){var i=feedFind(t.dataset.id);if(!i)return;feedToEntry(i,'idea');CH=null;refresh();toast('Saved to your list')},
+  feedskip:function(t){S.feed.dismissed[t.dataset.id]=1;save();draw(true)},
+  feedmore:function(){S.feed.more=!S.feed.more;save();draw(true)},
+  feedpitch:function(t){var i=feedFind(t.dataset.id);if(!i)return;copyText(feedPitch(i),'Pitch copied. Paste it into the application.')},
+  feedurl:function(){var v=(($('#feed_url')||{}).value||'').trim();S.feed.url=v;S.feed.fetched=0;save();feedLoad(true);toast(v?'Saved':'Cleared')},
+  copyscript:function(t){var s=SCRIPTS.filter(function(x){return x.id===t.dataset.id})[0];if(s)copyText(s.txt,'Copied. Fill in the [brackets].')}
+});
+function copyText(tx,msg){try{navigator.clipboard.writeText(tx).then(function(){toast(msg||'Copied')},function(){toast('Could not copy')})}catch(e){toast('Could not copy')}}
+
+Object.assign(A,{
+  ugcbook:function(){copyText(ugcBookText(),'Brand Book copied')},
+  ugcroundup:function(){copyText(ugcRoundupText(),'Roundup copied. Paste it into your group.')},
+  calcgo:function(){calcRun()},
+  calccopy:function(){copyText(calcTxt,'Quote copied')}
+});
+
 document.addEventListener('toggle',function(e){var el=e.target;if(el&&el.classList&&el.classList.contains('lane'))laneOpen[el.dataset.k]=el.open;else if(el&&el.classList&&el.classList.contains('rec'))recOpen[el.dataset.k]=el.open},true);
 document.addEventListener('keydown',function(e){
   if(e.key==='Enter'&&(e.target.id==='gin'||e.target.id==='steps_in')){var bb=$('[data-a='+(e.target.id==='gin'?'gadd':'stepsave')+']');if(bb)bb.click();return}
@@ -2194,14 +2924,14 @@ pagesEl.addEventListener('touchend',function(e){
   var t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;
   if(Math.abs(dx)>70&&Math.abs(dy)<45&&Date.now()-st0<700){if(dx<0)go(cur+1);else go(cur-1)}
 },{passive:true});
-document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'){CH=null;alWake();alTick();setTimeout(alPush,1500);checkReminders();updateStats();if(open)draw(true);else renderCover()}});
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'){CH=null;rwTouch();feedLoad(false);alWake();alTick();setTimeout(alPush,1500);checkReminders();updateStats();if(open)draw(true);else renderCover()}});
 setInterval(function(){checkReminders();tickCover();alTick()},20000);
 setInterval(function(){alPush()},1800000);
 
 /* ================= boot ================= */
-ensureToday();updateStats();save();checkReminders();
+ensureToday();updateStats();rwTouch();save();checkReminders();
 draw();renderCover();showSheet();
-alWake();alTick();setTimeout(alPush,2000);
+alWake();alTick();setTimeout(alPush,2000);feedLoad(true);
 if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})}
 })();
 </script>

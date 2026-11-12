@@ -1,7 +1,7 @@
 /* Devon's Day Book service worker.
    Pages and images: network first, so a new version shows up the next time the app opens online.
    Offline: falls back to the last saved copy. Bump VERSION to force a clean cache. */
-var VERSION = "daybook-v7";
+var VERSION = "daybook-v11";
 var CORE = ["./", "./index.html", "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png", "./icons/apple-touch-icon.png"];
 
 self.addEventListener("install", function (e) {
@@ -23,6 +23,16 @@ self.addEventListener("fetch", function (e) {
   var sameOrigin = url.origin === self.location.origin;
   var fonts = url.hostname === "fonts.googleapis.com" || url.hostname === "fonts.gstatic.com";
   if (!sameOrigin && !fonts) return;
+
+  if (url.pathname.slice(-10) === "leads.json") {
+    e.respondWith(
+      fetch(req).then(function (res) {
+        if (res && res.ok) { var copy = res.clone(); caches.open(VERSION).then(function (c) { c.put("./leads.json", copy); }); }
+        return res;
+      }).catch(function () { return caches.match("./leads.json"); })
+    );
+    return;
+  }
 
   if (req.mode === "navigate") {
     e.respondWith(
